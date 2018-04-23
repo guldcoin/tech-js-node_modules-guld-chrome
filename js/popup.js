@@ -7,7 +7,7 @@ function loadLogin() {
     return `<option value="${fpr}">${fpr}</option>`
   });
   var keyopts = keymap.join("\n");
-  wrapper.innerHTML = `
+  wrapper.innerHTML = `<button id="goto-generate-button" value="Generate">Generate</button><br>
   <form id="key-login-form">
   <select id="key-fpr">${keyopts}</select>
 

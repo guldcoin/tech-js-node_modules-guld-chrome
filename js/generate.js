@@ -4,13 +4,13 @@ const gen_template = `<form id="generate-key-form">
   <input type="text" id="key-name" placeholder="Name"></input><br>
 
   <input type="text" id="key-email" placeholder="Email"></input><br>
-  
+
   <input type="password" id="key-passphrase" placeholder="PGP Key Passphrase"></input><br>
 
   <span class="warning">WARNING: Name and email will be public!</span><br>
-  
+
   <button id="generate" type="submit" value="Generate">Generate</button>
-  
+
 </form>`;
 
 function loadGenerate() {
