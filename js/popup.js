@@ -19,9 +19,7 @@ function submitLogin() {
   var fprlist = document.getElementById("key-fpr");
   var fpr = fprlist.options[fprlist.selectedIndex].value
   var passphrase = document.getElementById("login-passphrase").value;
-  alert(passphrase);
   var key = keyring.privateKeys.getForId(fpr)
-  alert(key);
   decryptKeyThenGameList(key, passphrase)
 }
 
