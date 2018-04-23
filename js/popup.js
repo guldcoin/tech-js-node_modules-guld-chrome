@@ -9,8 +9,8 @@ function loadLogin() {
   var keyopts = keymap.join("\n");
   wrapper.innerHTML = `<form id="key-login-form">
   <select id="key-fpr">${keyopts}</select>
-  <input id="login-passphrase" type="password"></input>
-  <input id="login-submit" type="submit" value="Login"></input>
+  <input id="login-passphrase" type="password" placeholder="PGP Key Passphrase"></input><br>
+  <button id="login-submit" type="submit" value="Login">Login</button>
   </form>`
   document.getElementById("key-login-form").addEventListener("submit", submitLogin);
 }

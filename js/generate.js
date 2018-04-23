@@ -1,17 +1,14 @@
 'use strict';
 
-const gen_template = `<span>WARNING: This information will be public!</span>
-<br>
-<form id="generate-key-form">
-  <label for="key-name">Name:</label>
-  <input type="text" id="key-name"></input><br>
+const gen_template = `<form id="generate-key-form">
+  <input type="text" id="key-name" placeholder="Name"></input><br>
 
-  <label for="key-email">Email:</label>
-  <input type="text" id="key-email"></input><br>
+  <input type="text" id="key-email" placeholder="Email"></input><br>
+  
+  <input type="password" id="key-passphrase" placeholder="PGP Key Passphrase"></input><br>
 
-  <label for="key-passphrase">Passphrase:</label>
-  <input type="password" id="key-passphrase"></input><br>
-
+  <span class="warning">WARNING: Name and email will be public!</span><br>
+  
   <button id="generate" type="submit" value="Generate">Generate</button>
 </form>`;
 
