@@ -2,10 +2,32 @@
   "name": "Guld Games",
   "version": "0.1",
   "description": "Guld Games",
-  "permissions": ["activeTab", "declarativeContent", "storage"],
+  "permissions": ["clipboardRead", "clipboardWrite", "activeTab", "declarativeContent", "storage", "unlimitedStorage", "notifications"],
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "windows": "Alt+Shift+G",
+        "mac": "Alt+Shift+G",
+        "chromeos": "Alt+Shift+G",
+        "linux": "Alt+Shift+G"
+      }
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "file://*/*",
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": ["js/contentscript.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
   "background": {
     "scripts": ["js/background.js"],
-    "persistent": false
+    "persistent": true
   },
   "browser_action": {
     "default_popup": "popup.html",
@@ -21,6 +43,9 @@
     "32": "images/icon32.png",
     "48": "images/icon48.png",
     "128": "images/icon128.png"
-},
+  },
+  "web_accessible_resources": [
+    "js/inject.js"
+  ],
   "manifest_version": 2
 }
