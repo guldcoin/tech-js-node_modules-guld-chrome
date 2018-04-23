@@ -10,6 +10,7 @@ const gen_template = `<form id="generate-key-form">
   <span class="warning">WARNING: Name and email will be public!</span><br>
   
   <button id="generate" type="submit" value="Generate">Generate</button>
+  
 </form>`;
 
 function loadGenerate() {
