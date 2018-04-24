@@ -37,8 +37,8 @@ function submitLogin() {
 
 document.addEventListener('DOMContentLoaded', function() {
   if (keyring.privateKeys.keys.length > 0) {
-    loadLogin()
+    routes("login", function (next) { next(); });
   } else {
-    loadGenerate()
+    routes("generate", function (next) { next(); });
   }
 });

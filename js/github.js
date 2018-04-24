@@ -40,6 +40,6 @@ function submitGithub(e, key, passphrase) {
             password: password
         }
     }, function () {
-        loadGameList();
+        routes("gamelist", function (next) { next(); });
     });
 }

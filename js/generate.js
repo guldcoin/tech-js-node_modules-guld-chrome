@@ -31,7 +31,7 @@ function loadGenerate() {
     if (keyring.privateKeys.keys.length > 0) {
         document.getElementById("skip-gen-div").innerHTML = `<button id="skip-gen" class="text-button" value="Skip">Skip</button>`;
         document.getElementById("skip-gen").addEventListener("click", loadLogin);
-    }    
+    }
     document.getElementById("generate-key-form").addEventListener("submit", submitGenerate);
 }
 
@@ -48,12 +48,14 @@ function submitGenerate(e) {
         }],
         passphrase: passphrase
     };
-    openpgp.generateKey(options).then(function (key) {
-        var privkey = key.privateKeyArmored;
-        var pubkey = key.publicKeyArmored;
-        keyring.publicKeys.importKey(pubkey);
-        keyring.privateKeys.importKey(privkey);
-        keyring.store();
-        decryptKeyThenGithub(key, passphrase);
+    routes("github", function (next) {
+        openpgp.generateKey(options).then(function (key) {
+            var privkey = key.privateKeyArmored;
+            var pubkey = key.publicKeyArmored;
+            keyring.publicKeys.importKey(pubkey);
+            keyring.privateKeys.importKey(privkey);
+            keyring.store();
+            next(key, passphrase);
+        });
     });
 }
