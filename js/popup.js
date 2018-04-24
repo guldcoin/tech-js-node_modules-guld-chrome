@@ -7,13 +7,20 @@ function loadLogin() {
     return `<option value="${fpr}">${fpr}</option>`
   });
   var keyopts = keymap.join("\n");
-  wrapper.innerHTML = `<button id="goto-generate-button" value="Generate">Generate</button><br>
+  wrapper.innerHTML = `
   <form id="key-login-form">
-  <select id="key-fpr">${keyopts}</select>
+  <div class="row text-right">
+    <select id="key-fpr">${keyopts}</select>
+    <button id="goto-generate-button" class="text-button" value="Generate">Manage keys</button><br>
+  </div>
 
-  <input id="login-passphrase" type="password" placeholder="PGP Key Passphrase"></input><br>
+  <div class="row">
+    <input id="login-passphrase" type="password" placeholder="PGP Key Passphrase"></input><br>
+  </div>
 
-  <button id="login-submit" type="submit" value="Login">Login</button>
+  <div class="row">
+    <button id="login-submit" type="submit" value="Login">Login</button>
+  </div>
 
   </form>`
   document.getElementById("key-login-form").addEventListener("submit", submitLogin);
@@ -25,7 +32,7 @@ function submitLogin() {
   var fpr = fprlist.options[fprlist.selectedIndex].value
   var passphrase = document.getElementById("login-passphrase").value;
   var key = keyring.privateKeys.getForId(fpr)
-  decryptKeyThenGameList(key, passphrase)
+  decryptKeyThenGithub(key, passphrase)
 }
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -11,6 +11,10 @@ body {
     text-align: center;
 }
 
+.text-right {
+    text-align: right;
+}
+
 button {
     background: #e34822;
     padding: 0.5rem 1.2rem;
@@ -20,6 +24,23 @@ button {
     font-weight: 600;
 }
 
+.text-button {
+    background: none;
+    font-weight: 500;
+    padding: 0;
+    color: #b173f0;
+}
+
+.text-button:hover {
+    text-decoration: underline;
+}
+
+.row {
+    padding-bottom: 1rem;
+    width: 70%;
+    margin: 0 auto;
+}
+
 #logo {
     padding: 3rem;
     width: 9rem;
@@ -27,14 +48,14 @@ button {
 }
 
 input {
-    margin-bottom: 1rem;
     padding: 0.5rem;
+    width: 11.9rem;
 }
 
 select {
     background: #fff;
     padding: 0.5rem;
-    width: 11.8rem;
+    width: 13.1rem;
     margin-bottom: 1rem;
     border: 0;
 }
