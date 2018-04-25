@@ -14,6 +14,9 @@ const gh_template = `<form id="github-credentials-form">
     <button type="submit" value="store">Secure and store</button>
   </div>
 
+  <div id="github-feedback-div" class="row"> 
+  </div>
+
 </form>`;
 
 function decryptKeyThenGithub(key, passphrase) {
@@ -42,12 +45,24 @@ function submitGithub(e, key, passphrase) {
         publicKeys: keyring.publicKeys.getForId(key.primaryKey.fingerprint),
         privateKeys: [key]
     };
-    openpgp.encrypt(options).then(function(ciphertext) {
-        var encrypted = ciphertext.data;
-        chrome.storage.local.set({
-            gh: encrypted
-        }, function () {
-            routes("gamelist", function (next) { next(); });
-        });
+
+    curl("https://api.github.com", {
+        method: "GET",
+        headers: {
+            Authorization: "Basic " + btoa(unescape(encodeURIComponent( uname + ":" + password )))
+        }
+    }, function(success){
+        openpgp.encrypt(options).then(function (ciphertext) {
+            var encrypted = ciphertext.data;
+            chrome.storage.local.set({
+                gh: encrypted
+            }, function () {
+                routes("gamelist", function (next) {
+                    next();
+                });
+            });
+        });    
+    }, function(error){
+        document.getElementById("github-feedback-div").innerHTML = `<p class="error">Invalid credentials</p>`;        
     });
 }
