@@ -5,6 +5,12 @@ if (typeof window == 'undefined' || !(window.openpgp)) {
 }
 const keyring = new openpgp.Keyring();
 
+const err_template = `<div id="err-div" class="row"> </div>`;
+
+function load(err) {
+    document.getElementById("err-div").innerHTML = `<p class="error">` + err + `</p>`;
+}
+
 function gpg_sign(key, message) {
     options = {
         data: message,

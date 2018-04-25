@@ -1,13 +1,13 @@
 'use strict';
 
-function loadLogin() {
-  var wrapper = document.getElementById("wrapper");
-  var keymap = keyring.privateKeys.keys.map(function(key) {
-    var fpr = key.primaryKey.fingerprint
-    return `<option value="${fpr}">${fpr}</option>`
-  });
-  var keyopts = keymap.join("\n");
-  wrapper.innerHTML = `
+function loadLogin(err) {
+    var wrapper = document.getElementById("wrapper");
+    var keymap = keyring.privateKeys.keys.map(function (key) {
+        var fpr = key.primaryKey.fingerprint
+        return `<option value="${fpr}">${fpr}</option>`
+    });
+    var keyopts = keymap.join("\n");
+    wrapper.innerHTML = `
   <form id="key-login-form">
   <div class="row text-right">
     <select id="key-fpr">${keyopts}</select>
@@ -22,23 +22,32 @@ function loadLogin() {
     <button id="login-submit" type="submit" value="Login">Login</button>
   </div>
 
+  ` + err_template + `
+
   </form>`
-  document.getElementById("key-login-form").addEventListener("submit", submitLogin);
-  document.getElementById("goto-generate-button").addEventListener("click", loadGenerate);
+    document.getElementById("key-login-form").addEventListener("submit", submitLogin);
+    document.getElementById("goto-generate-button").addEventListener("click", loadGenerate);
+    load(err);
 }
 
 function submitLogin() {
-  var fprlist = document.getElementById("key-fpr");
-  var fpr = fprlist.options[fprlist.selectedIndex].value
-  var passphrase = document.getElementById("login-passphrase").value;
-  var key = keyring.privateKeys.getForId(fpr)
-  decryptKeyThenGithub(key, passphrase)
+    var fprlist = document.getElementById("key-fpr");
+    var fpr = fprlist.options[fprlist.selectedIndex].value
+    var passphrase = document.getElementById("login-passphrase").value;
+    var key = keyring.privateKeys.getForId(fpr)
+    routes("decrypt", function (next) {
+        next("", key, passphrase);
+    });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  if (keyring.privateKeys.keys.length > 0) {
-    routes("login", function (next) { next(); });
-  } else {
-    routes("generate", function (next) { next(); });
-  }
+document.addEventListener('DOMContentLoaded', function () {
+    if (keyring.privateKeys.keys.length > 0) {
+        routes("login", function (next) {
+            next("");
+        });
+    } else {
+        routes("generate", function (next) {
+            next("");
+        });
+    }
 });

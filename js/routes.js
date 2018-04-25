@@ -11,20 +11,24 @@ function routes(to, next) {
     wrapper.innerHTML = loading_template;
 
     if (to == "generate") {
-        next(function () {
-            loadGenerate();
+        next(function (err) {
+            loadGenerate(err);
+        });
+    } else if (to == "decrypt") {
+        next(function (err, key, passphrase) {
+            decryptKey(err, key, passphrase);
         });
     } else if (to == "github") {
-        next(function (key, passphrase) {
-            decryptKeyThenGithub(key, passphrase);
+        next(function (err, key, passphrase) {
+            loadGithub(err, key, passphrase);
         });
     } else if (to == "gamelist") {
-        next(function () {
-            loadGameList();
+        next(function (err) {
+            loadGameList(err);
         });
     } else {
-        next(function () {
-            loadLogin();
+        next(function (err) {
+            loadLogin(err);
         });
     }
 }

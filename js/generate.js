@@ -14,6 +14,8 @@ const gen_template = `<form id="generate-key-form">
     <input type="password" id="key-passphrase" placeholder="PGP Key Passphrase"></input><br>
   </div>
 
+  ` + err_template + `  
+
   <span class="warning">WARNING: Name and email will be public!</span><br>
 
   <div class="row">
@@ -21,11 +23,10 @@ const gen_template = `<form id="generate-key-form">
   </div>
 
   <div id="skip-gen-div" class="row"> 
-  </div>
-
+  </div>  
 </form>`;
 
-function loadGenerate() {
+function loadGenerate(err) {
     var wrapper = document.getElementById("wrapper");
     wrapper.innerHTML = gen_template;
     if (keyring.privateKeys.keys.length > 0) {
@@ -33,6 +34,7 @@ function loadGenerate() {
         document.getElementById("skip-gen").addEventListener("click", loadLogin);
     }
     document.getElementById("generate-key-form").addEventListener("submit", submitGenerate);
+    load(err);
 }
 
 function submitGenerate(e) {
@@ -48,14 +50,14 @@ function submitGenerate(e) {
         }],
         passphrase: passphrase
     };
-    routes("github", function (next) {
+    routes("decrypt", function (next) {
         openpgp.generateKey(options).then(function (key) {
             var privkey = key.privateKeyArmored;
             var pubkey = key.publicKeyArmored;
             keyring.publicKeys.importKey(pubkey);
             keyring.privateKeys.importKey(privkey);
             keyring.store();
-            next(key, passphrase);
+            next("", key, passphrase);
         });
     });
 }
