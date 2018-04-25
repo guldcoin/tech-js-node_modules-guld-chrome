@@ -13,7 +13,7 @@ const gh_template = `<form id="github-credentials-form">
   <div class="row">
     <button type="submit" value="store">Secure and store</button>
   </div>
-  
+
 </form>`;
 
 function decryptKeyThenGithub(key, passphrase) {
@@ -34,12 +34,20 @@ function submitGithub(e, key, passphrase) {
     e.preventDefault();
     var uname = document.getElementById("key-gh-username").value;
     var password = document.getElementById("key-gh-password").value;
-    chrome.storage.local.set({
-        gh: {
+    var options = {
+        data: JSON.stringify({
             username: uname,
             password: password
-        }
-    }, function () {
-        routes("gamelist", function (next) { next(); });
+        }),
+        publicKeys: keyring.publicKeys.getForId(key.primaryKey.fingerprint),
+        privateKeys: [key]
+    };
+    openpgp.encrypt(options).then(function(ciphertext) {
+        var encrypted = ciphertext.data;
+        chrome.storage.local.set({
+            gh: encrypted
+        }, function () {
+            routes("gamelist", function (next) { next(); });
+        });
     });
 }
