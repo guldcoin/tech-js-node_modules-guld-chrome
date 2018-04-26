@@ -1,6 +1,7 @@
 'use strict';
 
-const gen_template = `<form id="generate-key-form">
+const gen_template = logo_template +
+`<form id="generate-key-form">
   
   <div class="row">
     <input type="text" id="key-name" placeholder="Name"></input><br>

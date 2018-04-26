@@ -1,6 +1,7 @@
 'use strict';
 
-const gh_template = `<form id="github-credentials-form">
+const gh_template = logo_template +
+`<form id="github-credentials-form">
 
   <div class="row">
     <input type="text" id="key-gh-username" placeholder="Github username"></input><br>

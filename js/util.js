@@ -6,6 +6,7 @@ if (typeof window == 'undefined' || !(window.openpgp)) {
 const keyring = new openpgp.Keyring();
 
 const err_template = `<div id="err-div" class="row"> </div>`;
+const logo_template = `<img id="logo" src="images/logo.svg" alt="Guld Games" width="60%">`;
 
 function load(err) {
     document.getElementById("err-div").innerHTML = `<p class="error">` + err + `</p>`;
