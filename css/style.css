@@ -135,7 +135,7 @@ select {
 
 #leprechaun {
     position: relative;
-    margin-top: 5rem;
+    padding-top: 3.4rem;
 }
 
 #leprechaun #head {
@@ -227,7 +227,7 @@ select {
     display: inline-block;
     position: absolute;
     left: 5rem;
-    top: 9rem;
+    top: 12.5rem;
     -webkit-animation: eyes_move 3s infinite;
     /* Safari 4+ */
     -moz-animation: eyes_move 3s infinite;

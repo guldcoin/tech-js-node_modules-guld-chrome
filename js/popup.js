@@ -41,6 +41,12 @@ function submitLogin() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    routes("login", function (next) {
+        setTimeout(function () {
+            next("");
+        }, 2000000);
+    });
+    /*
     if (keyring.privateKeys.keys.length > 0) {
         routes("login", function (next) {
             next("");
@@ -50,4 +56,5 @@ document.addEventListener('DOMContentLoaded', function () {
             next("");
         });
     }
+    */
 });
