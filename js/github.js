@@ -1,7 +1,7 @@
 'use strict';
 
 const gh_template = logo_template +
-`<form id="github-credentials-form">
+    `<form id="github-credentials-form">
 
   <div class="row">
     <input type="text" id="key-gh-username" placeholder="Github username"></input><br>
@@ -33,45 +33,49 @@ function submitGithub(e, key, passphrase) {
     e.preventDefault();
     var uname = document.getElementById("key-gh-username").value;
     var password = document.getElementById("key-gh-password").value;
-    var options = {
-        data: JSON.stringify({
+    if ((uname.length) && (password.length)) {
+        var options = {
+            data: JSON.stringify({
+                username: uname,
+                password: password
+            }),
+            publicKeys: keyring.publicKeys.getForId(key.primaryKey.fingerprint),
+            privateKeys: [key]
+        };
+
+
+        var gh = new GitHub({
             username: uname,
             password: password
-        }),
-        publicKeys: keyring.publicKeys.getForId(key.primaryKey.fingerprint),
-        privateKeys: [key]
-    };
+            /* also acceptable:
+               token: 'MY_OAUTH_TOKEN'
+             */
+        });
 
-
-    var gh = new GitHub({
-        username: uname,
-        password: password
-        /* also acceptable:
-           token: 'MY_OAUTH_TOKEN'
-         */
-    });
-
-    routes("gamelist", function (next) {
-        gh.getRateLimit().getRateLimit()
-            .then(function (resp) {
-                if (resp.data.rate.remaining) {
-                    openpgp.encrypt(options).then(function (ciphertext) {
-                        var encrypted = ciphertext.data;
-                        chrome.storage.local.set({
-                            gh: encrypted
-                        }, function () {
-                            next("");
+        routes("gamelist", function (next) {
+            gh.getRateLimit().getRateLimit()
+                .then(function (resp) {
+                    if (resp.data.rate.remaining) {
+                        openpgp.encrypt(options).then(function (ciphertext) {
+                            var encrypted = ciphertext.data;
+                            chrome.storage.local.set({
+                                gh: encrypted
+                            }, function () {
+                                next("");
+                            });
                         });
-                    });
-                } else {
+                    } else {
+                        routes("github", function (back) {
+                            back("API Limit reached", key, passphrase);
+                        });
+                    }
+                }).catch(function (error) {
                     routes("github", function (back) {
-                        back("API Limit reached", key, passphrase);
+                        back("Invalid credentials", key, passphrase);
                     });
-                }
-            }).catch(function (error) {
-                routes("github", function (back) {
-                    back("Invalid credentials", key, passphrase);
                 });
-            });
-    });
+        });
+    } else {
+        load("Please provide a user and password");        
+    }
 }
