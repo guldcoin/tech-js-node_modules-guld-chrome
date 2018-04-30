@@ -1,6 +1,8 @@
-'use strict';
+'use strict'
 
-const clover_img = `
+/* global loadGenerate:false decryptKey:false loadGithub:false loadGameList:false loadLogin:false */
+
+const CLOVER_IMG = `
     <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="9.94203in" height="13.8585in" version="1.0" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
     viewBox="0 0 923 1287"
     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -36,51 +38,51 @@ const clover_img = `
     </g>
     </g>
     </g>
-    </svg>`;
+    </svg>`
 
-const loading_template = `
+const LOADING_TEMPLATE = `
     <div id="leprechaun" class="row text-center">
         <div id="hat"></div>
         <div id="eyes"></div>
         <div id="head"></div>
     </div>
     <div id="leprechaun_loading" class="row text-center">
-        <div id="clover1" class="clover">` + clover_img + `</div>
-        <div id="clover2" class="clover">` + clover_img + `</div>
-        <div id="clover3" class="clover">` + clover_img + `</div>
-        <div id="clover4" class="clover">` + clover_img + `</div>
-        <div id="clover5" class="clover">` + clover_img + `</div>
-        <div id="clover6" class="clover">` + clover_img + `</div>
-        <div id="clover7" class="clover">` + clover_img + `</div>
+        <div id="clover1" class="clover">${CLOVER_IMG}</div>
+        <div id="clover2" class="clover">${CLOVER_IMG}</div>
+        <div id="clover3" class="clover">${CLOVER_IMG}</div>
+        <div id="clover4" class="clover">${CLOVER_IMG}</div>
+        <div id="clover5" class="clover">${CLOVER_IMG}</div>
+        <div id="clover6" class="clover">${CLOVER_IMG}</div>
+        <div id="clover7" class="clover">${CLOVER_IMG}</div>
     </div>
     <div class="row text-center">
         LOADING
     </div>
-`;
+`
 
-function routes(to, next) {
-    var wrapper = document.getElementById("wrapper");
-    wrapper.innerHTML = loading_template;
+function routes (to, next) { // eslint-disable-line no-unused-vars
+  var wrapper = document.getElementById('wrapper')
+  wrapper.innerHTML = LOADING_TEMPLATE
 
-    if (to == "generate") {
-        next(function (err) {
-            loadGenerate(err);
-        });
-    } else if (to == "decrypt") {
-        next(function (err, key, passphrase) {
-            decryptKey(err, key, passphrase);
-        });
-    } else if (to == "github") {
-        next(function (err, key, passphrase) {
-            loadGithub(err, key, passphrase);
-        });
-    } else if (to == "gamelist") {
-        next(function (err) {
-            loadGameList(err);
-        });
-    } else {
-        next(function (err) {
-            loadLogin(err);
-        });
-    }
+  if (to === 'generate') {
+    next(function (err) {
+      loadGenerate(err)
+    })
+  } else if (to === 'decrypt') {
+    next(function (err, key, passphrase) {
+      decryptKey(err, key, passphrase)
+    })
+  } else if (to === 'github') {
+    next(function (err, key, passphrase) {
+      loadGithub(err, key, passphrase)
+    })
+  } else if (to === 'gamelist') {
+    next(function (err) {
+      loadGameList(err)
+    })
+  } else {
+    next(function (err) {
+      loadLogin(err)
+    })
+  }
 }
