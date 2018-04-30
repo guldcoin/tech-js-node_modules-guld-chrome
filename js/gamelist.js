@@ -1,8 +1,11 @@
-'use strict';
+'use strict'
 
-const game_list_template = `game list found <3`;
+/* global load:false */
 
-function loadGameList() {
-    var wrapper = document.getElementById("wrapper");
-    wrapper.innerHTML = game_list_template;
+const GAME_LIST_TEMPLATE = `game list found <3`
+
+function loadGameList (err) { // eslint-disable-line no-unused-vars
+  var wrapper = document.getElementById('wrapper')
+  wrapper.innerHTML = GAME_LIST_TEMPLATE
+  load(err)
 }

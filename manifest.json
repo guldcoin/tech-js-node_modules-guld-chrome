@@ -2,7 +2,7 @@
   "name": "Guld Games",
   "version": "0.1",
   "description": "Guld Games",
-  "permissions": ["clipboardRead", "clipboardWrite", "activeTab", "declarativeContent", "storage", "unlimitedStorage", "notifications"],
+  "permissions": ["clipboardRead", "clipboardWrite", "activeTab", "declarativeContent", "storage", "unlimitedStorage", "notifications", "nativeMessaging"],
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
@@ -13,21 +13,10 @@
       }
     }
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "file://*/*",
-        "http://*/*",
-        "https://*/*"
-      ],
-      "js": ["js/contentscript.js"],
-      "run_at": "document_start",
-      "all_frames": true
-    }
-  ],
+
   "background": {
     "scripts": ["js/background.js"],
-    "persistent": true
+    "persistent": false
   },
   "browser_action": {
     "default_popup": "popup.html",

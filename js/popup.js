@@ -1,44 +1,82 @@
-'use strict';
+'use strict'
 
-function loadLogin() {
-  var wrapper = document.getElementById("wrapper");
-  var keymap = keyring.privateKeys.keys.map(function(key) {
+/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false loadGenerate:false BrowserFS:false LOADING_TEMPLATE:false */
+
+function loadLogin (err) { // eslint-disable-line no-unused-vars
+  var wrapper = document.getElementById('wrapper')
+  var keymap = keyring.privateKeys.keys.map(function (key) {
     var fpr = key.primaryKey.fingerprint
     return `<option value="${fpr}">${fpr}</option>`
-  });
-  var keyopts = keymap.join("\n");
-  wrapper.innerHTML = `
-  <form id="key-login-form">
-  <div class="row text-right">
-    <select id="key-fpr">${keyopts}</select>
-    <button id="goto-generate-button" class="text-button" value="Generate">Manage keys</button><br>
-  </div>
+  })
+  var keyopts = keymap.join('\n')
+  wrapper.innerHTML =
+    `${LOGO_TEMPLATE}
+    <form id="key-login-form">
+    <div class="row text-right">
+        <select id="key-fpr">${keyopts}</select>
+        <button id="goto-generate-button" class="text-button" value="Generate">Manage keys</button><br>
+    </div>
 
-  <div class="row">
-    <input id="login-passphrase" type="password" placeholder="PGP Key Passphrase"></input><br>
-  </div>
+    <div class="row">
+        <input id="login-passphrase" type="password" placeholder="PGP Key Passphrase"></input><br>
+    </div>
 
-  <div class="row">
-    <button id="login-submit" type="submit" value="Login">Login</button>
-  </div>
+    <div class="row">
+        <button id="login-submit" type="submit" value="Login">Login</button>
+    </div>
 
-  </form>`
-  document.getElementById("key-login-form").addEventListener("submit", submitLogin);
-  document.getElementById("goto-generate-button").addEventListener("click", loadGenerate);
+    ${ERR_TEMPLATE}
+
+    </form>`
+  document.getElementById('key-login-form').addEventListener('submit',
+    submitLogin)
+  document.getElementById('goto-generate-button').addEventListener('click',
+    loadGenerate)
+  load(err)
 }
 
-function submitLogin() {
-  var fprlist = document.getElementById("key-fpr");
+function submitLogin () {
+  var fprlist = document.getElementById('key-fpr')
   var fpr = fprlist.options[fprlist.selectedIndex].value
-  var passphrase = document.getElementById("login-passphrase").value;
+  var passphrase = document.getElementById('login-passphrase').value
   var key = keyring.privateKeys.getForId(fpr)
-  decryptKeyThenGithub(key, passphrase)
+  routes('decrypt', function (next) {
+    next('', key, passphrase)
+  })
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  if (keyring.privateKeys.keys.length > 0) {
-    routes("login", function (next) { next(); });
-  } else {
-    routes("generate", function (next) { next(); });
-  }
-});
+document.addEventListener('DOMContentLoaded', function () {
+  var wrapper = document.getElementById('wrapper')
+  wrapper.innerHTML = LOADING_TEMPLATE
+
+  chrome.runtime.sendNativeMessage('com.guld.ledger',
+    {'cmd': '--help'},
+    response => {
+      if (!response) {
+        wrapper.innerHTML = JSON.stringify(chrome.runtime.lastError)
+      }
+      wrapper.innerHTML = wrapper.innerHTML + response
+    }
+  )
+
+  BrowserFS.configure({
+    fs: 'LocalStorage',
+    options: {
+      '/tmp': {
+        fs: 'InMemory'
+      }
+    }
+  }, function (err) {
+    if (err) return console.log(err) // eslint-disable-line no-console
+    window.fs = BrowserFS.BFSRequire('fs')
+    if (keyring.privateKeys.keys.length > 0) {
+      routes('login', function (next) {
+        next('')
+      })
+    } else {
+      routes('generate', function (next) {
+        next('')
+      })
+    }
+  })
+})
