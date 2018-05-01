@@ -64,25 +64,29 @@ function routes (to, next) { // eslint-disable-line no-unused-vars
   var wrapper = document.getElementById('wrapper')
   wrapper.innerHTML = LOADING_TEMPLATE
 
-  if (to === 'generate') {
-    next(function (err) {
-      loadGenerate(err)
-    })
-  } else if (to === 'decrypt') {
-    next(function (err, key, passphrase) {
-      decryptKey(err, key, passphrase)
-    })
-  } else if (to === 'github') {
-    next(function (err, key, passphrase) {
-      loadGithub(err, key, passphrase)
-    })
-  } else if (to === 'gamelist') {
-    next(function (err) {
-      loadGameList(err)
-    })
-  } else {
-    next(function (err) {
-      loadLogin(err)
-    })
-  }
+    if (to == "generate") {
+        next(function (err, key, passphrase) {
+            loadGenerate(err, key, passphrase);
+        });
+    } else if (to == "decrypt") {
+        next(function (err, key, passphrase) {
+            decryptKey(err, key, passphrase);
+        });
+    } else if (to == "github") {
+        next(function (err, key, passphrase) {
+            loadGithub(err, key, passphrase);
+        });
+    } else if (to == "gamelist") {
+        next(function (err) {
+            loadGameList(err);
+        });
+    } else if (to == "dash") {
+        next(function (err, key, passphrase) {
+            loadDash(err, key, passphrase);
+        });
+    } else {
+        next(function (err) {
+            loadLogin(err);
+        });
+    }
 }

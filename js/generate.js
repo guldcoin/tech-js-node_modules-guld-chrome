@@ -25,45 +25,42 @@ const GEN_TEMPLATE =
   <div class="row">
     <button id="generate" type="submit" value="Generate">Generate</button>
   </div>
+</form>
 
-  <div id="skip-gen-div" class="row">
-  </div>
-</form>`
+  ${FOOTER_TEMPLATE}`;    
 
-function loadGenerate (err) { // eslint-disable-line no-unused-vars
-  var wrapper = document.getElementById('wrapper')
-  wrapper.innerHTML = GEN_TEMPLATE
-  if (keyring.privateKeys.keys.length > 0) {
-    document.getElementById('skip-gen-div').innerHTML =
-            `<button id="skip-gen" class="text-button" value="Skip">Skip</button>`
-    document.getElementById('skip-gen').addEventListener('click', loadLogin)
-  }
-  document.getElementById('generate-key-form').addEventListener('submit',
-    submitGenerate)
-  load(err)
+function loadGenerate(err, key, passphrase) {
+    var wrapper = document.getElementById("wrapper");
+    wrapper.innerHTML = gen_template;
+    document.getElementById("generate-key-form").addEventListener("submit", submitGenerate);
+    load(err, key, passphrase);
 }
 
-function submitGenerate (e) {
-  e.preventDefault()
-  var uname = document.getElementById('key-name').value
-  var email = document.getElementById('key-email').value
-  var passphrase = document.getElementById('key-passphrase').value
-  var options = {
-    numBits: 4096,
-    userIds: [{
-      name: uname,
-      email: email
-    }],
-    passphrase: passphrase
-  }
-  routes('decrypt', function (next) {
-    openpgp.generateKey(options).then(function (key) {
-      var privkey = key.privateKeyArmored
-      var pubkey = key.publicKeyArmored
-      keyring.publicKeys.importKey(pubkey)
-      keyring.privateKeys.importKey(privkey)
-      keyring.store()
-      next('', key, passphrase)
-    })
-  })
+function submitGenerate(e) {
+    e.preventDefault();
+    var uname = document.getElementById("key-name").value;
+    var email = document.getElementById("key-email").value;
+    var passphrase = document.getElementById("key-passphrase").value;
+    var options = {
+        numBits: 4096,
+        userIds: [{
+            name: uname,
+            email: email
+        }],
+        passphrase: passphrase
+    };
+    if ((uname.length) && (email.length) && (passphrase.length)) {
+        routes("decrypt", function (next) {
+            openpgp.generateKey(options).then(function (key) {
+                var privkey = key.privateKeyArmored;
+                var pubkey = key.publicKeyArmored;
+                keyring.publicKeys.importKey(pubkey);
+                keyring.privateKeys.importKey(privkey);
+                keyring.store();
+                next("", key, passphrase);
+            });
+        });
+    } else {
+        load("Please provide a user, email and passphrase");
+    }
 }

@@ -4,8 +4,7 @@
 
 const GH_TEMPLATE =
     `${LOGO_TEMPLATE}
-
-<form id="github-credentials-form">
+  <form id="github-credentials-form">
 
   <div class="row">
     <input type="text" id="key-gh-username" placeholder="Github username"></input><br>
@@ -20,8 +19,8 @@ const GH_TEMPLATE =
   </div>
 
   ${ERR_TEMPLATE}
-
-</form>`
+</form>  
+${FOOTER_TEMPLATE}`;    
 
 function loadGithub (err, key, passphrase) { // eslint-disable-line no-unused-vars
   // Load view
@@ -32,54 +31,57 @@ function loadGithub (err, key, passphrase) { // eslint-disable-line no-unused-va
     function (e) {
       submitGithub(e, key, passphrase)
     })
-  load(err)
+    load(err, key, passphrase);
 }
 
-function submitGithub (e, key, passphrase) {
-  e.preventDefault()
-  var uname = document.getElementById('key-gh-username').value
-  var password = document.getElementById('key-gh-password').value
-  var options = {
-    data: JSON.stringify({
-      username: uname,
-      password: password
-    }),
-    publicKeys: keyring.publicKeys.getForId(key.primaryKey.fingerprint),
-    privateKeys: [key]
-  }
 
-  var gh = new GitHub({
-    username: uname,
-    password: password
-    /* also acceptable:
-           token: 'MY_OAUTH_TOKEN'
-         */
-  })
+function submitGithub(e, key, passphrase) {
+    e.preventDefault();
+    var uname = document.getElementById("key-gh-username").value;
+    var password = document.getElementById("key-gh-password").value;
+    if ((uname.length) && (password.length)) {
+        var options = {
+            data: JSON.stringify({
+                username: uname,
+                password: password
+            }),
+            publicKeys: keyring.publicKeys.getForId(key.primaryKey.fingerprint),
+            privateKeys: [key]
+        };
 
-  routes('gamelist', function (next) {
-    gh.getRateLimit().getRateLimit()
-      .then(function (resp) {
-        if (resp.data.rate.remaining) {
-          openpgp.encrypt(options).then(function (
-            ciphertext) {
-            var encrypted = ciphertext.data
-            chrome.storage.local.set({
-              gh: encrypted
-            }, function () {
-              next('')
-            })
-          })
-        } else {
-          routes('github', function (back) {
-            back('API Limit reached', key,
-              passphrase)
-          })
-        }
-      }).catch(function () {
-        routes('github', function (back) {
-          back('Invalid credentials', key,
-            passphrase)
-        })
-      })
-  })
+
+        var gh = new GitHub({
+            username: uname,
+            password: password
+            /* also acceptable:
+               token: 'MY_OAUTH_TOKEN'
+             */
+        });
+
+        routes("dash", function (next) {
+            gh.getRateLimit().getRateLimit()
+                .then(function (resp) {
+                    if (resp.data.rate.remaining) {
+                        openpgp.encrypt(options).then(function (ciphertext) {
+                            var encrypted = ciphertext.data;
+                            chrome.storage.local.set({
+                                gh: encrypted
+                            }, function () {
+                                next("", key, passphrase);
+                            });
+                        });
+                    } else {
+                        routes("github", function (back) {
+                            back("API Limit reached", key, passphrase);
+                        });
+                    }
+                }).catch(function (error) {
+                    routes("github", function (back) {
+                        back("Invalid credentials", key, passphrase);
+                    });
+                });
+        });
+    } else {
+        load("Please provide a user and password");        
+    }
 }
