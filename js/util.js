@@ -22,6 +22,14 @@ const FOOTER_ITEMS_TEMPLATE = `
     <div id="keys_tab" class="menu_btn"><img src="images/footer_menu/keys.svg"><div class="name">keys</div></div>
     <div id="hosts_tab" class="menu_btn"><img src="images/footer_menu/hosts.svg"><div class="name">hosts</div></div>
     `
+const TOP_MENU_TEMPLATE = // eslint-disable-line no-unused-vars
+    `<nav>
+        <img id="logo_dash" src="images/logo2.svg">
+        <div id="balance">
+            <div class="balances"><span class="gg text-right">2.5147</span><span class="usd text-right">176.029</span></div>
+            <div class="assets"><span class="gg text-left">GG</span><span class="usd text-left">USD</span></div>
+        </div>
+    </nav>`
 
 var activeTab = 'games'
 

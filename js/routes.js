@@ -1,6 +1,6 @@
 'use strict'
 
-/* global activeTab:true loadGenerate:false decryptKey:false loadGithub:false loadGameList:false loadLogin:false  loadDash:false */
+/* global activeTab:true loadGenerate:false loadLotteryPickRoom:false decryptKey:false loadGithub:false loadLogin:false  loadDash:false */
 /* exported activeTab */
 
 const CLOVER_IMG = `
@@ -79,14 +79,15 @@ function routes (to, next) { // eslint-disable-line no-unused-vars
       activeTab = 'hosts' // eslint-disable-line no-unused-vars
       loadGithub(err, key, passphrase)
     })
-  } else if (to === 'gamelist') {
-    next(function (err) {
-      loadGameList(err)
-    })
   } else if (to === 'dash') {
     next(function (err, key, passphrase) {
       activeTab = 'games' // eslint-disable-line no-unused-vars
       loadDash(err, key, passphrase)
+    })
+  } else if (to === 'lottery_pick_room') {
+    next(function (err, key, passphrase) {
+      activeTab = 'games' // eslint-disable-line no-unused-vars
+      loadLotteryPickRoom(err, key, passphrase)
     })
   } else {
     next(function (err) {

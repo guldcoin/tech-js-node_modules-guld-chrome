@@ -9,6 +9,13 @@ body {
     margin: 0;
 }
 
+h1 {
+    margin: 0;
+    padding: 2rem 0;
+    color: #8e8d8d;
+    font-weight: 400;
+}
+
 .text-center {
     text-align: center;
 }
@@ -21,13 +28,31 @@ body {
     text-align: left;
 }
 
-button {
+button, button:visited {
     background: #e34822;
     padding: 0.5rem 1.2rem;
     border: 0;
     border-radius: 5rem;
     color: #fff;
     font-weight: 600;
+    transition: all 0.5s;
+}
+
+button:hover, button:active {
+    background: #f1866c;
+}
+
+button.secondary, button.secondary:visited {
+    background: #3b235e;
+    transition: all 0.5s;
+}
+
+button.secondary:hover, button.secondary:active {
+    background: #7d58b3;
+}
+
+button.grouped {
+    width: 12rem;
 }
 
 .text-button {
@@ -934,4 +959,54 @@ nav {
 #footer_menu .name {
     margin-top: 0.2rem;
     color: #fff;
+}
+
+#white_bg {
+    background: #fff;
+    position: absolute;
+    top: 4.4rem;
+    bottom: 0;
+    width: 100%;
+}
+
+#lottery_room_list {
+    width: 12rem;
+    margin: 0 auto;
+    background: #c8c8c8;
+    height: 0;
+    overflow-y: auto;
+    transition: all 0.5s;
+    transition-delay: 0s;
+}
+
+#lottery_room_list button {
+    background: #00ba0e;
+    padding: 0.2rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.6rem;
+    position: absolute;
+    right: 0.6rem;
+    top: 0.2rem;
+}
+
+#lottery_room_list .room {
+    position: relative;
+    padding: 0.4rem 0.8rem;
+    color: #6f6f6f;
+}
+
+#join_lottery_rooms #join_lottery_room {
+    transition-delay: 0.5s;
+}
+
+#join_lottery_rooms:hover #join_lottery_room {
+    border-radius: 0.6rem;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    transition-delay: 0s;
+}
+
+#join_lottery_rooms:hover #lottery_room_list {
+    height: 13rem;
+    transition-delay: 0.3s;
 }

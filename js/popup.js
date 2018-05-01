@@ -49,6 +49,7 @@ function submitLogin () {
 
 function loadBlocktree (fs) {
   blocktree = new Blocktree(fs, 'gg')
+
   if (keyring.privateKeys.keys.length > 0) {
     routes('login', function (next) {
       next('')
@@ -59,7 +60,6 @@ function loadBlocktree (fs) {
     })
   }
 }
-
 // Example ledger call
 
 // chrome.runtime.sendNativeMessage('com.guld.ledger',
