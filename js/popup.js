@@ -2,7 +2,7 @@
 
 /* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false loadGenerate:false LOADING_TEMPLATE:false Blocktree:false getBrowserFS:false */
 
-var blocktree
+var blocktree // eslint-disable-line no-unused-vars
 
 function loadLogin (err) { // eslint-disable-line no-unused-vars
   var wrapper = document.getElementById('wrapper')

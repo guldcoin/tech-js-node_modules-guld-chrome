@@ -1,6 +1,8 @@
-'use strict';
+'use strict'
 
-const dash_template =
+/* global ERR_TEMPLATE:false FOOTER_TEMPLATE:false load:false */
+
+const DASH_TEMPLATE = // eslint-disable-line no-unused-vars
     `<nav>
         <img id="logo_dash" src="images/logo2.svg">
         <div id="balance">
@@ -25,10 +27,10 @@ const dash_template =
         <button id="playgame" type="submit" value="Play">Play Game</button>
     </div>
 
-  ${FOOTER_TEMPLATE}`;    
+  ${FOOTER_TEMPLATE}`
 
-function loadDash(err, key, passphrase) {
-    var wrapper = document.getElementById("wrapper");
-    wrapper.innerHTML = dash_template;
-    load(err, key, passphrase);
+function loadDash (err, key, passphrase) { // eslint-disable-line no-unused-vars
+  var wrapper = document.getElementById('wrapper')
+  wrapper.innerHTML = DASH_TEMPLATE
+  load(err, key, passphrase)
 }

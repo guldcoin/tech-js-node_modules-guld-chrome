@@ -1,6 +1,6 @@
 'use strict'
 
-/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false loadLogin:false load:false routes:false openpgp:false */
+/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false loadLogin:false load:false routes:false openpgp:false FOOTER_TEMPLATE:false */
 
 const GEN_TEMPLATE =
     `${LOGO_TEMPLATE}
@@ -27,9 +27,9 @@ const GEN_TEMPLATE =
   </div>
 </form>
 
-  ${FOOTER_TEMPLATE}`;    
+  ${FOOTER_TEMPLATE}`
 
-function loadGenerate(err) { // eslint-disable-line no-unused-vars
+function loadGenerate (err) { // eslint-disable-line no-unused-vars
   var wrapper = document.getElementById('wrapper')
   wrapper.innerHTML = GEN_TEMPLATE
   if (keyring.privateKeys.keys.length > 0) {
