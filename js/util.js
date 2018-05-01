@@ -29,35 +29,38 @@ function load (err, key, passphrase) { // eslint-disable-line no-unused-vars
   document.getElementById('err-div').innerHTML = `<p class="error">${err}</p>`
   // Footer menu
   if (keyring.privateKeys.keys.length > 0) {
-    document.getElementById('footer_menu').innerHTML = FOOTER_ITEMS_TEMPLATE
+    var footerMenu = document.getElementById('footer_menu')
+    if (footerMenu) {
+      footerMenu.innerHTML = FOOTER_ITEMS_TEMPLATE
 
-    document.getElementById('games_tab').addEventListener('click', function () {
-      activeTab = 'games'
-      routes('dash', function (next) {
-        next('', key, passphrase)
+      document.getElementById('games_tab').addEventListener('click', function () {
+        activeTab = 'games'
+        routes('dash', function (next) {
+          next('', key, passphrase)
+        })
       })
-    })
 
-    document.getElementById('keys_tab').addEventListener('click', function () {
-      activeTab = 'keys'
-      routes('generate', function (next) {
-        next('', key, passphrase)
+      document.getElementById('keys_tab').addEventListener('click', function () {
+        activeTab = 'keys'
+        routes('generate', function (next) {
+          next('', key, passphrase)
+        })
       })
-    })
 
-    document.getElementById('hosts_tab').addEventListener('click', function () {
-      activeTab = 'hosts'
-      routes('github', function (next) {
-        next('', key, passphrase)
+      document.getElementById('hosts_tab').addEventListener('click', function () {
+        activeTab = 'hosts'
+        routes('github', function (next) {
+          next('', key, passphrase)
+        })
       })
-    })
 
-    if (activeTab === 'games') {
-      document.getElementById('games_tab').classList.add('active')
-    } else if (activeTab === 'keys') {
-      document.getElementById('keys_tab').classList.add('active')
-    } else if (activeTab === 'hosts') {
-      document.getElementById('hosts_tab').classList.add('active')
+      if (activeTab === 'games') {
+        document.getElementById('games_tab').classList.add('active')
+      } else if (activeTab === 'keys') {
+        document.getElementById('keys_tab').classList.add('active')
+      } else if (activeTab === 'hosts') {
+        document.getElementById('hosts_tab').classList.add('active')
+      }
     }
   }
 }

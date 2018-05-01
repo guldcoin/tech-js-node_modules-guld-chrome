@@ -1,6 +1,6 @@
 'use strict'
 
-/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false loadLogin:false load:false routes:false openpgp:false FOOTER_TEMPLATE:false */
+/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false openpgp:false FOOTER_TEMPLATE:false */
 
 const GEN_TEMPLATE =
     `${LOGO_TEMPLATE}
@@ -29,19 +29,14 @@ const GEN_TEMPLATE =
 
   ${FOOTER_TEMPLATE}`
 
-function loadGenerate (err) { // eslint-disable-line no-unused-vars
+function loadGenerate (err, key, passphrase) { // eslint-disable-line no-unused-vars
   var wrapper = document.getElementById('wrapper')
   wrapper.innerHTML = GEN_TEMPLATE
-  if (keyring.privateKeys.keys.length > 0) {
-    document.getElementById('skip-gen-div').innerHTML =
-            `<button id="skip-gen" class="text-button" value="Skip">Skip</button>`
-    document.getElementById('skip-gen').addEventListener('click', loadLogin)
-  }
   document.getElementById('generate-key-form').addEventListener('submit',
     submitGenerate)
   //  document.getElementById('key-name').addEventListener('focusout', validateKeyName)
 
-  load(err)
+  load(err, key, passphrase)
 }
 
 function submitGenerate (e) {

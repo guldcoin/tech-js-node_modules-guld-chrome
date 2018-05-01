@@ -1,6 +1,7 @@
 'use strict'
 
-/* global loadGenerate:false decryptKey:false loadGithub:false loadGameList:false loadLogin:false  loadDash:false */
+/* global activeTab:true loadGenerate:false decryptKey:false loadGithub:false loadGameList:false loadLogin:false  loadDash:false */
+/* exported activeTab */
 
 const CLOVER_IMG = `
     <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="9.94203in" height="13.8585in" version="1.0" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
@@ -66,6 +67,7 @@ function routes (to, next) { // eslint-disable-line no-unused-vars
 
   if (to === 'generate') {
     next(function (err, key, passphrase) {
+      activeTab = 'keys' // eslint-disable-line no-unused-vars
       loadGenerate(err, key, passphrase)
     })
   } else if (to === 'decrypt') {
@@ -74,6 +76,7 @@ function routes (to, next) { // eslint-disable-line no-unused-vars
     })
   } else if (to === 'github') {
     next(function (err, key, passphrase) {
+      activeTab = 'hosts' // eslint-disable-line no-unused-vars
       loadGithub(err, key, passphrase)
     })
   } else if (to === 'gamelist') {
@@ -82,6 +85,7 @@ function routes (to, next) { // eslint-disable-line no-unused-vars
     })
   } else if (to === 'dash') {
     next(function (err, key, passphrase) {
+      activeTab = 'games' // eslint-disable-line no-unused-vars
       loadDash(err, key, passphrase)
     })
   } else {

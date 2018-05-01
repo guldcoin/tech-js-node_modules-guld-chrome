@@ -32,6 +32,12 @@ function loadGithub (err, key, passphrase) { // eslint-disable-line no-unused-va
       submitGithub(e, key, passphrase)
     })
   load(err, key, passphrase)
+  // Hidding menu if settings are not saved
+  chrome.storage.local.get('gh', function (data) {
+    if (typeof data.gh === 'undefined') {
+      document.getElementById('footer_menu').innerHTML = ''
+    }
+  })
 }
 
 function submitGithub (e, key, passphrase) {
