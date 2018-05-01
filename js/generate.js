@@ -7,15 +7,15 @@ const GEN_TEMPLATE =
 <form id="generate-key-form">
 
   <div class="row">
-    <input type="text" id="key-name" placeholder="Name"></input><br>
+    <input type="text" id="key-name" placeholder="Name" autocomplete="username"></input><br>
   </div>
 
   <div class="row">
-    <input type="text" id="key-email" placeholder="Email"></input><br>
+    <input type="text" id="key-email" placeholder="Email" autocomplete="email"></input><br>
   </div>
 
   <div class="row">
-    <input type="password" id="key-passphrase" placeholder="PGP Key Passphrase"></input><br>
+    <input type="password" id="key-passphrase" placeholder="PGP Key Passphrase" autocomplete="new-password"></input><br>
   </div>
 
   ${ERR_TEMPLATE}
