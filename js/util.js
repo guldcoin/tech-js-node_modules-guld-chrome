@@ -1,11 +1,13 @@
 'use strict'
 
-/* global openpgp:false fetch:false */
+/* global openpgp:false fetch:false BrowserFS:false */
 
 if (typeof window === 'undefined' || !(window.openpgp)) {
   throw new ReferenceError('Openpgp is not avilable.')
 }
 const keyring = new openpgp.Keyring() // eslint-disable-line no-unused-vars
+// keyring.clear()
+// keyring.store()
 
 const ERR_TEMPLATE = `<div id="err-div" class="row"> </div>` // eslint-disable-line no-unused-vars
 const LOGO_TEMPLATE = // eslint-disable-line no-unused-vars
@@ -41,5 +43,23 @@ function curl (url, settings, next, error) { // eslint-disable-line no-unused-va
     next(data)
   }).catch(function (e) {
     error(e.message)
+  })
+}
+
+function getBrowserFS (config) { // eslint-disable-line no-unused-vars
+  config = config || {
+    fs: 'LocalStorage',
+    options: {
+      '/tmp': {
+        fs: 'InMemory'
+      }
+    }
+  }
+  return new Promise((resolve, reject) => {
+    BrowserFS.configure(config, err => {
+      if (err) reject(err)
+      window.fs = BrowserFS.BFSRequire('fs')
+      return resolve(window.fs)
+    })
   })
 }

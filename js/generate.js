@@ -40,6 +40,8 @@ function loadGenerate (err) { // eslint-disable-line no-unused-vars
   }
   document.getElementById('generate-key-form').addEventListener('submit',
     submitGenerate)
+  //  document.getElementById('key-name').addEventListener('focusout', validateKeyName)
+
   load(err)
 }
 
@@ -67,3 +69,9 @@ function submitGenerate (e) {
     })
   })
 }
+
+// function validateKeyName (event) {
+//  if (!isNameAvail) {
+
+//  }
+// }

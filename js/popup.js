@@ -1,6 +1,8 @@
 'use strict'
 
-/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false loadGenerate:false BrowserFS:false LOADING_TEMPLATE:false */
+/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false loadGenerate:false LOADING_TEMPLATE:false Blocktree:false getBrowserFS:false */
+
+var blocktree
 
 function loadLogin (err) { // eslint-disable-line no-unused-vars
   var wrapper = document.getElementById('wrapper')
@@ -45,38 +47,33 @@ function submitLogin () {
   })
 }
 
+function loadBlocktree (fs) {
+  blocktree = new Blocktree(fs, 'gg')
+  if (keyring.privateKeys.keys.length > 0) {
+    routes('login', function (next) {
+      next('')
+    })
+  } else {
+    routes('generate', function (next) {
+      next('')
+    })
+  }
+}
+
+// Example ledger call
+
+// chrome.runtime.sendNativeMessage('com.guld.ledger',
+//  {'cmd': '--help'},
+//  response => {
+//    if (!response) {
+//      wrapper.innerHTML = JSON.stringify(chrome.runtime.lastError)
+//    }
+//    wrapper.innerHTML = wrapper.innerHTML + response
+//  }
+// )
+
 document.addEventListener('DOMContentLoaded', function () {
   var wrapper = document.getElementById('wrapper')
   wrapper.innerHTML = LOADING_TEMPLATE
-
-  chrome.runtime.sendNativeMessage('com.guld.ledger',
-    {'cmd': '--help'},
-    response => {
-      if (!response) {
-        wrapper.innerHTML = JSON.stringify(chrome.runtime.lastError)
-      }
-      wrapper.innerHTML = wrapper.innerHTML + response
-    }
-  )
-
-  BrowserFS.configure({
-    fs: 'LocalStorage',
-    options: {
-      '/tmp': {
-        fs: 'InMemory'
-      }
-    }
-  }, function (err) {
-    if (err) return console.log(err) // eslint-disable-line no-console
-    window.fs = BrowserFS.BFSRequire('fs')
-    if (keyring.privateKeys.keys.length > 0) {
-      routes('login', function (next) {
-        next('')
-      })
-    } else {
-      routes('generate', function (next) {
-        next('')
-      })
-    }
-  })
+  getBrowserFS().then(loadBlocktree)
 })
