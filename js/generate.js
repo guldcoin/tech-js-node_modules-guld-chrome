@@ -25,12 +25,11 @@ const GEN_TEMPLATE =
   <div class="row">
     <button id="generate" type="submit" value="Generate">Generate</button>
   </div>
+</form>
 
-  <div id="skip-gen-div" class="row">
-  </div>
-</form>`
+  ${FOOTER_TEMPLATE}`;    
 
-function loadGenerate (err) { // eslint-disable-line no-unused-vars
+function loadGenerate(err) { // eslint-disable-line no-unused-vars
   var wrapper = document.getElementById('wrapper')
   wrapper.innerHTML = GEN_TEMPLATE
   if (keyring.privateKeys.keys.length > 0) {

@@ -6,6 +6,7 @@ body {
     background-size: cover;
     overflow: hidden;
     color: #fff;
+    margin: 0;
 }
 
 .text-center {
@@ -14,6 +15,10 @@ body {
 
 .text-right {
     text-align: right;
+}
+
+.text-left {
+    text-align: left;
 }
 
 button {
@@ -824,4 +829,109 @@ select {
     -o-animation: clover7_move 3s infinite;
     /* Opera 12+ */
     animation: clover7_move 3s infinite;
+}
+
+#logo_dash {
+    display: inline-block;
+    width: 6.6rem;
+}
+
+#balance {
+    display: inline-block;
+    float: right;
+}
+
+#balance span {
+    display: block;
+}
+
+#balance .balances {
+    width: 8rem;
+    display: inline-block;
+}
+
+#balance .assets {
+    width: 2rem;
+    display: inline-block;
+}
+
+#balance .balances .gg {
+    font-size: 1.2rem;
+}
+
+#balance .balances .usd {
+    font-size: 0.8rem;
+}
+
+#balance .assets .gg {
+    font-size: 1rem;
+}
+
+#balance .assets .usd {
+    font-size: 0.8rem;
+}
+
+#balance .usd {
+    color: #b5b5b5;
+}
+
+nav {
+    padding: 1rem 0.6rem;
+}
+
+#profile {
+    background: #fff;
+    padding: 2rem 0;
+}
+
+#name {
+    color: #727272;
+    font-size: 1.4rem;
+}
+
+#username {
+    color: #e34822;
+    font-size: 1.4rem;
+}
+
+#game_pick .pick {
+    margin-top: 3rem;
+}
+
+#game_pick .pick.active {
+    width: 5rem
+}
+
+#game_pick .description {
+    margin-top: 0.6rem;
+}
+
+.menu_btn {
+    width: 2rem;
+    margin: 0.8rem 1.2rem;
+    display: inline-block;
+    opacity: 0.4;
+    cursor: pointer;
+}
+
+.menu_btn img {
+    width: 100%;
+}
+
+.menu_btn:hover {
+    opacity: 0.8;
+}
+
+.menu_btn.active {
+    opacity: 0.8;
+}
+
+#footer_menu {
+    border-top: solid 1px #6742a4;
+    margin-top: 1.4rem;
+}
+
+#footer_menu .name {
+    margin-top: 0.2rem;
+    color: #fff;
 }
