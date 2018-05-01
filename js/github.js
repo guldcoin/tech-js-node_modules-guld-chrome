@@ -17,7 +17,7 @@ const gh_template = logo_template +
 
   ` + err_template + `
 
-</form>`;
+</form>  ` + footer_template;    
 
 function loadGithub(err, key, passphrase) {
     // Load view
@@ -26,7 +26,7 @@ function loadGithub(err, key, passphrase) {
     document.getElementById("github-credentials-form").addEventListener("submit", function (e) {
         submitGithub(e, key, passphrase)
     });
-    load(err);
+    load(err, key, passphrase);
 }
 
 function submitGithub(e, key, passphrase) {
@@ -52,7 +52,7 @@ function submitGithub(e, key, passphrase) {
              */
         });
 
-        routes("gamelist", function (next) {
+        routes("dash", function (next) {
             gh.getRateLimit().getRateLimit()
                 .then(function (resp) {
                     if (resp.data.rate.remaining) {
@@ -61,7 +61,7 @@ function submitGithub(e, key, passphrase) {
                             chrome.storage.local.set({
                                 gh: encrypted
                             }, function () {
-                                next("");
+                                next("", key, passphrase);
                             });
                         });
                     } else {

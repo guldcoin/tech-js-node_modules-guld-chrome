@@ -22,20 +22,14 @@ const gen_template = logo_template +
   <div class="row">
     <button id="generate" type="submit" value="Generate">Generate</button>
   </div>
+</form>
+  ` + footer_template;    
 
-  <div id="skip-gen-div" class="row"> 
-  </div>  
-</form>`;
-
-function loadGenerate(err) {
+function loadGenerate(err, key, passphrase) {
     var wrapper = document.getElementById("wrapper");
     wrapper.innerHTML = gen_template;
-    if (keyring.privateKeys.keys.length > 0) {
-        document.getElementById("skip-gen-div").innerHTML = `<button id="skip-gen" class="text-button" value="Skip">Skip</button>`;
-        document.getElementById("skip-gen").addEventListener("click", loadLogin);
-    }
     document.getElementById("generate-key-form").addEventListener("submit", submitGenerate);
-    load(err);
+    load(err, key, passphrase);
 }
 
 function submitGenerate(e) {

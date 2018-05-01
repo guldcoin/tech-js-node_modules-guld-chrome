@@ -63,8 +63,8 @@ function routes(to, next) {
     wrapper.innerHTML = loading_template;
 
     if (to == "generate") {
-        next(function (err) {
-            loadGenerate(err);
+        next(function (err, key, passphrase) {
+            loadGenerate(err, key, passphrase);
         });
     } else if (to == "decrypt") {
         next(function (err, key, passphrase) {
@@ -77,6 +77,10 @@ function routes(to, next) {
     } else if (to == "gamelist") {
         next(function (err) {
             loadGameList(err);
+        });
+    } else if (to == "dash") {
+        next(function (err, key, passphrase) {
+            loadDash(err, key, passphrase);
         });
     } else {
         next(function (err) {

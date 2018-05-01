@@ -1,68 +1,34 @@
 'use strict';
 
-const gen_template = logo_template +
-    `<form id="generate-key-form">
-  
-  <div class="row">
-    <input type="text" id="key-name" placeholder="Name"></input><br>
-  </div>
+const dash_template =
+    `<nav>
+        <img id="logo_dash" src="images/logo2.svg">
+        <div id="balance">
+            <div class="balances"><span class="gg text-right">2.5147</span><span class="usd text-right">176.029</span></div>
+            <div class="assets"><span class="gg text-left">GG</span><span class="usd text-left">USD</span></div>
+        </div>
+    </nav>
 
-  <div class="row">
-    <input type="text" id="key-email" placeholder="Email"></input><br>
-  </div>
+    <div id="profile">
+        <div id="name" class="text-center">Daniel Castellanos</div>
+        <div id="username" class="text-center">srcreativo</div>
+    </div>
 
-  <div class="row">
-    <input type="password" id="key-passphrase" placeholder="PGP Key Passphrase"></input><br>
-  </div>
+    <div id="game_pick" class="row">
+        <img id="lottery_pick" class="pick active" src="images/lottery.svg">
+        <div class="description text-center">Lottery</div>
+    </div>
 
   ` + err_template + `  
 
-  <span class="warning">WARNING: Name and email will be public!</span><br>
+    <div class="row">
+        <button id="playgame" type="submit" value="Play">Play Game</button>
+    </div>
 
-  <div class="row">
-    <button id="generate" type="submit" value="Generate">Generate</button>
-  </div>
+  ` + footer_template;    
 
-  <div id="skip-gen-div" class="row"> 
-  </div>  
-</form>`;
-
-function loadGenerate(err) {
+function loadDash(err, key, passphrase) {
     var wrapper = document.getElementById("wrapper");
-    wrapper.innerHTML = gen_template;
-    if (keyring.privateKeys.keys.length > 0) {
-        document.getElementById("skip-gen-div").innerHTML = `<button id="skip-gen" class="text-button" value="Skip">Skip</button>`;
-        document.getElementById("skip-gen").addEventListener("click", loadLogin);
-    }
-    document.getElementById("generate-key-form").addEventListener("submit", submitGenerate);
-    load(err);
-}
-
-function submitGenerate(e) {
-    e.preventDefault();
-    var uname = document.getElementById("key-name").value;
-    var email = document.getElementById("key-email").value;
-    var passphrase = document.getElementById("key-passphrase").value;
-    var options = {
-        numBits: 4096,
-        userIds: [{
-            name: uname,
-            email: email
-        }],
-        passphrase: passphrase
-    };
-    if ((uname.length) && (email.length) && (passphrase.length)) {
-        routes("decrypt", function (next) {
-            openpgp.generateKey(options).then(function (key) {
-                var privkey = key.privateKeyArmored;
-                var pubkey = key.publicKeyArmored;
-                keyring.publicKeys.importKey(pubkey);
-                keyring.privateKeys.importKey(privkey);
-                keyring.store();
-                next("", key, passphrase);
-            });
-        });
-    } else {
-        load("Please provide a user, email and passphrase");
-    }
+    wrapper.innerHTML = dash_template;
+    load(err, key, passphrase);
 }
