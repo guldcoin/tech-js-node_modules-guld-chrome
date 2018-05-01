@@ -9,7 +9,7 @@
     "lint": "eslint --env browser *.js* js/*.js*",
     "fix": "eslint --fix *.js* js/*.js*",
     "build-deps": "cd ../BrowserFS && git pull && npm run build && cd ../isomorphic-git && git pull && npm run build && cd ../decimal.js && git pull && cd ../openpgp && git pull && cd ../ledger-types && git pull && cd ../github-api && git pull && npm run build ",
-    "dist": "cp ../BrowserFS/dist/browserfs.min.js js/vendor/ && cp ../isomorphic-git/dist/bundle.umd.min.js js/vendor/isomorphic-git.min.js && cp ../decimal.js/decimal.min.js js/vendor/ && cp ../ledger-types/types.js js/vendor/ledger.types.js && cp ../github-api/dist/GitHub.bundle.js js/vendor/ && cp ../openpgp/dist/openpgp.min.js js/vendor/",
+    "dist": "cp ../BrowserFS/dist/browserfs.min.js js/vendor/ && cp ../isomorphic-git/dist/bundle.umd.min.js js/vendor/isomorphic-git.min.js && cp ../decimal.js/decimal.min.js js/vendor/ && cp ../ledger-types/types.js js/vendor/ledger.types.js && cp ../github-api/dist/GitHub.bundle.js js/vendor/ && cp ../openpgp/dist/openpgp.min.js js/vendor/ && cp ../js-guld-lib/guld-lib.js js/vendor/",
     "bdist": "npm run build-deps && npm run dist"
   },
   "peerDependencies": {
