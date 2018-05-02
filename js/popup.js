@@ -2,7 +2,8 @@
 
 /* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false loadGenerate:false LOADING_TEMPLATE:false Blocktree:false getBrowserFS:false */
 
-var blocktree // eslint-disable-line no-unused-vars
+var guldBranch // eslint-disable-line no-unused-vars
+var ggBranch // eslint-disable-line no-unused-vars
 
 function loadLogin (err) { // eslint-disable-line no-unused-vars
   var wrapper = document.getElementById('wrapper')
@@ -48,14 +49,16 @@ function submitLogin () {
 }
 
 function loadBlocktree (fs) {
-  blocktree = new Blocktree(fs, 'gg')
+  ggBranch = new Blocktree(fs, 'gg')
   if (keyring.privateKeys.keys.length > 0) {
     routes('login', function (next) {
       next('')
     })
   } else {
-    routes('generate', function (next) {
-      next('')
+    ggBranch.initFS('gg', 'guld-games').then(() => {
+      routes('generate', function (next) {
+        next('')
+      })
     })
   }
 }

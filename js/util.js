@@ -77,6 +77,11 @@ function gpgSign (key, message) { // eslint-disable-line no-unused-vars
 }
 
 function curl (url, settings, next, error) { // eslint-disable-line no-unused-vars
+  if (!(settins.headers)) {
+    settings.headers = new Headers({
+      Origin: 'chrome-extension://fjnccnnmidoffkjhcnnahfeclbgoaooo'
+    })
+  }
   fetch(url, settings).then(function (response) {
     if (response.ok) {
       return response.json()
