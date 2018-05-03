@@ -1,6 +1,6 @@
 'use strict'
 
-/* global activeTab:true loadGenerate:false loadLotteryPickRoom:false loadLotteryGuessRoom:false decryptKey:false loadGithub:false loadLogin:false  loadDash:false */
+/* global activeTab:true loadGenerate:false loadLotteryPickRoom:false loadLotteryGuessRoom:false loadLotteryResultRoom:false decryptKey:false loadGithub:false loadLogin:false  loadDash:false */
 /* exported activeTab */
 
 const CLOVER_IMG = `
@@ -93,6 +93,11 @@ function routes (to, next) { // eslint-disable-line no-unused-vars
     next(function (err, key, passphrase) {
       activeTab = 'games' // eslint-disable-line no-unused-vars
       loadLotteryGuessRoom(err, key, passphrase)
+    })
+  } else if (to === 'lottery_result_room') {
+    next(function (err, key, passphrase) {
+      activeTab = 'games' // eslint-disable-line no-unused-vars
+      loadLotteryResultRoom(err, key, passphrase)
     })
   } else {
     next(function (err) {

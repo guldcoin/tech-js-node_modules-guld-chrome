@@ -51,6 +51,10 @@ button.secondary:hover, button.secondary:active {
     background: #7d58b3;
 }
 
+button.go {
+    background: #00ba0e;
+}
+
 button.grouped {
     width: 12rem;
 }
@@ -996,7 +1000,6 @@ nav {
 }
 
 #lottery_room_list button {
-    background: #00ba0e;
     padding: 0.2rem 0.6rem;
     border-radius: 1rem;
     font-size: 0.6rem;
@@ -1085,7 +1088,6 @@ nav {
 }
 
 #lottery_room_creation button {
-    background: #00ba0e;
     padding: 0.4rem 1rem;
     border-radius: 1rem;
     font-size: 0.8rem;
@@ -1139,4 +1141,18 @@ nav {
     padding: 1rem 0;
     border-radius: 1rem;
     border: 0;
+}
+
+#result_head img {
+    width: 6rem;
+    margin-top: 2rem;
+}
+
+#guess_result_amount {
+    font-size: 2rem;
+    padding-right: 0.4rem;
+}
+
+#result_indicator {
+    margin-top: 0.6rem;
 }

@@ -17,22 +17,22 @@ const LOTTERY_ROOM_TEMPLATE = // eslint-disable-line no-unused-vars
             Bet Amount
             <input id="lottery_bet_amount" type="text"></input>
           </div>
-          <button>Create</button>
+          <button class="go">Create</button>
         </div>
       </div>
 
       <div id="join_lottery_rooms" class="row">
         <button id="join_lottery_room" class="grouped" value="join">Join</button>
         <div id="lottery_room_list" class="text-left">
-          <div class="room">Lorem ipsum dolor<button>Join</button></div>
-          <div class="room">Lorem ipsum dolor<button>Join</button></div>
-          <div class="room">Lorem ipsum dolor<button>Join</button></div>
-          <div class="room">Lorem ipsum dolor<button>Join</button></div>
-          <div class="room">Lorem ipsum dolor<button>Join</button></div>
-          <div class="room">Lorem ipsum dolor<button>Join</button></div>
-          <div class="room">Lorem ipsum dolor<button>Join</button></div>
-          <div class="room">Lorem ipsum dolor<button>Join</button></div>
-          <div class="room">Lorem ipsum dolor<button>Join</button></div>
+          <div class="room">Lorem ipsum dolor<button class="go">Join</button></div>
+          <div class="room">Lorem ipsum dolor<button class="go">Join</button></div>
+          <div class="room">Lorem ipsum dolor<button class="go">Join</button></div>
+          <div class="room">Lorem ipsum dolor<button class="go">Join</button></div>
+          <div class="room">Lorem ipsum dolor<button class="go">Join</button></div>
+          <div class="room">Lorem ipsum dolor<button class="go">Join</button></div>
+          <div class="room">Lorem ipsum dolor<button class="go">Join</button></div>
+          <div class="room">Lorem ipsum dolor<button class="go">Join</button></div>
+          <div class="room">Lorem ipsum dolor<button class="go">Join</button></div>
         </div>
       </div>
 
