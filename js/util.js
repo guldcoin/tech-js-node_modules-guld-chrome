@@ -30,6 +30,7 @@ const TOP_MENU_TEMPLATE = // eslint-disable-line no-unused-vars
             <div class="assets"><span class="gg text-left">GG</span><span class="usd text-left">USD</span></div>
         </div>
     </nav>`
+const BACK_TEMPLATE = `<div id="back-div"><img src="images/back.svg"></div>` // eslint-disable-line no-unused-vars
 
 var activeTab = 'games'
 

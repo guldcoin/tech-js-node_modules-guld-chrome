@@ -16,11 +16,11 @@ function loadLogin (err) { // eslint-disable-line no-unused-vars
     <form id="key-login-form">
     <div class="row text-right">
         <select id="key-fpr">${keyopts}</select>
-        <button id="goto-generate-button" class="text-button" value="Generate">Manage keys</button><br>
+        <a id="goto-generate-button" class="text-button" value="Generate">Manage keys</a><br>
     </div>
 
     <div class="row">
-        <input id="login-passphrase" type="password" placeholder="PGP Key Passphrase"></input><br>
+        <input id="login-passphrase" type="password" placeholder="PGP Key Passphrase" autofocus></input><br>
     </div>
 
     <div class="row">
@@ -32,8 +32,12 @@ function loadLogin (err) { // eslint-disable-line no-unused-vars
     </form>`
   document.getElementById('key-login-form').addEventListener('submit',
     submitLogin)
-  document.getElementById('goto-generate-button').addEventListener('click',
-    loadGenerate)
+  document.getElementById('goto-generate-button').addEventListener('click', 
+    function () {
+      routes('generate', function (next) {
+        next('')
+      })
+    })
   load(err)
 }
 
@@ -50,6 +54,11 @@ function submitLogin () {
 function loadBlocktree (fs) {
   blocktree = new Blocktree(fs, 'gg')
 
+  routes('lottery_pick_room', function (next) {
+    next('')
+  })
+
+/*
   if (keyring.privateKeys.keys.length > 0) {
     routes('login', function (next) {
       next('')
@@ -59,6 +68,7 @@ function loadBlocktree (fs) {
       next('')
     })
   }
+  */
 }
 // Example ledger call
 
