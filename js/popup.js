@@ -1,9 +1,8 @@
 'use strict'
 
-/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false loadGenerate:false LOADING_TEMPLATE:false Blocktree:false getBrowserFS:false */
+/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false LOADING_TEMPLATE:false Blocktree:false getBrowserFS:false */
 
-var guldBranch // eslint-disable-line no-unused-vars
-var ggBranch // eslint-disable-line no-unused-vars
+var blocktree // eslint-disable-line no-unused-vars
 
 function loadLogin (err) { // eslint-disable-line no-unused-vars
   var wrapper = document.getElementById('wrapper')
@@ -17,11 +16,11 @@ function loadLogin (err) { // eslint-disable-line no-unused-vars
     <form id="key-login-form">
     <div class="row text-right">
         <select id="key-fpr">${keyopts}</select>
-        <button id="goto-generate-button" class="text-button" value="Generate">Manage keys</button><br>
+        <a id="goto-generate-button" class="text-button" value="Generate">Manage keys</a><br>
     </div>
 
     <div class="row">
-        <input id="login-passphrase" type="password" placeholder="PGP Key Passphrase"></input><br>
+        <input id="login-passphrase" type="password" placeholder="PGP Key Passphrase" autofocus></input><br>
     </div>
 
     <div class="row">
@@ -33,8 +32,11 @@ function loadLogin (err) { // eslint-disable-line no-unused-vars
     </form>`
   document.getElementById('key-login-form').addEventListener('submit',
     submitLogin)
-  document.getElementById('goto-generate-button').addEventListener('click',
-    loadGenerate)
+  document.getElementById('goto-generate-button').addEventListener('click', function () {
+    routes('generate', function (next) {
+      next('')
+    })
+  })
   load(err)
 }
 
@@ -44,25 +46,31 @@ function submitLogin () {
   var passphrase = document.getElementById('login-passphrase').value
   var key = keyring.privateKeys.getForId(fpr)
   routes('decrypt', function (next) {
-    next('', key, passphrase)
+    next('')
   })
 }
 
 function loadBlocktree (fs) {
-  ggBranch = new Blocktree(fs, 'gg')
+//  routes('lottery_result_room', function (next) {
+//    next('')
+//  })
+  blocktree = new Blocktree(fs, 'gg')
+  var start = Date.now()
+  blocktree.initFS('gg', 'guld-games').then(() => {
+    console.log(`${(Date.now() - start) / 1000} seconds to load blocktree`)
+  }).catch(err => {
+    console.error(err)
+  })
   if (keyring.privateKeys.keys.length > 0) {
     routes('login', function (next) {
       next('')
     })
   } else {
-    ggBranch.initFS('gg', 'guld-games').then(() => {
-      routes('generate', function (next) {
-        next('')
-      })
+    routes('generate', function (next) {
+      next('')
     })
   }
 }
-
 // Example ledger call
 
 // chrome.runtime.sendNativeMessage('com.guld.ledger',
@@ -76,7 +84,10 @@ function loadBlocktree (fs) {
 // )
 
 document.addEventListener('DOMContentLoaded', function () {
-  var wrapper = document.getElementById('wrapper')
+  keyring.clear()
+  keyring.store()
+  wrapper = document.getElementById('wrapper')
+  manifest = chrome.runtime.getManifest()
   wrapper.innerHTML = LOADING_TEMPLATE
   getBrowserFS().then(loadBlocktree)
 })

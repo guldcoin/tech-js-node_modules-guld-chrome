@@ -1,26 +1,26 @@
 'use strict'
 
-/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false loadLogin:false load:false routes:false openpgp:false FOOTER_TEMPLATE:false */
+/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false openpgp:false FOOTER_TEMPLATE:false */
 
 const GEN_TEMPLATE =
     `${LOGO_TEMPLATE}
 <form id="generate-key-form">
 
   <div class="row">
-    <input type="text" id="key-name" placeholder="Name" autocomplete="username"></input><br>
+    <input type="text" id="key-name" placeholder="Name" autocomplete="username" value="pokerface"></input><br>
   </div>
 
   <div class="row">
-    <input type="text" id="key-email" placeholder="Email" autocomplete="email"></input><br>
+    <input type="text" id="key-email" placeholder="Email" autocomplete="email" value="guld-games-poker-face@gmail.com"></input><br>
   </div>
 
   <div class="row">
-    <input type="password" id="key-passphrase" placeholder="PGP Key Passphrase" autocomplete="new-password"></input><br>
+    <input type="password" id="key-passphrase" placeholder="PGP Key Passphrase" autocomplete="new-password" value="tUg5iiwZfso2m3BwRdT9"></input><br>
   </div>
 
   ${ERR_TEMPLATE}
 
-  <span class="warning">WARNING: Name and email will be public!</span><br>
+  <span id="err-warn" class="warning">WARNING: Name and email will be public!</span><br>
 
   <div class="row">
     <button id="generate" type="submit" value="Generate">Generate</button>
@@ -30,15 +30,16 @@ const GEN_TEMPLATE =
   ${FOOTER_TEMPLATE}`
 
 function loadGenerate (err) { // eslint-disable-line no-unused-vars
-  var wrapper = document.getElementById('wrapper')
   wrapper.innerHTML = GEN_TEMPLATE
   if (keyring.privateKeys.keys.length > 0) {
     document.getElementById('skip-gen-div').innerHTML =
             `<button id="skip-gen" class="text-button" value="Skip">Skip</button>`
     document.getElementById('skip-gen').addEventListener('click', loadLogin)
   }
+
   document.getElementById('generate-key-form').addEventListener('submit',
     submitGenerate)
+
   //  document.getElementById('key-name').addEventListener('focusout', validateKeyName)
 
   load(err)
@@ -57,15 +58,17 @@ function submitGenerate (e) {
     }],
     passphrase: passphrase
   }
-  routes('decrypt', function (next) {
+  routes('github', function (next) {
     openpgp.generateKey(options).then(function (key) {
-      var privkey = key.privateKeyArmored
-      var pubkey = key.publicKeyArmored
-      keyring.publicKeys.importKey(pubkey)
-      keyring.privateKeys.importKey(privkey)
+      keyring.publicKeys.importKey(key.publicKeyArmored)
+      keyring.privateKeys.importKey(key.privateKeyArmored)
       keyring.store()
-      next('', key, passphrase)
+      key.key.decrypt(passphrase).then(() => {
+        myKey = key
+        wrapper.dispatchEvent(new Event('mykey-ready'))
+      })
     })
+    next('')
   })
 }
 
