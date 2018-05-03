@@ -1,6 +1,6 @@
 'use strict'
 
-/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false loadGenerate:false LOADING_TEMPLATE:false Blocktree:false getBrowserFS:false */
+/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false LOADING_TEMPLATE:false Blocktree:false getBrowserFS:false */
 
 var blocktree // eslint-disable-line no-unused-vars
 
@@ -32,12 +32,11 @@ function loadLogin (err) { // eslint-disable-line no-unused-vars
     </form>`
   document.getElementById('key-login-form').addEventListener('submit',
     submitLogin)
-  document.getElementById('goto-generate-button').addEventListener('click', 
-    function () {
-      routes('generate', function (next) {
-        next('')
-      })
+  document.getElementById('goto-generate-button').addEventListener('click', function () {
+    routes('generate', function (next) {
+      next('')
     })
+  })
   load(err)
 }
 
@@ -54,11 +53,6 @@ function submitLogin () {
 function loadBlocktree (fs) {
   blocktree = new Blocktree(fs, 'gg')
 
-  routes('lottery_pick_room', function (next) {
-    next('')
-  })
-
-/*
   if (keyring.privateKeys.keys.length > 0) {
     routes('login', function (next) {
       next('')
@@ -68,7 +62,6 @@ function loadBlocktree (fs) {
       next('')
     })
   }
-  */
 }
 // Example ledger call
 
