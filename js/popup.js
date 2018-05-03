@@ -53,11 +53,6 @@ function submitLogin () {
 function loadBlocktree (fs) {
   blocktree = new Blocktree(fs, 'gg')
 
-  routes('lottery_guess_room', function (next) {
-    next('')
-  })
-
-/*
   if (keyring.privateKeys.keys.length > 0) {
     routes('login', function (next) {
       next('')
@@ -67,7 +62,6 @@ function loadBlocktree (fs) {
       next('')
     })
   }
-  */
 }
 // Example ledger call
 
