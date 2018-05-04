@@ -21,7 +21,6 @@ BrowserFS.configure(config, err => {
       if (err) initBT(err)
       else fs.readdir(`/BLOCKTREE/gg/keys/pgp`, (err, list) => {
         if (err) return initBT(err)
-        console.log('assuming last update')
         b.blocktree.initialized = true
         b.blocktree.emit('initialized')
       })
@@ -37,14 +36,19 @@ chrome.runtime.onInstalled.addListener(function() {
 function initBT (err) {
   if (err) console.trace(err)
   chrome.storage.local.get('gg-initialized', inited => {
-    console.log(JSON.stringify(inited))
     if (!inited || !inited.hasOwnProperty('gg-initialized') || inited['gg-initialized'] === false) {
       chrome.storage.local.set({
         'gg-initialized': true
       }, () => {
+        chrome.browserAction.disable()
+        chrome.browserAction.setBadgeText({text: 'wait'})
+        chrome.browserAction.setTitle({title: 'Loading initial blocktree snapshot, this may take up to five minutes.'})
         console.log(`starting blocktree init @ ${start}`)
         blocktree.initFS('gg', 'guld-games').then(() => {
           console.log(`${(Date.now() - start) / 1000} seconds to init blocktree`)
+          chrome.browserAction.enable()
+          chrome.browserAction.setBadgeText({text: ''})
+          chrome.browserAction.setTitle({title: 'Play games on the guld blocktree.'})
         })
       })
     } else {

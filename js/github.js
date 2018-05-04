@@ -112,13 +112,6 @@ function loadGithub (err) { // eslint-disable-line no-unused-vars
     presubmit()
   })
 
-  // Hidding menu if settings are not saved
-  chrome.storage.local.get('gh', function (data) {
-    if (typeof data.gh === 'undefined') {
-      document.getElementById('footer_menu').innerHTML = ''
-    }
-  })
-
   function submitGithub (e) {
     checkGName().then(avail => {
       if (avail === false) {
