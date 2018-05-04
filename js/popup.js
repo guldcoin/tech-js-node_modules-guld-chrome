@@ -42,8 +42,8 @@ function submitLogin (e) {
   var fprlist = document.getElementById('key-fpr')
   var fpr = fprlist.options[fprlist.selectedIndex].value
   var passphrase = document.getElementById('login-passphrase').value
-  myKey = keyring.privateKeys.getForId(fpr)
-  myKey.decrypt(passphrase).then(() => {
+
+  function keyReady () {
     wrapper.dispatchEvent(new Event('mykey-ready'))
     chrome.storage.local.get('gh', function (dat) {
       if (typeof dat.gh === 'undefined') {
@@ -65,7 +65,14 @@ function submitLogin (e) {
         })
       }
     })
-  })
+  }
+
+  myKey = keyring.privateKeys.getForId(fpr)
+  if (myKey.primaryKey.isDecrypted) {
+    keyReady()
+  } else {
+    myKey.decrypt(passphrase).then(keyReady)
+  }
 }
 
 function loadBlocktree () {

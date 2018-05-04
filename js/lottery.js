@@ -2,8 +2,8 @@
 
 /* global TOP_MENU_TEMPLATE:false ERR_TEMPLATE:false BACK_TEMPLATE:false load:false routes:false */
 
-const LOTTERY_ROOM_TEMPLATE = // eslint-disable-line no-unused-vars
-    `${TOP_MENU_TEMPLATE}
+function lotteryRoomTemplate () { // eslint-disable-line no-unused-vars
+  return `${topMenuTemplate()}
     <div class="white_bg">
       <h1 class="text-center">Lottery</h1>
 
@@ -40,10 +40,11 @@ const LOTTERY_ROOM_TEMPLATE = // eslint-disable-line no-unused-vars
       ${ERR_TEMPLATE}
       ${BACK_TEMPLATE}
     </div>`
+}
 
 function loadLotteryPickRoom (err, key, passphrase) { // eslint-disable-line no-unused-vars
   var wrapper = document.getElementById('wrapper')
-  wrapper.innerHTML = LOTTERY_ROOM_TEMPLATE
+  wrapper.innerHTML = lotteryRoomTemplate()
   load(err)
   document.getElementById('back-div').addEventListener('click', function () {
     routes('dash', '')
