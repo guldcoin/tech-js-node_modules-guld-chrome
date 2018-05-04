@@ -17,13 +17,10 @@ BrowserFS.configure(config, err => {
   window.dispatchEvent(new Event('blocktree-avail'))
   fs.readdir(`/BLOCKTREE/gg/ledger/GULD`, (err, list) => {
     if (err) initBT(err)
-    else fs.readdir(`/BLOCKTREE/gg/ledger/GG`, (err, list) => {
-      if (err) initBT(err)
-      else fs.readdir(`/BLOCKTREE/gg/keys/pgp`, (err, list) => {
-        if (err) return initBT(err)
-        b.blocktree.initialized = true
-        b.blocktree.emit('initialized')
-      })
+    else fs.readdir(`/BLOCKTREE/gg/keys/pgp`, (err, list) => {
+      if (err) return initBT(err)
+      blocktree.initialized = true
+      blocktree.emit('initialized')
     })
   })
 
@@ -34,7 +31,7 @@ chrome.runtime.onInstalled.addListener(function() {
 })
 
 function initBT (err) {
-  if (err) console.trace(err)
+  if (err) console.log(err.message)
   chrome.storage.local.get('gg-initialized', inited => {
     if (!inited || !inited.hasOwnProperty('gg-initialized') || inited['gg-initialized'] === false) {
       chrome.storage.local.set({
@@ -42,7 +39,7 @@ function initBT (err) {
       }, () => {
         chrome.browserAction.disable()
         chrome.browserAction.setBadgeText({text: 'wait'})
-        chrome.browserAction.setTitle({title: 'Loading initial blocktree snapshot, this may take up to five minutes.'})
+        chrome.browserAction.setTitle({title: 'Loading initial blocktree snapshot, this may take up to 10 minutes.'})
         console.log(`starting blocktree init @ ${start}`)
         blocktree.initFS('gg', 'guld-games').then(() => {
           console.log(`${(Date.now() - start) / 1000} seconds to init blocktree`)
