@@ -11,6 +11,7 @@ var gh // eslint-disable-line no-unused-vars
 var USER = ""// eslint-disable-line no-unused-vars
 var PASSWORD = "" // eslint-disable-line no-unused-vars
 var EMAIL = "" // eslint-disable-line no-unused-vars
+var AVATAR_URL = ""
 var b // eslint-disable-line no-unused-vars
 var GG_BAL = 0
 var USD_VAL = 0

@@ -26,6 +26,7 @@ function initGitHub () {
   var guser = gh.getUser()
   return guser.getProfile().then(profile => {
     USER = profile.data.login
+    AVATAR_URL = profile.data.avatar_url
     return USER
   })
 }
