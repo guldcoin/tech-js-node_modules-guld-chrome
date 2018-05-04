@@ -86,12 +86,15 @@ function loadBlocktree () {
       }
     }
     function setInitListener () {
-      b.blocktree.on('initialized', (e) => {
-        waitBltInit()
-      })
+      if (b.blocktree.initialized) waitBltInit()
+      else {
+        b.blocktree.on('initialized', (e) => {
+          waitBltInit()
+        })
+      }
     }
     if (!b.blocktree) {
-      b.addEventListener('blockchain-avail', (e) => {
+      b.addEventListener('blocktree-avail', (e) => {
         setInitListener()
       })
     } else setInitListener()
