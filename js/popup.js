@@ -85,11 +85,16 @@ function loadBlocktree () {
         routes('generate', '')
       }
     }
-    if (!b.blocktree) {
-      b.addEventListener('blockchain-avail', (e) => {
+    function setInitListener () {
+      b.blocktree.on('initialized', (e) => {
         waitBltInit()
       })
-    } else waitBltInit()
+    }
+    if (!b.blocktree) {
+      b.addEventListener('blockchain-avail', (e) => {
+        setInitListener()
+      })
+    } else setInitListener()
   })
 }
 // Example ledger call
