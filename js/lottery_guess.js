@@ -4,7 +4,7 @@
 
 const LOTTERY_GUESS_ROOM_TEMPLATE = // eslint-disable-line no-unused-vars
     `${TOP_MENU_TEMPLATE}
-    <div id="black_bg">
+    <div class="black_bg">
       <h1 class="text-center">Lottery</h1>
 
       <div class="row">

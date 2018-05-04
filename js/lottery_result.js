@@ -4,7 +4,7 @@
 
 const LOTTERY_RESULT_WIN_ROOM_TEMPLATE = // eslint-disable-line no-unused-vars
     `${TOP_MENU_TEMPLATE}
-    <div id="black_bg">
+    <div  id="lottery_result" class="black_bg">
       <div id="result_head" class="row">
         <img src="images/winner.svg">
       </div>
@@ -18,7 +18,7 @@ const LOTTERY_RESULT_WIN_ROOM_TEMPLATE = // eslint-disable-line no-unused-vars
       </div>
 
       <div id="guess_result_amount" class="row">
-      +250
+        <img src="images/chip.svg"> <span>+250</span>
       </div>
 
       ${ERR_TEMPLATE}
@@ -27,7 +27,7 @@ const LOTTERY_RESULT_WIN_ROOM_TEMPLATE = // eslint-disable-line no-unused-vars
 
 const LOTTERY_RESULT_LOSE_ROOM_TEMPLATE = // eslint-disable-line no-unused-vars
     `${TOP_MENU_TEMPLATE}
-    <div id="black_bg">
+    <div  id="lottery_result" class="black_bg">
       <div id="result_head" class="row">
         <img src="images/loser.svg">
       </div>
@@ -41,7 +41,7 @@ const LOTTERY_RESULT_LOSE_ROOM_TEMPLATE = // eslint-disable-line no-unused-vars
       </div>
 
       <div id="guess_result_amount" class="row">
-      -250
+        <img src="images/chip.svg"> <span>-250</span>
       </div>
 
       ${ERR_TEMPLATE}

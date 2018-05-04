@@ -51,8 +51,12 @@ button.secondary:hover, button.secondary:active {
     background: #7d58b3;
 }
 
-button.go {
+button.go, button.go:visited {
     background: #00ba0e;
+}
+
+button.go:hover, button.go:active {
+    background: #7eb982;
 }
 
 button.grouped {
@@ -966,7 +970,7 @@ nav {
     color: #fff;
 }
 
-#white_bg {
+.white_bg {
     background: #fff;
     position: absolute;
     top: 4.4rem;
@@ -976,7 +980,7 @@ nav {
     background-image: url("../images/background_lottery.png");
 }
 
-#black_bg {
+.black_bg {
     background: #333;
     position: absolute;
     top: 4.4rem;
@@ -985,7 +989,7 @@ nav {
     background-image: url("../images/background_lottery_black.png");
 }
 
-#black_bg h1 {
+.black_bg h1 {
     color: #d2d2d2;
 }
 
@@ -1066,12 +1070,22 @@ nav {
 #lottery_room_creation #bet {
     color: #969796;
     text-align: center;
+    position: relative;
+    padding-left: 1rem;
 }
 
-#lottery_bet_amount {
-    width: 5rem !important;
+#lottery_room_creation #bet input {
+    padding-left: 2rem;
+    width: 3rem !important;
     display: inline-block;
     margin: 0 1rem;
+}
+
+#lottery_room_creation #bet img {
+    width: 1rem;
+    position: absolute;
+    right: 5.4rem;
+    top: 0.5rem;
 }
 
 #create_lottery_rooms:hover #lottery_room_creation {
@@ -1091,6 +1105,7 @@ nav {
     padding: 0.4rem 1rem;
     border-radius: 1rem;
     font-size: 0.8rem;
+    margin-top: 0.8rem;
 }
 
 #room_name {
@@ -1141,6 +1156,8 @@ nav {
     padding: 1rem 0;
     border-radius: 1rem;
     border: 0;
+    background: #fff;
+    color: #000;
 }
 
 #result_head img {
@@ -1150,7 +1167,13 @@ nav {
 
 #guess_result_amount {
     font-size: 2rem;
-    padding-right: 0.4rem;
+}
+
+#guess_result_amount img {
+    width: 1.6rem;
+    position: relative;
+    top: 0.2rem;
+    margin-right: 0.2rem;
 }
 
 #result_indicator {

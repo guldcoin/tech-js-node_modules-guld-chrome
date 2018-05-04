@@ -4,7 +4,7 @@
 
 const LOTTERY_ROOM_TEMPLATE = // eslint-disable-line no-unused-vars
     `${TOP_MENU_TEMPLATE}
-    <div id="white_bg">
+    <div class="white_bg">
       <h1 class="text-center">Lottery</h1>
 
       <div id="create_lottery_rooms" class="row">
@@ -15,6 +15,7 @@ const LOTTERY_ROOM_TEMPLATE = // eslint-disable-line no-unused-vars
           <input id="lottery_lucky_number" type="number" placeholder="Lucky number"></input>
           <div id="bet">
             Bet Amount
+            <img src="images/chip.svg">
             <input id="lottery_bet_amount" type="text"></input>
           </div>
           <button class="go">Create</button>
