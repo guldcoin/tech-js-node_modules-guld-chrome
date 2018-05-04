@@ -8,6 +8,7 @@ var OAUTH_TOKEN // eslint-disable-line no-unused-vars
 var myKey // eslint-disable-line no-unused-vars
 var ghcreds // eslint-disable-line no-unused-vars
 var gh // eslint-disable-line no-unused-vars
+var GHUSER = ""// eslint-disable-line no-unused-vars
 var USER = ""// eslint-disable-line no-unused-vars
 var PASSWORD = "" // eslint-disable-line no-unused-vars
 var EMAIL = "" // eslint-disable-line no-unused-vars

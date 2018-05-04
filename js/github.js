@@ -7,7 +7,7 @@ function ghTemplate () {
   <form id="name-selection-form">
 
   <div class="row">
-    <input type="text" id="gh-username" placeholder="github username"></input><br>
+    <input type="text" id="gh-username" placeholder="github username" value=${GHUSER}></input><br>
   </div>
 
   <div class="row">
@@ -25,10 +25,11 @@ ${FOOTER_TEMPLATE}`
 function initGitHub () {
   gh = new GitHub({token: OAUTH_TOKEN})
   var guser = gh.getUser()
+  if (GHUSER) return Promise.resolve(GHUSER)
   return guser.getProfile().then(profile => {
-    USER = profile.data.login
+    GHUSER = profile.data.login
     AVATAR_URL = profile.data.avatar_url
-    return USER
+    return GHUSER
   })
 }
 
@@ -38,16 +39,19 @@ function loadGithub (err) { // eslint-disable-line no-unused-vars
   var guldn = document.getElementById('guld-name')
   var errdiv = document.getElementById('err-div')
   var nsf = document.getElementById('name-selection-form')
+  const NAMEWARN = 'Guld name is not available or valid, choose another.'
   nsf.addEventListener('submit', submitGithub)
 
   var presubmit = () => {
-    if (errdiv.innerHTML.indexOf('Guld name is not available or available, choose another.') > -1) { errdiv.innerHTML = errdiv.innerHTML.replace(/Guld name is not available or available, choose another./g, '') }
+    if (errdiv.innerHTML.indexOf(NAMEWARN) > -1) {
+      errdiv.innerHTML = errdiv.innerHTML.replace(/Guld name is not available or valid, choose another\./g, '')
+    }
   }
 
   var ghInit = () => {
     return initGitHub().then(() => {
       var ghn = document.getElementById('gh-username')
-      ghn.value = USER
+      ghn.value = GHUSER
       ghn.disabled = true
       if (!guldn.value || guldn.value.length === 0) {
         guldn.value = ghn.value
@@ -62,7 +66,9 @@ function loadGithub (err) { // eslint-disable-line no-unused-vars
       if (avail) {
         presubmit()
       } else {
-        if (errdiv.innerHTML.indexOf('Guld name is not available or valid, choose another.') === -1) { errdiv.innerHTML = `${errdiv.innerHTML} Guld name is not available or available, choose another.` }
+        if (errdiv.innerHTML.indexOf(NAMEWARN) == -1) {
+          errdiv.innerHTML = `${errdiv.innerHTML} ${NAMEWARN}`
+        }
         guldn.focus()
         guldn.select()
       }
@@ -118,11 +124,13 @@ function loadGithub (err) { // eslint-disable-line no-unused-vars
         return
       }
       e.preventDefault()
+      USER = guldn.value
       nsf.disabled = true
       var options = {
         data: JSON.stringify({
           oauth: OAUTH_TOKEN,
-          username: USER
+          user: USER,
+          ghuser: GHUSER
         }),
         publicKeys: keyring.publicKeys.getForId(myKey.primaryKey.fingerprint),
         privateKeys: [myKey]
@@ -130,11 +138,13 @@ function loadGithub (err) { // eslint-disable-line no-unused-vars
       openpgp.encrypt(options).then(function (ciphertext) {
         var encrypted = ciphertext.data
         chrome.storage.local.set({
-          gh: encrypted
+          gg: encrypted
         }, routes('dash', ''))
       })
     })
   }
 
   load(err)
+
+//  checkGName()
 }

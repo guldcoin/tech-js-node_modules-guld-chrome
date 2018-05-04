@@ -45,23 +45,20 @@ function submitLogin (e) {
 
   function keyReady () {
     wrapper.dispatchEvent(new Event('mykey-ready'))
-    chrome.storage.local.get('gh', function (dat) {
-      if (typeof dat.gh === 'undefined') {
+    chrome.storage.local.get('gg', function (dat) {
+      if (typeof dat.gg === 'undefined') {
         routes('github', '')
       } else {
         var options = {
-          message: openpgp.message.readArmored(dat.gh),
+          message: openpgp.message.readArmored(dat.gg),
           privateKeys: [myKey]
         }
         openpgp.decrypt(options).then(me => {
           me = JSON.parse(me.data)
           OAUTH_TOKEN = me.oauth
-          USER = me.username
-          initGitHub().then(() => {
-            routes('dash', '')
-          }).catch(er => {
-            routes('github', '')
-          })
+          USER = me.user
+          GHUSER = me.ghuser
+          routes('dash', '')
         })
       }
     })
