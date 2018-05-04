@@ -25,9 +25,6 @@ ${ERR_TEMPLATE}
 <div class="row">
   <button id="generate" type="submit" value="Generate">Generate</button>
 </div>
-<div class="row">
-  <div id="skip-gen-div"></div>
-</div>
 </form>
 
 ${FOOTER_TEMPLATE}`
@@ -35,11 +32,6 @@ ${FOOTER_TEMPLATE}`
 
 function loadGenerate (err) { // eslint-disable-line no-unused-vars
   wrapper.innerHTML = genTemplate()
-  if (keyring.privateKeys.keys.length > 0) {
-    document.getElementById('skip-gen-div').innerHTML =
-            `<button id="skip-gen" class="text-button" value="Skip">Skip</button>`
-    document.getElementById('skip-gen').addEventListener('click', loadLogin)
-  }
 
   document.getElementById('generate-key-form').addEventListener('submit',
     submitGenerate)

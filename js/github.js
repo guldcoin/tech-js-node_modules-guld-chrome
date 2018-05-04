@@ -2,8 +2,8 @@
 
 /* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false openpgp:false GitHub:false FOOTER_TEMPLATE:false b:false gh:true OAUTH_TOKEN:true USER:true wrapper:false myKey:true ghOAUTH:true */
 
-const GH_TEMPLATE =
-    `${LOGO_TEMPLATE}
+function ghTemplate () {
+  return `${LOGO_TEMPLATE}
   <form id="name-selection-form">
 
   <div class="row">
@@ -11,7 +11,7 @@ const GH_TEMPLATE =
   </div>
 
   <div class="row">
-    <input type="text" id="guld-name" placeholder="guld username"></input><br>
+    <input type="text" id="guld-name" placeholder="guld username" value="${USER}"></input><br>
   </div>
   ${ERR_TEMPLATE}
 
@@ -20,6 +20,7 @@ const GH_TEMPLATE =
   </div>
 </form>  
 ${FOOTER_TEMPLATE}`
+}
 
 function initGitHub () {
   gh = new GitHub({token: OAUTH_TOKEN})
@@ -33,7 +34,7 @@ function initGitHub () {
 
 function loadGithub (err) { // eslint-disable-line no-unused-vars
   // Load view
-  wrapper.innerHTML = GH_TEMPLATE
+  wrapper.innerHTML = ghTemplate()
   var guldn = document.getElementById('guld-name')
   var errdiv = document.getElementById('err-div')
   var nsf = document.getElementById('name-selection-form')
