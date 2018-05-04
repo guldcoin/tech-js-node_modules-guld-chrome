@@ -1,6 +1,6 @@
 'use strict'
 
-/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false openpgp:false GitHub:true FOOTER_TEMPLATE:false */
+/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false openpgp:false GitHub:false FOOTER_TEMPLATE:false b:false gh:true OAUTH_TOKEN:true USER:true wrapper:false myKey:true ghOAUTH:true */
 
 const GH_TEMPLATE =
     `${LOGO_TEMPLATE}
@@ -21,6 +21,14 @@ const GH_TEMPLATE =
 </form>  
 ${FOOTER_TEMPLATE}`
 
+function initGitHub () {
+  gh = new GitHub({token: OAUTH_TOKEN})
+  var guser = gh.getUser()
+  return guser.getProfile().then(profile => {
+    USER = profile.data.login
+    return USER
+  })
+}
 
 function loadGithub (err) { // eslint-disable-line no-unused-vars
   // Load view
@@ -31,125 +39,106 @@ function loadGithub (err) { // eslint-disable-line no-unused-vars
   nsf.addEventListener('submit', submitGithub)
 
   var presubmit = () => {
-    nsf.disabled = true
-    if (errdiv.innerHTML.indexOf('Guld name is not available or available, choose another.') > -1)
-          errdiv.innerHTML = errdiv.innerHTML.replace(/Guld name is not available or available, choose another./g, '')
+    if (errdiv.innerHTML.indexOf('Guld name is not available or available, choose another.') > -1) { errdiv.innerHTML = errdiv.innerHTML.replace(/Guld name is not available or available, choose another./g, '') }
   }
 
-  var ghInit = (done) => {
-    gh = new GitHub({username: OAUTH_TOKEN, token: OAUTH_TOKEN})
-    var me = gh.getUser()
-    me.getProfile().then(profile => {
-      if (profile && profile.data) {
-        var ghn = document.getElementById('gh-username')
-        ghn.value = profile.data.login
-        USER = ghn.value
-        ghn.disabled = true
-        if (!guldn.value || guldn.value.length == 0) {
-          guldn.value = ghn.value
-          checkGName()
-        }
-      }
-      done()
+  var ghInit = () => {
+    return initGitHub().then(() => {
+      var ghn = document.getElementById('gh-username')
+      ghn.value = USER
+      ghn.disabled = true
+      if (!guldn.value || guldn.value.length === 0) {
+        guldn.value = ghn.value
+        return checkGName()
+      } else return
     })
   }
 
   var checkGName = () => {
-    return blocktree.isNameAvail(guldn.value).then(avail => {
+    return b.blocktree.isNameAvail(guldn.value).then(avail => {
       if (avail) {
         presubmit()
       } else {
-        if (errdiv.innerHTML.indexOf('Guld name is not available or available, choose another.') == -1)
-          errdiv.innerHTML = `${errdiv.innerHTML} Guld name is not available or available, choose another.`
+        if (errdiv.innerHTML.indexOf('Guld name is not available or available, choose another.') === -1) { errdiv.innerHTML = `${errdiv.innerHTML} Guld name is not available or available, choose another.` }
         guldn.focus()
         guldn.select()
-        nsf.disabled = true
       }
-      return Promise.resolve(avail)
-    }).catch(err => {
-      errdiv.innerHTML = `${errdiv.innerHTML} ${err}`
+      return avail
+    }).catch(error => {
+      errdiv.innerHTML = `${errdiv.innerHTML} ${error}`
     })
-  }
-
-  var gInit = (done) => {
-    guldn.addEventListener('focusout', checkGName)
-    done()
   }
 
   Promise.all([
     new Promise((resolve, reject) => {
-      if (!blocktree.initialized) {
+      if (!b.blocktree || !b.blocktree.initialized) {
         var errmess = 'Still loading blocktree. '
         err += errmess
-        blocktree.on('initialized', (e) => {
+        b.blocktree.on('initialized', (e) => {
           errdiv.innerHTML = errdiv.innerHTML.replace(errmess, '')
-          gInit(resolve)
+          guldn.addEventListener('focusout', checkGName)
+          resolve()
         })
-      } else gInit(resolve)
-
+      } else {
+        guldn.addEventListener('focusout', checkGName)
+        resolve()
+      }
     }),
     new Promise((resolve, reject) => {
       if (typeof myKey === 'undefined') {
         var errmess = 'Still generating keys. '
         err += errmess
-        wrapper.addEventListener('mykey-ready', function (e) {
-          errdiv.innerHTML = errdiv.innerHTML.replace(errmess, '')
-          resolve()
-        }, false)
       }
-    
+      wrapper.addEventListener('mykey-ready', function (e) {
+        errdiv.innerHTML = errdiv.innerHTML.replace(errmess, '')
+        resolve()
+      }, false)
     }),
     new Promise((resolve, reject) => {
       if (typeof ghcreds === 'undefined') {
         var errmess = 'Git host authentication is required. '
         err += errmess
-        ghOAUTH()
+        ghOAUTH().catch(reject)
         wrapper.addEventListener('oauth-ready', function (e) {
           errdiv.innerHTML = errdiv.innerHTML.replace(errmess, '')
-          return ghInit(resolve)
+          ghInit().then(resolve)
         }, false)
-      } else return ghInit(resolve)
-  
+      } else ghInit().then(resolve)
     })
   ]).then(() => {
     presubmit()
-    checkGName()
   })
 
-  load(err)
   // Hidding menu if settings are not saved
   chrome.storage.local.get('gh', function (data) {
     if (typeof data.gh === 'undefined') {
       document.getElementById('footer_menu').innerHTML = ''
     }
   })
-  
+
   function submitGithub (e) {
-    e.preventDefault()
     checkGName().then(avail => {
-      if (avail === false) return
-      var ghname = document.getElementById('gh-username').value
-      var gname = document.getElementById('guld-name').value
+      if (avail === false) {
+        return
+      }
+      e.preventDefault()
+      nsf.disabled = true
       var options = {
         data: JSON.stringify({
           oauth: OAUTH_TOKEN,
           username: USER
         }),
-        publicKeys: keyring.publicKeys.getForId(myKey.key.primaryKey.fingerprint),
-        privateKeys: [myKey.key]
+        publicKeys: keyring.publicKeys.getForId(myKey.primaryKey.fingerprint),
+        privateKeys: [myKey]
       }
-
-      routes('dash', function (next) {
-        openpgp.encrypt(options).then(function (ciphertext) {
-          var encrypted = ciphertext.data
-          chrome.storage.local.set({
-            gh: encrypted
-          }, function () {
-            next('')
-          })
-        })
+      openpgp.encrypt(options).then(function (ciphertext) {
+        var encrypted = ciphertext.data
+        chrome.storage.local.set({
+          gh: encrypted
+        }, routes('dash', ''))
       })
     })
   }
-}
 
+  load(err)
+}

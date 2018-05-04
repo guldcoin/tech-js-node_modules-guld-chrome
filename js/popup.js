@@ -1,8 +1,6 @@
 'use strict'
 
-/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false LOADING_TEMPLATE:false Blocktree:false getBrowserFS:false */
-
-var blocktree // eslint-disable-line no-unused-vars
+/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false LOADING_TEMPLATE:false wrapper:true b:true initGitHub:false ghOAUTH:false openpgp:false myKey:true Event:false manifest:true USER:true */
 
 function loadLogin (err) { // eslint-disable-line no-unused-vars
   var wrapper = document.getElementById('wrapper')
@@ -20,7 +18,7 @@ function loadLogin (err) { // eslint-disable-line no-unused-vars
     </div>
 
     <div class="row">
-        <input id="login-passphrase" type="password" placeholder="PGP Key Passphrase" autofocus></input><br>
+        <input id="login-passphrase" type="password" placeholder="PGP Key Passphrase" value="${PASSWORD}" autofocus></input><br>
     </div>
 
     <div class="row">
@@ -30,46 +28,62 @@ function loadLogin (err) { // eslint-disable-line no-unused-vars
     ${ERR_TEMPLATE}
 
     </form>`
-  document.getElementById('key-login-form').addEventListener('submit',
-    submitLogin)
-  document.getElementById('goto-generate-button').addEventListener('click', function () {
-    routes('generate', function (next) {
-      next('')
-    })
+  document.getElementById('key-login-form').addEventListener('submit', submitLogin)
+  document.getElementById('goto-generate-button').addEventListener('click', function (e) {
+    routes('generate', '')
   })
   load(err)
+  // if debugging, auto-submit
+  if (manifest.debug.pass.length > 0) submitLogin(new Event('submit'))
 }
 
-function submitLogin () {
+function submitLogin (e) {
+  e.preventDefault()
   var fprlist = document.getElementById('key-fpr')
   var fpr = fprlist.options[fprlist.selectedIndex].value
   var passphrase = document.getElementById('login-passphrase').value
-  var key = keyring.privateKeys.getForId(fpr)
-  routes('decrypt', function (next) {
-    next('')
+  myKey = keyring.privateKeys.getForId(fpr)
+  myKey.decrypt(passphrase).then(() => {
+    wrapper.dispatchEvent(new Event('mykey-ready'))
+    chrome.storage.local.get('gh', function (dat) {
+      if (typeof dat.gh === 'undefined') {
+        routes('github', '')
+      } else {
+        var options = {
+          message: openpgp.message.readArmored(dat.gh),
+          privateKeys: [myKey]
+        }
+        openpgp.decrypt(options).then(me => {
+          me = JSON.parse(me.data)
+          OAUTH_TOKEN = me.oauth
+          USER = me.username
+          initGitHub().then(() => {
+            routes('dash', '')
+          }).catch(er => {
+            routes('github', '')
+          })
+        })
+      }
+    })
   })
 }
 
-function loadBlocktree (fs) {
-//  routes('lottery_result_room', function (next) {
-//    next('')
-//  })
-  blocktree = new Blocktree(fs, 'gg')
-  var start = Date.now()
-  blocktree.initFS('gg', 'guld-games').then(() => {
-    console.log(`${(Date.now() - start) / 1000} seconds to load blocktree`)
-  }).catch(err => {
-    console.error(err)
+function loadBlocktree () {
+  chrome.runtime.getBackgroundPage(bkg => {
+    b = bkg
+    function waitBltInit () {
+      if (keyring.privateKeys.keys.length > 0) {
+        routes('login', '')
+      } else {
+        routes('generate', '')
+      }
+    }
+    if (!b.blocktree) {
+      b.addEventListener('blockchain-avail', (e) => {
+        waitBltInit()
+      })
+    } else waitBltInit()
   })
-  if (keyring.privateKeys.keys.length > 0) {
-    routes('login', function (next) {
-      next('')
-    })
-  } else {
-    routes('generate', function (next) {
-      next('')
-    })
-  }
 }
 // Example ledger call
 
@@ -84,10 +98,13 @@ function loadBlocktree (fs) {
 // )
 
 document.addEventListener('DOMContentLoaded', function () {
-  keyring.clear()
-  keyring.store()
   wrapper = document.getElementById('wrapper')
   manifest = chrome.runtime.getManifest()
+  if (manifest && manifest.debug && manifest.debug.user.length > 0) {
+    USER = manifest.debug.user
+    EMAIL = manifest.debug.email
+    PASSWORD = manifest.debug.pass
+  }
   wrapper.innerHTML = LOADING_TEMPLATE
-  getBrowserFS().then(loadBlocktree)
+  loadBlocktree()
 })

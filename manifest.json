@@ -1,5 +1,6 @@
 {
   "name": "Guld Games",
+  "short_name": "gg",
   "version": "0.1.1.2",
   "description": "Guld Games",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsmjbIs865n8tHXDuCQ+fdbY6vXJKG5A0uYUF5MMxMQD8FXLiVEY3+t4OP3edSWQvXP4dvn9hf1h1udJMqpEJFHCNeh57M79za27cXl0cgR8zNNlC7CrvsAxoUISFrpvTagBOv7kWxjNmoPecVKCqLC1S3h97utknJ8uUxZe5xU2y5H6+hmG2qTIPSRrWhIqxDGKjnXIaSmfYFjsuz4Yvyd2OvUfEF8TjEtDjJDmA+L66sT9gvbCDDr/2XSTluTJ47/T5X4ohgU0Ad15C6nqNKXcJa7mw63lAIW2lvmszMXlbzxqnwtHjRYlrlF7PoBW1ZJunT3UB3PUFhvhCFYJZ5QIDAQAB",
@@ -13,7 +14,8 @@
     "nativeMessaging", 
     "identity",
     "https://github.com/",
-    "https://api.github.com/"],
+    "https://api.github.com/"
+  ],
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
@@ -48,6 +50,23 @@
       "admin:gpg_key",
       "read:public_key"
     ]
+  },
+  "background": {
+    "scripts": [
+      "js/vendor/EventEmitter.js",
+      "js/vendor/GitHub.bundle.js",
+      "js/vendor/browserfs.min.js",
+      "js/vendor/isomorphic-git.min.js",
+      "js/vendor/openpgp.min.js",
+      "js/vendor/guld-lib.js",
+      "js/guldfs.js"
+    ],
+    "persistent": true
+  },
+  "debug": {
+    "user": "",
+    "email": "",
+    "pass": ""
   },
   "manifest_version": 2
 }

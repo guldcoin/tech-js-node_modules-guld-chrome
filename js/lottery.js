@@ -45,8 +45,6 @@ function loadLotteryPickRoom (err, key, passphrase) { // eslint-disable-line no-
   wrapper.innerHTML = LOTTERY_ROOM_TEMPLATE
   load(err)
   document.getElementById('back-div').addEventListener('click', function () {
-    routes('dash', function (next) {
-      next('', key, passphrase)
-    })
+    routes('dash', '')
   })
 }

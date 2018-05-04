@@ -23,14 +23,10 @@ const DASH_TEMPLATE = // eslint-disable-line no-unused-vars
 
   ${FOOTER_TEMPLATE}`
 
-function loadDash (err, key, passphrase) { // eslint-disable-line no-unused-vars
-  var wrapper = document.getElementById('wrapper')
+function loadDash (err) { // eslint-disable-line no-unused-vars
   wrapper.innerHTML = DASH_TEMPLATE
-  load(err, key, passphrase)
-
+  load(err)
   document.getElementById('playgame').addEventListener('click', function () {
-    routes('lottery_pick_room', function (next) {
-      next('', key, passphrase)
-    })
+    routes('lottery_pick_room', '')
   })
 }

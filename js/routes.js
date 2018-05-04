@@ -1,6 +1,6 @@
 'use strict'
 
-/* global activeTab:true loadGenerate:false loadLotteryPickRoom:false loadLotteryGuessRoom:false loadLotteryResultRoom:false decryptKey:false loadGithub:false loadLogin:false  loadDash:false */
+/* global activeTab:true loadGenerate:false loadLotteryPickRoom:false loadLotteryGuessRoom:false loadLotteryResultRoom:false loadGithub:false loadLogin:false  loadDash:false */
 /* exported activeTab */
 
 const CLOVER_IMG = `
@@ -61,47 +61,32 @@ const LOADING_TEMPLATE = `
     </div>
 `
 
-function routes (to, next) { // eslint-disable-line no-unused-vars
-  var wrapper = document.getElementById('wrapper')
+function routes (to, err) { // eslint-disable-line no-unused-vars
   wrapper.innerHTML = LOADING_TEMPLATE
 
   if (to === 'generate') {
-    next(function (err) {
-      activeTab = 'keys' // eslint-disable-line no-unused-vars
-      loadGenerate(err)
-    })
-//  } else if (to === 'decrypt') {
-//    next(function (err) {
-//      decryptKey(err)
-//    })
+    activeTab = 'keys' // eslint-disable-line no-unused-vars
+    loadGenerate(err)
   } else if (to === 'github') {
-    next(function (err) {
-      activeTab = 'hosts' // eslint-disable-line no-unused-vars
-      loadGithub(err)
-    })
+    activeTab = 'hosts' // eslint-disable-line no-unused-vars
+    loadGithub(err)
   } else if (to === 'dash') {
-    next(function (err) {
-      activeTab = 'games' // eslint-disable-line no-unused-vars
-      loadDash(err)
-    })
+    activeTab = 'games' // eslint-disable-line no-unused-vars
+    loadDash(err)
   } else if (to === 'lottery_pick_room') {
-    next(function (err) {
-      activeTab = 'games' // eslint-disable-line no-unused-vars
-      loadLotteryPickRoom(err)
-    })
+    activeTab = 'games' // eslint-disable-line no-unused-vars
+    loadLotteryPickRoom(err)
   } else if (to === 'lottery_guess_room') {
-    next(function (err) {
-      activeTab = 'games' // eslint-disable-line no-unused-vars
-      loadLotteryGuessRoom(err)
-    })
+    activeTab = 'games' // eslint-disable-line no-unused-vars
+    loadLotteryGuessRoom(err)
   } else if (to === 'lottery_result_room') {
-    next(function (err) {
-      activeTab = 'games' // eslint-disable-line no-unused-vars
-      loadLotteryResultRoom(err)
-    })
+    activeTab = 'games' // eslint-disable-line no-unused-vars
+    loadLotteryResultRoom(err)
+  } else if (to === 'login') {
+    activeTab = 'login' // eslint-disable-line no-unused-vars
+    loadLogin(err)
   } else {
-    next(function (err) {
-      loadLogin(err)
-    })
+    err += `unknown to page ${to}`
+    loadLogin(err)
   }
 }
