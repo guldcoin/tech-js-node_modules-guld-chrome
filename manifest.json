@@ -13,6 +13,7 @@
     "unlimitedStorage", 
     "nativeMessaging", 
     "identity",
+    "management",
     "https://github.com/",
     "https://api.github.com/"
   ],

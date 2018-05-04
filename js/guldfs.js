@@ -15,23 +15,15 @@ BrowserFS.configure(config, err => {
   fs = BrowserFS.BFSRequire('fs')
   blocktree = new Blocktree(fs, 'gg')
   window.dispatchEvent(new Event('blocktree-avail'))
-  fs.readdir(`/BLOCKTREE`, (err, list) => {
-    if (err) initBT()
-    else fs.readdir(`/BLOCKTREE/gg`, (err, list) => {
-      if (err) initBT()
-      else fs.readdir(`/BLOCKTREE/gg/ledger`, (err, list) => {
-        if (err) initBT()
-        else fs.readdir(`/BLOCKTREE/gg/ledger/GULD`, (err, list) => {
-          if (err) initBT()
-          else fs.readdir(`/BLOCKTREE/gg/ledger/GG`, (err, list) => {
-            if (err) initBT()
-            else fs.readdir(`/BLOCKTREE/gg/keys/pgp`, (err, list) => {
-              if (err) return initBT()
-              b.blocktree.initialized = true
-              b.blocktree.emit('initialized')
-            })
-          })
-        })
+  fs.readdir(`/BLOCKTREE/gg/ledger/GULD`, (err, list) => {
+    if (err) initBT(err)
+    else fs.readdir(`/BLOCKTREE/gg/ledger/GG`, (err, list) => {
+      if (err) initBT(err)
+      else fs.readdir(`/BLOCKTREE/gg/keys/pgp`, (err, list) => {
+        if (err) return initBT(err)
+        console.log('assuming last update')
+        b.blocktree.initialized = true
+        b.blocktree.emit('initialized')
       })
     })
   })
@@ -42,7 +34,8 @@ chrome.runtime.onInstalled.addListener(function() {
   initBT()
 })
 
-function initBT () {
+function initBT (err) {
+  if (err) console.trace(err)
   chrome.storage.local.get('gg-initialized', inited => {
     console.log(JSON.stringify(inited))
     if (!inited || !inited.hasOwnProperty('gg-initialized') || inited['gg-initialized'] === false) {
@@ -60,3 +53,12 @@ function initBT () {
   })
 }
 
+chrome.management.onUninstalled.addListener(strid => {
+  if (strid == chrome.runtime.id) {
+    chrome.storage.local.set({
+      'gg-initialized': false
+    }, () => {
+      localStorage.clear();
+    })
+  }
+})
