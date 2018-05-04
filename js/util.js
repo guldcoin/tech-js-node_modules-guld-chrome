@@ -22,8 +22,11 @@ var keyring = new openpgp.Keyring() // eslint-disable-line no-unused-vars
 var ERR_TEMPLATE = `<div id="err-div" class="row"> </div>` // eslint-disable-line no-unused-vars
 var LOGO_TEMPLATE = // eslint-disable-line no-unused-vars
     `<img id="logo" src="images/logo.svg" alt="Guld Games" width="60%">`
+//const FOOTER_TEMPLATE = // eslint-disable-line no-unused-vars
+//`<div id="footer_menu"></div>`
 const FOOTER_TEMPLATE = // eslint-disable-line no-unused-vars
-`<div id="footer_menu"></div>`
+``
+
 const FOOTER_ITEMS_TEMPLATE = `
     <div class="menu_btn"><img src="images/footer_menu/wallet.svg"><div class="name">wallet</div></div>
     <div id="games_tab" class="menu_btn"><img src="images/footer_menu/games.svg"><div class="name">games</div></div>
@@ -79,34 +82,52 @@ function ghOAUTH () { // eslint-disable-line no-unused-vars
 
 function load (err) { // eslint-disable-line no-unused-vars
   document.getElementById('err-div').innerHTML = `<p class="error">${err}</p>`
-  // Footer menu
   if (keyring.privateKeys.keys.length > 0) {
-    var footerMenu = document.getElementById('footer_menu')
-    if (footerMenu) {
-      footerMenu.innerHTML = FOOTER_ITEMS_TEMPLATE
-
-      document.getElementById('games_tab').addEventListener('click', function () {
-        activeTab = 'games'
-        routes('dash', '')
-      })
-
-      document.getElementById('keys_tab').addEventListener('click', function () {
-        activeTab = 'keys'
-        routes('generate', '')
-      })
-
-      document.getElementById('hosts_tab').addEventListener('click', function () {
-        activeTab = 'hosts'
-        routes('github', '')
-      })
-      if (activeTab === 'games') {
-        document.getElementById('games_tab').classList.add('active')
-      } else if (activeTab === 'keys') {
-        document.getElementById('keys_tab').classList.add('active')
-      } else if (activeTab === 'hosts') {
-        document.getElementById('hosts_tab').classList.add('active')
+    // Header menu
+      var ld = document.getElementById('logo_dash')
+      if (ld) {
+        ld.style.cursor = 'pointer'
+        ld.addEventListener('click', function () {
+          activeTab = 'games'
+          routes('dash', '')
+        })
       }
-    }
+      var bald = document.getElementById('balance')
+      if (bald) {
+        bald.style.cursor = 'pointer'
+        bald.addEventListener('click', function () {
+          activeTab = 'wallet'
+          routes('wallet', '')
+        })
+      }
+
+    // Footer menu
+//    var footerMenu = document.getElementById('footer_menu')
+//    if (footerMenu) {
+//      footerMenu.innerHTML = FOOTER_ITEMS_TEMPLATE
+
+//      document.getElementById('games_tab').addEventListener('click', function () {
+//        activeTab = 'games'
+//        routes('dash', '')
+//      })
+
+//      document.getElementById('keys_tab').addEventListener('click', function () {
+//        activeTab = 'keys'
+//        routes('generate', '')
+//      })
+
+//      document.getElementById('hosts_tab').addEventListener('click', function () {
+//        activeTab = 'hosts'
+//        routes('github', '')
+//      })
+//      if (activeTab === 'games') {
+//        document.getElementById('games_tab').classList.add('active')
+//      } else if (activeTab === 'keys') {
+//        document.getElementById('keys_tab').classList.add('active')
+//      } else if (activeTab === 'hosts') {
+//        document.getElementById('hosts_tab').classList.add('active')
+//      }
+//    }
   }
 }
 

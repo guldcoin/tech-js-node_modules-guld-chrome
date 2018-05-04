@@ -86,7 +86,8 @@ function routes (to, err) { // eslint-disable-line no-unused-vars
     activeTab = 'login' // eslint-disable-line no-unused-vars
     loadLogin(err)
   } else {
-    err += `unknown to page ${to}`
-    loadLogin(err)
+    err += `unknown page ${to}`
+    activeTab = 'games' // eslint-disable-line no-unused-vars
+    loadDash(err)
   }
 }
