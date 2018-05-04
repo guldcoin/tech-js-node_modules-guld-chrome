@@ -56,11 +56,12 @@ function loadGithub (err) { // eslint-disable-line no-unused-vars
   }
 
   var checkGName = () => {
+    if (!b.blocktree || !b.blocktree.initialized) return Promise.resolve(false)
     return b.blocktree.isNameAvail(guldn.value).then(avail => {
       if (avail) {
         presubmit()
       } else {
-        if (errdiv.innerHTML.indexOf('Guld name is not available or available, choose another.') === -1) { errdiv.innerHTML = `${errdiv.innerHTML} Guld name is not available or available, choose another.` }
+        if (errdiv.innerHTML.indexOf('Guld name is not available or valid, choose another.') === -1) { errdiv.innerHTML = `${errdiv.innerHTML} Guld name is not available or available, choose another.` }
         guldn.focus()
         guldn.select()
       }

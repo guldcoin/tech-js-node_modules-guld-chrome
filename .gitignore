@@ -57,5 +57,5 @@ typings/
 # dotenv environment variables file
 .env
 
-js/vendor/*.js
+#js/vendor/*.js
 gg-chrome.zip
