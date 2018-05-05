@@ -3,7 +3,7 @@
 /* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false openpgp:false FOOTER_TEMPLATE:false wrapper:false myKey:true loadLogin:false Event:false */
 
 function genTemplate() {
-  return `${LOGO_TEMPLATE}
+  return `${topMenuTemplate()}
 <form id="generate-key-form">
 
 <div class="row">

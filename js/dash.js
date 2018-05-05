@@ -19,8 +19,7 @@ function dashTemplate() {
   <div class="row">
       <button id="playgame" type="submit" value="Play">Play Game</button>
   </div>
-
-${FOOTER_TEMPLATE}`
+`
 }
 
 function loadDash (err) { // eslint-disable-line no-unused-vars

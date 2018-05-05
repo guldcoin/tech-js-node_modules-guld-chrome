@@ -942,7 +942,7 @@ nav {
 
 .menu_btn {
     width: 2rem;
-    margin: 0.8rem 1.2rem;
+    margin: 0.8rem 3.2rem;
     display: inline-block;
     opacity: 0.4;
     cursor: pointer;
@@ -1185,10 +1185,4 @@ nav {
 
 .odometer-inside .odometer-digit:first-child {
     display: none !important;
-}
-
-#err-div {
-    position: absolute;
-    width: 100%;
-    bottom: 1rem;
 }

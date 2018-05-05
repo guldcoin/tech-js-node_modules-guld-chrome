@@ -15,15 +15,13 @@ var keyring = new openpgp.Keyring() // eslint-disable-line no-unused-vars
 
 var ERR_TEMPLATE = `<div id="err-div" class="row"> </div>` // eslint-disable-line no-unused-vars
 var LOGO_TEMPLATE = // eslint-disable-line no-unused-vars
-    `<img id="logo" src="images/logo.svg" alt="Guld Games" width="60%">`
-//const FOOTER_TEMPLATE = // eslint-disable-line no-unused-vars
-//`<div id="footer_menu"></div>`
+  `<img id="logo" src="images/logo.svg" alt="Guld Games" width="60%">`
 const FOOTER_TEMPLATE = // eslint-disable-line no-unused-vars
-``
+  `<div id="footer_menu"></div>`
 
-const FOOTER_ITEMS_TEMPLATE = `
-    <div class="menu_btn"><img src="images/footer_menu/wallet.svg"><div class="name">wallet</div></div>
-    <div id="games_tab" class="menu_btn"><img src="images/footer_menu/games.svg"><div class="name">games</div></div>
+const FOOTER_ITEMS_TEMPLATE = // eslint-disable-line no-unused-vars
+  ` <!--<div class="menu_btn"><img src="images/footer_menu/wallet.svg"><div class="name">wallet</div></div>
+    <div id="games_tab" class="menu_btn"><img src="images/footer_menu/games.svg"><div class="name">games</div></div>-->
     <div id="keys_tab" class="menu_btn"><img src="images/footer_menu/keys.svg"><div class="name">keys</div></div>
     <div id="hosts_tab" class="menu_btn"><img src="images/footer_menu/hosts.svg"><div class="name">hosts</div></div>
     `
@@ -102,24 +100,24 @@ function load (err) { // eslint-disable-line no-unused-vars
       }
 
     // Footer menu
-//    var footerMenu = document.getElementById('footer_menu')
-//    if (footerMenu) {
-//      footerMenu.innerHTML = FOOTER_ITEMS_TEMPLATE
+    var footerMenu = document.getElementById('footer_menu')
+    if (footerMenu) {
+      footerMenu.innerHTML = FOOTER_ITEMS_TEMPLATE
 
 //      document.getElementById('games_tab').addEventListener('click', function () {
 //        activeTab = 'games'
 //        routes('dash', '')
 //      })
 
-//      document.getElementById('keys_tab').addEventListener('click', function () {
-//        activeTab = 'keys'
-//        routes('generate', '')
-//      })
+      document.getElementById('keys_tab').addEventListener('click', function () {
+        activeTab = 'keys'
+        routes('generate', '')
+      })
 
-//      document.getElementById('hosts_tab').addEventListener('click', function () {
-//        activeTab = 'hosts'
-//        routes('github', '')
-//      })
+      document.getElementById('hosts_tab').addEventListener('click', function () {
+        activeTab = 'hosts'
+        routes('github', '')
+      })
 //      if (activeTab === 'games') {
 //        document.getElementById('games_tab').classList.add('active')
 //      } else if (activeTab === 'keys') {
@@ -127,7 +125,7 @@ function load (err) { // eslint-disable-line no-unused-vars
 //      } else if (activeTab === 'hosts') {
 //        document.getElementById('hosts_tab').classList.add('active')
 //      }
-//    }
+    }
   }
 }
 
@@ -200,6 +198,6 @@ function listOpenGames () {
   })
 }
 
-function createGame (gname, secret, bet) {
-  
-}
+//function createGame (gname, secret, bet) {
+//  
+//}

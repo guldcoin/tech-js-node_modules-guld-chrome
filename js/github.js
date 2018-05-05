@@ -3,7 +3,7 @@
 /* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false openpgp:false GitHub:false FOOTER_TEMPLATE:false b:false gh:true GG_CACHE:true wrapper:false myKey:true ghOAUTH:true */
 
 function ghTemplate () {
-  return `${LOGO_TEMPLATE}
+  return `${topMenuTemplate()}
   <form id="name-selection-form">
 
   <div class="row">
