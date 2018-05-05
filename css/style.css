@@ -1151,17 +1151,12 @@ nav {
 }
 
 #guess_amount {
-    text-align: center;
-    font-size: 3rem;
-    padding: 1rem 0;
-    border-radius: 1rem;
-    border: 0;
-    background: #fff;
-    color: #000;
+    font-size: 2.6rem;
+    margin: 0.4rem 0;
 }
 
 #result_head img {
-    width: 6rem;
+    height: 8rem;
     margin-top: 2rem;
 }
 
@@ -1178,4 +1173,22 @@ nav {
 
 #result_indicator {
     margin-top: 0.6rem;
+}
+
+#result_info {
+    height: 5.28rem;
+}
+
+.odometer-digit {
+    transition: all 0.5s;
+}
+
+.odometer-inside .odometer-digit:first-child {
+    display: none !important;
+}
+
+#err-div {
+    position: absolute;
+    width: 100%;
+    bottom: 1rem;
 }
