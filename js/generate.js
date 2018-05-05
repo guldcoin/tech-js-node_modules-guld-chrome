@@ -7,15 +7,15 @@ function genTemplate() {
 <form id="generate-key-form">
 
 <div class="row">
-  <input type="text" id="key-name" placeholder="Name" autocomplete="username" value="${USER}"></input><br>
+  <input type="text" id="key-name" placeholder="Name" autocomplete="username" value="${GG_CACHE['user']}"></input><br>
 </div>
 
 <div class="row">
-  <input type="text" id="key-email" placeholder="Email" autocomplete="email" value="${EMAIL}"></input><br>
+  <input type="text" id="key-email" placeholder="Email" autocomplete="email" value="${GG_CACHE['email']}"></input><br>
 </div>
 
 <div class="row">
-  <input type="password" id="key-passphrase" placeholder="PGP Key Passphrase" autocomplete="new-password" value="${PASSWORD}"></input><br>
+  <input type="password" id="key-passphrase" placeholder="PGP Key Passphrase" autocomplete="new-password" value=""></input><br>
 </div>
 
 ${ERR_TEMPLATE}
@@ -35,30 +35,29 @@ function loadGenerate (err) { // eslint-disable-line no-unused-vars
 
   document.getElementById('generate-key-form').addEventListener('submit',
     submitGenerate)
-  // if debugging, auto-submit
-  if (PASSWORD && PASSWORD.length > 0) submitGenerate(new Event('submit'))
   load(err)
 }
 
 function submitGenerate (e) {
   e.preventDefault()
-  USER = document.getElementById('key-name').value
-  EMAIL = document.getElementById('key-email').value
-  PASSWORD = document.getElementById('key-passphrase').value
+  GG_CACHE['key-name'] = document.getElementById('key-name').value
+  GG_CACHE['email'] = document.getElementById('key-email').value
+  var pass = document.getElementById('key-passphrase').value
   var options = {
     numBits: 4096,
     userIds: [{
-      name: USER,
-      email: EMAIL
+      name: GG_CACHE['key-name'],
+      email: GG_CACHE['email']
     }],
-    passphrase: PASSWORD
+    passphrase: pass
   }
   routes('github', '')
   openpgp.generateKey(options).then(function (key) {
     keyring.publicKeys.importKey(key.publicKeyArmored)
     keyring.privateKeys.importKey(key.privateKeyArmored)
+    GG_CACHE['fpr'] = key.key.primaryKey.fingerprint
     keyring.store()
-    key.key.decrypt(PASSWORD).then(() => {
+    key.key.decrypt(pass).then(() => {
       myKey = key.key
       wrapper.dispatchEvent(new Event('mykey-ready'))
     })

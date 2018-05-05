@@ -1,17 +1,17 @@
 'use strict'
 
-/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false openpgp:false GitHub:false FOOTER_TEMPLATE:false b:false gh:true OAUTH_TOKEN:true USER:true wrapper:false myKey:true ghOAUTH:true */
+/* global LOGO_TEMPLATE:false ERR_TEMPLATE:false keyring:false load:false routes:false openpgp:false GitHub:false FOOTER_TEMPLATE:false b:false gh:true GG_CACHE:true wrapper:false myKey:true ghOAUTH:true */
 
 function ghTemplate () {
   return `${LOGO_TEMPLATE}
   <form id="name-selection-form">
 
   <div class="row">
-    <input type="text" id="gh-username" placeholder="github username" value=${GHUSER}></input><br>
+    <input type="text" id="gh-username" placeholder="github username" value="${GG_CACHE['ghuser']}"></input><br>
   </div>
 
   <div class="row">
-    <input type="text" id="guld-name" placeholder="guld username" value="${USER}"></input><br>
+    <input type="text" id="guld-name" placeholder="guld username" value="${GG_CACHE['user']}"></input><br>
   </div>
   ${ERR_TEMPLATE}
 
@@ -23,13 +23,13 @@ ${FOOTER_TEMPLATE}`
 }
 
 function initGitHub () {
-  gh = new GitHub({token: OAUTH_TOKEN})
+  gh = new GitHub({token: GG_CACHE['oauth']})
   var guser = gh.getUser()
-  if (GHUSER) return Promise.resolve(GHUSER)
+  if (GG_CACHE.hasOwnProperty('ghuser') && GG_CACHE['ghuser'].length > 0) return Promise.resolve(GG_CACHE['ghuser'])
   return guser.getProfile().then(profile => {
-    GHUSER = profile.data.login
-    AVATAR_URL = profile.data.avatar_url
-    return GHUSER
+    GG_CACHE['ghuser'] = profile.data.login
+    GG_CACHE['gh_avatar_url'] = profile.data.avatar_url
+    return GG_CACHE['ghuser']
   })
 }
 
@@ -51,7 +51,7 @@ function loadGithub (err) { // eslint-disable-line no-unused-vars
   var ghInit = () => {
     return initGitHub().then(() => {
       var ghn = document.getElementById('gh-username')
-      ghn.value = GHUSER
+      ghn.value = GG_CACHE['ghuser']
       ghn.disabled = true
       if (!guldn.value || guldn.value.length === 0) {
         guldn.value = ghn.value
@@ -61,7 +61,7 @@ function loadGithub (err) { // eslint-disable-line no-unused-vars
   }
 
   var checkGName = () => {
-    if (!b.blocktree || !b.blocktree.initialized) return Promise.resolve(false)
+    if (!b.blocktree || !b.blocktree.initialized || guldn.value.length == 0) return Promise.resolve(false)
     return b.blocktree.isNameAvail(guldn.value).then(avail => {
       if (avail) {
         presubmit()
@@ -124,22 +124,10 @@ function loadGithub (err) { // eslint-disable-line no-unused-vars
         return
       }
       e.preventDefault()
-      USER = guldn.value
+      GG_CACHE['user'] = guldn.value
       nsf.disabled = true
-      var options = {
-        data: JSON.stringify({
-          oauth: OAUTH_TOKEN,
-          user: USER,
-          ghuser: GHUSER
-        }),
-        publicKeys: keyring.publicKeys.getForId(myKey.primaryKey.fingerprint),
-        privateKeys: [myKey]
-      }
-      openpgp.encrypt(options).then(function (ciphertext) {
-        var encrypted = ciphertext.data
-        chrome.storage.local.set({
-          gg: encrypted
-        }, routes('dash', ''))
+      storeCache().then(() => {
+        routes('dash', '')
       })
     })
   }

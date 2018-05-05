@@ -23,12 +23,23 @@ BrowserFS.configure(config, err => {
       blocktree.emit('initialized')
     })
   })
-
 })
 
 chrome.runtime.onInstalled.addListener(function() {
   initBT()
 })
+
+function cloneGG () {
+  var p = "/BLOCKTREE/gg/ledger/GG"
+  return git.clone({
+    fs: fs,
+    dir: p,
+    gitdir: `${p}/.git`,
+    url: "https://github.com/guld-games/ledger-gg.git",
+    singleBranch: true,
+    depth: 1
+  })
+}
 
 function initBT (err) {
   if (err) console.log(err.message)
@@ -41,7 +52,7 @@ function initBT (err) {
         chrome.browserAction.setBadgeText({text: 'wait'})
         chrome.browserAction.setTitle({title: 'Loading initial blocktree snapshot, this may take up to 10 minutes.'})
         console.log(`starting blocktree init @ ${start}`)
-        blocktree.initFS('gg', 'guld-games').then(() => {
+        blocktree.initFS('gg', 'guld-games').then(cloneGG).then(() => {
           console.log(`${(Date.now() - start) / 1000} seconds to init blocktree`)
           chrome.browserAction.enable()
           chrome.browserAction.setBadgeText({text: ''})

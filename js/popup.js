@@ -18,7 +18,7 @@ function loadLogin (err) { // eslint-disable-line no-unused-vars
     </div>
 
     <div class="row">
-        <input id="login-passphrase" type="password" placeholder="PGP Key Passphrase" value="${PASSWORD}" autofocus></input><br>
+        <input id="login-passphrase" type="password" placeholder="PGP Key Passphrase" value="" autofocus></input><br>
     </div>
 
     <div class="row">
@@ -33,8 +33,6 @@ function loadLogin (err) { // eslint-disable-line no-unused-vars
     routes('generate', '')
   })
   load(err)
-  // if debugging, auto-submit
-  if (manifest.debug.pass.length > 0) submitLogin(new Event('submit'))
 }
 
 function submitLogin (e) {
@@ -54,10 +52,7 @@ function submitLogin (e) {
           privateKeys: [myKey]
         }
         openpgp.decrypt(options).then(me => {
-          me = JSON.parse(me.data)
-          OAUTH_TOKEN = me.oauth
-          USER = me.user
-          GHUSER = me.ghuser
+          GG_CACHE = JSON.parse(me.data)
           routes('dash', '')
         })
       }
@@ -113,9 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
   wrapper = document.getElementById('wrapper')
   manifest = chrome.runtime.getManifest()
   if (manifest && manifest.debug && manifest.debug.user.length > 0) {
-    USER = manifest.debug.user
-    EMAIL = manifest.debug.email
-    PASSWORD = manifest.debug.pass
+    GG_CACHE = manifest.debug
   }
   wrapper.innerHTML = LOADING_TEMPLATE
   loadBlocktree()

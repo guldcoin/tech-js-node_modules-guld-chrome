@@ -4,18 +4,11 @@
 var activeTab = 'games'
 var wrapper
 var manifest // eslint-disable-line no-unused-vars
-var OAUTH_TOKEN // eslint-disable-line no-unused-vars
 var myKey // eslint-disable-line no-unused-vars
 var ghcreds // eslint-disable-line no-unused-vars
+var GG_CACHE = {'user': '', 'email': '', 'ghuser': ''}
 var gh // eslint-disable-line no-unused-vars
-var GHUSER = ""// eslint-disable-line no-unused-vars
-var USER = ""// eslint-disable-line no-unused-vars
-var PASSWORD = "" // eslint-disable-line no-unused-vars
-var EMAIL = "" // eslint-disable-line no-unused-vars
-var AVATAR_URL = ""
 var b // eslint-disable-line no-unused-vars
-var GG_BAL = 0
-var USD_VAL = 0
 var keyring = new openpgp.Keyring() // eslint-disable-line no-unused-vars
 // keyring.clear()
 // keyring.store()
@@ -37,6 +30,12 @@ const FOOTER_ITEMS_TEMPLATE = `
 const BACK_TEMPLATE = `<div id="back-div"><img src="images/back.svg"></div>` // eslint-disable-line no-unused-vars
 
 function topMenuTemplate () { // eslint-disable-line no-unused-vars
+  var GG_BAL = 0
+  var USD_VAL = 0
+  if (GG_CACHE.hasOwnProperty('bals') && GG_CACHE['bals'].hasOwnProperty('GG')) {
+    GG_BAL = GG_CACHE['bals']['GG']
+    USD_VAL = GG_CACHE['bals']['GG'] / 400 * 75
+  }
   return `<nav>
         <img id="logo_dash" src="images/logo2.svg">
         <div id="balance">
@@ -49,7 +48,7 @@ function topMenuTemplate () { // eslint-disable-line no-unused-vars
 function getTokenForCode(code) {
   return curl(`https://guld.gg/api/OAUTH_TOKEN?code=${code}`,
   {}).then(token => {
-    OAUTH_TOKEN = token
+    GG_CACHE['oauth'] = token
     ghcreds = git.utils.oauth2('github', token)
     wrapper.dispatchEvent(new Event('oauth-ready'))
     return token
@@ -132,17 +131,30 @@ function load (err) { // eslint-disable-line no-unused-vars
   }
 }
 
-function gpgSign (key, message) { // eslint-disable-line no-unused-vars
+function gpgSign (message) { // eslint-disable-line no-unused-vars
   var options = {
     data: message,
-    privateKeys: [key],
+    privateKeys: [myKey],
     detached: true
   }
-  openpgp.sign(options).then(function (signed) {
-    // var cleartext = signed.data;
-    // console.log(cleartext)
-    // TODO return Promise
-    console.log(signed.signature) // eslint-disable-line no-console
+  return openpgp.sign(options).then(function (signed) {
+    return signed.signature
+  })
+}
+
+function storeCache () {
+  return new Promise((resolve, reject) => {
+//    var tmpCache = JSON.parse(JSON.stringify(GG_CACHE))
+//    delete tmpCache.passphrase
+    var options = {
+      data: JSON.stringify(GG_CACHE),
+      publicKeys: keyring.publicKeys.getForId(myKey.primaryKey.fingerprint),
+      privateKeys: [myKey]
+    }
+    openpgp.encrypt(options).then(function (ciphertext) {
+      var encrypted = ciphertext.data
+      chrome.storage.local.set({gg: encrypted}, resolve)
+    })
   })
 }
 
@@ -150,7 +162,7 @@ function curl (uri, settings) { // eslint-disable-line no-unused-vars
   settings = settings || {}
   if (uri.indexOf('github.com') >= 0 && OAUTH_TOKEN && !settings.hasOwnProperty('headers')) {
     var heads = {
-      'authorization': `token ${OAUTH_TOKEN}`,
+      'authorization': `token ${GG_CACHE['oauth']}`,
       'accept': 'application/json',
       'User-Agent': 'guld app'
     }
@@ -166,3 +178,28 @@ function curl (uri, settings) { // eslint-disable-line no-unused-vars
   })
 }
 
+function listOpenGames () {
+  return new Promise((resolve, reject) => {
+    b.fs.readdir('/BLOCKTREE/gg/ledger/GG/Games/LOTTERY', (err, games) => {
+      if (err) return resolve([])
+      var lopenGames = []
+      Promise.all(games.map(game => {
+        return new Promise(resolv => {
+          b.fs.readdir(`/BLOCKTREE/gg/ledger/GG/Games/LOTTERY/${game}`, (err, gfiles) => {
+            if (err) resolv()
+            if (gfiles.indexOf('GUESS.txt') == -1) {
+              lopenGames.push(game)
+              resolv()
+            } else resolv()
+          })
+        })
+      })).then(() => {
+        resolve(lopenGames)
+      })
+    })
+  })
+}
+
+function createGame (gname, secret, bet) {
+  
+}
