@@ -11,7 +11,7 @@ body {
 
 h1 {
     margin: 0;
-    padding: 1.4rem 0;
+    padding: 0.8rem 0;
     color: #8e8d8d;
     font-weight: 400;
 }
@@ -993,6 +993,16 @@ nav {
     color: #d2d2d2;
 }
 
+#my_lottery_room_list {
+    width: 12rem;
+    margin: 0 auto;
+    background: #fff;
+    height: 0;
+    overflow-y: auto;
+    transition: all 0.5s;
+    transition-delay: 0s;
+}
+
 #lottery_room_list {
     width: 12rem;
     margin: 0 auto;
@@ -1030,7 +1040,24 @@ nav {
 }
 
 #join_lottery_rooms:hover #lottery_room_list {
-    height: 13.8rem;
+    height: 12.8rem;
+    transition-delay: 0.3s;
+}
+
+
+#my_lottery_rooms #join_lottery_room {
+    transition-delay: 0.5s;
+}
+
+#my_lottery_rooms:hover #my_lottery_room {
+    border-radius: 0.6rem;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    transition-delay: 0s;
+}
+
+#my_lottery_rooms:hover #my_lottery_room_list {
+    height: 12.8rem;
     transition-delay: 0.3s;
 }
 
@@ -1056,7 +1083,7 @@ nav {
     background: #e5e3e3;
     border: 1px solid #C0C0C0;
     border-radius: 0.2rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.6rem;
     width: 10rem;
 }
 
@@ -1089,7 +1116,7 @@ nav {
 }
 
 #create_lottery_rooms:hover #lottery_room_creation {
-    height: 12.4rem;
+    height: 11.4rem;
     transition-delay: 0.3s;
     padding-top: 1.4rem;
 }

@@ -24,6 +24,13 @@ function lotteryRoomTemplate () { // eslint-disable-line no-unused-vars
         </div>
       </div>
 
+      <div id="my_lottery_rooms" class="row">
+        <button id="my_lottery_room" class="grouped go" value="join">My rooms</button>
+        <div id="my_lottery_room_list" class="text-left">
+          ${openGames}
+        </div>
+      </div>
+
       <div id="join_lottery_rooms" class="row">
         <button id="join_lottery_room" class="grouped" value="join">Join</button>
         <div id="lottery_room_list" class="text-left">
