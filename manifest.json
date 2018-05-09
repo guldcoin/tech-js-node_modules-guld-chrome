@@ -1,8 +1,8 @@
 {
-  "name": "Guld Games",
-  "short_name": "gg",
-  "version": "0.1.1.2",
-  "description": "Guld Games",
+  "name": "guld",
+  "short_name": "guld",
+  "version": "0.1.1",
+  "description": "guld browser extension",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsmjbIs865n8tHXDuCQ+fdbY6vXJKG5A0uYUF5MMxMQD8FXLiVEY3+t4OP3edSWQvXP4dvn9hf1h1udJMqpEJFHCNeh57M79za27cXl0cgR8zNNlC7CrvsAxoUISFrpvTagBOv7kWxjNmoPecVKCqLC1S3h97utknJ8uUxZe5xU2y5H6+hmG2qTIPSRrWhIqxDGKjnXIaSmfYFjsuz4Yvyd2OvUfEF8TjEtDjJDmA+L66sT9gvbCDDr/2XSTluTJ47/T5X4ohgU0Ad15C6nqNKXcJa7mw63lAIW2lvmszMXlbzxqnwtHjRYlrlF7PoBW1ZJunT3UB3PUFhvhCFYJZ5QIDAQAB",
   "permissions": [
     "clipboardRead",
@@ -28,8 +28,7 @@
     }
   },
   "browser_action": {
-    "default_popup": "popup.html",
-    "default_title": "Guld Games",
+    "default_title": "guld",
     "default_icon": {
       "16": "images/icon16.png",
       "32": "images/icon32.png",
@@ -60,15 +59,15 @@
       "js/vendor/browserfs.min.js",
       "js/vendor/isomorphic-git.min.js",
       "js/vendor/openpgp.min.js",
+      "js/vendor/decimal.min.js",
+      "js/vendor/highland.js",
+      "js/vendor/papaparse.js",
+      "js/vendor/ledger.types.js",
+      "js/vendor/ledger.js",
       "js/vendor/guld-lib.js",
-      "js/guldfs.js"
-    ],
-    "persistent": true
+      "js/background.js"
+    ]
   },
-  "debug": {
-    "user": "",
-    "email": "",
-    "pass": ""
-  },
+  "options_page": "options.html",
   "manifest_version": 2
 }

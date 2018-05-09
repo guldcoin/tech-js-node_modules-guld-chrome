@@ -1,8 +1,8 @@
 {
-  "name": "gg-chrome",
+  "name": "guld-chrome",
   "version": "0.0.5",
-  "description": "Chrome extension for guld and guld-games",
-  "repository": "https://github.com/guldcoin/gg-chrome",
+  "description": "Chrome extension for guld",
+  "repository": "https://github.com/guldcoin/guld-chrome",
   "author": "zimmi",
   "license": "MIT",
   "scripts": {
@@ -12,7 +12,7 @@
     "dist": "mkdir -p js/vendor && cp ../BrowserFS/dist/browserfs.min.js js/vendor/ && cp ../isomorphic-git/dist/bundle.umd.min.js js/vendor/isomorphic-git.min.js && cp ../decimal.js/decimal.min.js js/vendor/ && cp ../ledger-types/types.js js/vendor/ledger.types.js && cp ../github-api/dist/GitHub.bundle.js js/vendor/ && cp ../openpgp/dist/openpgp.min.js js/vendor/ && cp ../js-guld-lib/guld-lib.js js/vendor/ && cp ../EventEmitter/EventEmitter.js js/vendor/",
     "bdist": "npm run build-deps && npm run dist"
   },
-  "peerDependencies": {
+  "dependencies": {
     "decimal.js": "^10.0.0",
     "isomorphic-git": "^0.11.2",
     "ledger-types": "^1.2.0",

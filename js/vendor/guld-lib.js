@@ -107,7 +107,7 @@ class Register extends Transaction {
   }
 }
 
-class Blocktree  extends EventEmitter {
+class Blocktree extends EventEmitter {
   constructor (cfs, observer) {
     super()
     this.fs = cfs
@@ -169,7 +169,7 @@ class Blocktree  extends EventEmitter {
               if (err) return reject(err)
               var promises = commodities.map(mapCommodities)
               Promise.all(promises).then(() => {
-                self._ledger = new Ledger({'file': '-', 'raw': included})
+                self._ledger = new Ledger({'file': '-', 'raw': included, 'binary': 'chrome'})
                 resolve()
               }).catch(reject)
             })
@@ -325,6 +325,45 @@ class Blocktree  extends EventEmitter {
           }).catch(reject)
         }).catch(reject)
       }).catch(reject)
+    })
+  }
+
+  mapNamesToFPR (fpr) {
+    var self = this
+    if (typeof fpr === 'string') fpr = [fpr]
+    var kn = {}
+    return new Promise((resolve, reject) => {
+      function maybeResolve () {
+        if (fpr.length == 0) {
+          resolve(kn)
+          return true
+        } else return false
+      }
+      self.fs.readdir(`/BLOCKTREE/${self.observer}/keys/pgp/`, (error, names) => {
+        if (error) reject(error)
+        else {
+          for (var i = 0; i < names.length; i++) {
+            if (maybeResolve()) return
+            var p = `/BLOCKTREE/${self.observer}/keys/pgp/${names[i]}`
+            self.fs.readdir(p, (err, keys) => {
+              if (fpr.length == 0) return maybeResolve()
+              else if (err) return
+              else {
+                keys.forEach(key => {
+                  key = key.replace('.asc', '')
+                  if (fpr.indexOf(key) >= 0) {
+                    kn[key] = names[i]
+                    fpr = fpr.filter(f => {
+                      return f != key
+                    })
+                    maybeResolve()
+                  }
+                })
+              }
+            })
+          }
+        }
+      })
     })
   }
 
