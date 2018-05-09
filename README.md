@@ -1,6 +1,6 @@
-# gg-chrome
+# guld-chrome
 
-Chrome plugin for guld games
+Chrome plugin for guld
 
 To make a browser-based app (in this case, a Chrome extension) work with [`ledger`](http://ledger-cli.org/), a fundamentally command-line oriented application, we've had to patch and/or fork a number of its dependencies. Here's an overview of what it takes to get this extension running.
 
@@ -32,4 +32,4 @@ We are using the [js-guld-lib](https://github.com/guldcoin/js-guld-lib) library.
 
 The [GG JavaScript library](https://github.com/guld-games/js-gg-lib) is not published yet.
 
-And of course you're reading about the [GG Chrome extension](https://github.com/guld-games/gg-chrome). :)
+This is forked from the [GG Chrome extension](https://github.com/guld-games/gg-chrome).
