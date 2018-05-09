@@ -15,15 +15,19 @@
 
     <div id="header-menu">
       <nav>
-        <img id="logo_dash" src="images/logo2.svg">
+        <a href="/main.html"><img id="logo_dash" src="images/logo2.svg"></a>
+        <span><a href="" id="logout">logout</a></span>
       </nav>
     <div> <!--header-menu-->
 
     <div id="content">
       <div id="gh-options-div">
         <div class="row">
-          <h3>Github Options</h3>
-          <div class="row">
+          <h3>Github Account</h3>
+          <div class="row" id="gh-login-div">
+            <span>Requesting access to github. Please create a new account if you are concerned about changing keys.</span>
+          </div>
+          <div class="row" id="ghavatar-div">
             <img id="ghavatar" src="" alt="github avatar"></img>
           </div>            
         </div>
@@ -31,12 +35,20 @@
 
       <div id="guld-id-div">
         <h3>Guld Identity</h3>
+        <div class="row" id="key-create-radio-div">
+          <input type="radio" name="key-create-radio" id="key-create-radio-generate" value="generate" checked>generate</input>
+          <input type="radio" name="key-create-radio" id="key-create-radio-import" value="import">import</input>
+        </div>
 
-        <div class="row">
+        <div id="key-import-div" class="row">
+          <textarea id="key-import" placeholder="ASCII Armored PGP Private Key" cols="40" rows="30"></textarea><br>
+        </div>
+
+        <div id="guldfpr-div" class="row">
           <input type="text" id="guldfpr" placeholder="Guld Key Fingerprint" disabled value=""></input><br>
         </div>
 
-        <div class="row">
+        <div id="guldname-div" class="row">
           <input type="text" id="guldname" placeholder="Username" autocomplete="username" value=""></input><br>
         </div>
 
@@ -48,7 +60,7 @@
           <input type="text" id="guldmail" placeholder="Email" autocomplete="email" value=""></input><br>
         </div>
 
-        <div class="row">
+        <div id="key-passphrase-div" class="row">
           <input type="password" id="key-passphrase" placeholder="PGP Key Passphrase" value=""></input><br>
         </div>
 
@@ -62,14 +74,23 @@
 
         <div id="errors" class="row">
           <span id="err-div" class="error"></span><br>
-          <span id="err-warn" class="warning">WARNING: Everything except your passphrase is public!</span>
+          <span id="err-warn" class="warning"></span>
         </div>
 
         <div id="create-submit-div" class="row">
           <button id="create-submit" type="submit" value="Create">Create</button>
         </div>
 
-        <div id="login-submit-div" class="row">
+        <div id="import-submit-div" class="row">
+          <button id="import-submit" type="submit" value="Import">Import</button>
+        </div>
+
+        <div id="export-submit-div" class="row">
+          <button id="export-submit-private" type="submit" value="Export Private Key">Export Private Key</button>
+          <button id="export-submit-public" type="submit" value="Export Public Key">Export Public Key</button>
+        </div>
+
+        <div id="unlock-submit-div" class="row">
             <button id="login-submit" type="submit" value="Login">Login</button>
         </div>
       </div> <!--generate-key-->

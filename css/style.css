@@ -246,4 +246,10 @@ nav {
 
 #ghavatar {
     width: 100px;
+    cursor: pointer;
 }
+
+#export-submit-private, #login-submit-div, #import-submit-div, #guldfpr-div, #key-import-div, #ghavatar-div {
+    display: none;
+}
+

@@ -359,6 +359,7 @@ class Blocktree extends EventEmitter {
                     maybeResolve()
                   }
                 })
+                return reject(new Error("No names found."))
               }
             })
           }
