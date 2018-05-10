@@ -24,6 +24,13 @@ function loadBackground () { // eslint-disable-line no-unused-vars
   })
 }
 
+function setupPage () {
+  if (!b.guldname || b.guldname === 'guld' || !b.ghoauth || b.ghoauth.length === 0) {
+    window.location = `chrome-extension://${chrome.runtime.id}/options.html`
+  }
+  document.getElementById('logout').addEventListener('click', logout)
+}
+
 function setError (errmess) { // eslint-disable-line no-unused-vars
   errdiv.innerHTML = `${errmess}${errdiv.innerHTML}`
 }
@@ -46,4 +53,32 @@ function logout (e) { // eslint-disable-line no-unused-vars
   b.guldfpr = ''
   b.fullname = ''
   window.location = `chrome-extension://${chrome.runtime.id}/options.html`
+}
+
+function showBalances (gname, commodity) {
+  gname = gname || b.guldname
+  commodity = commodity || 'GULD'
+  var balDiv = document.getElementById('balance')
+  var usdValDiv = document.getElementById('usd-value')
+  function setUSD (dec) {
+    usdValDiv.innerHTML = `~ ${dec.toString()} USD`
+  }
+  if (balDiv && usdValDiv) {
+    b.getBalance(gname, true).then(bal => {
+      if (bal && bal.Assets && bal.Assets.__bal && bal.Assets.__bal[commodity]) {
+        balDiv.innerHTML = `${bal.Assets.__bal[commodity].value.toString()} ${commodity}`
+        b.blocktree.getPrice('GULD', '$').then(p => {
+          if (commodity === 'GULD') setUSD(bal.Assets.__bal.GULD.value.mul(p.value))
+          else {
+            b.blocktree.getPrice(commodity, 'GULD').then(pp => {
+              setUSD(bal.Assets.__bal[commodity].value.mul(p.value).mul(pp.value))
+            }).catch(e => {
+              console.error(e)
+              setUSD (new b.Decimal(0))
+            })
+          }
+        })
+      }
+    })
+  }
 }
