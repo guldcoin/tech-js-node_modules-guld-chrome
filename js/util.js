@@ -2,6 +2,13 @@
 
 var b
 var errdiv
+var commodity = 'GULD'
+var balance = new Decimal(0)
+var amount = new Decimal(0)
+var senderDiv
+var recDiv
+var amtDiv
+
 
 function loadBackground () { // eslint-disable-line no-unused-vars
   return new Promise((resolve, reject) => {
@@ -32,11 +39,14 @@ function setupPage () {
 }
 
 function setError (errmess) { // eslint-disable-line no-unused-vars
-  errdiv.innerHTML = `${errmess}${errdiv.innerHTML}`
+  if (typeof errdiv === 'undefined') errdiv = document.getElementById('err-div')
+  if (errdiv.innerHTML.indexOf(errmess) === -1)
+    errdiv.innerHTML = `${errmess}${errdiv.innerHTML}`
 }
 
 function unsetError (errmess) { // eslint-disable-line no-unused-vars
-  errdiv.innerHTML = errdiv.innerHTML.replace(errmess, '')
+  if (typeof errdiv === 'undefined') errdiv = document.getElementById('err-div')
+  errdiv.innerHTML = errdiv.innerHTML.replace(new RegExp(errmess, 'g'), '')
 }
 
 function logout (e) { // eslint-disable-line no-unused-vars
@@ -60,8 +70,13 @@ function showBalances (gname, commodity) {
   commodity = commodity || 'GULD'
   var balDiv = document.getElementById('balance')
   var usdValDiv = document.getElementById('usd-value')
-  document.getElementById('fullname').innerHTML = b.fullname
-  document.getElementById('guldname').innerHTML = b.guldname
+  var fullnameDiv = document.getElementById('fullname')
+  var guldnameDiv = document.getElementById('guldname')
+
+  if (fullnameDiv && guldnameDiv) {
+    fullnameDiv.innerHTML = b.fullname
+    guldnameDiv.innerHTML = b.guldname
+  }
 
   function setUSD (dec) {
     usdValDiv.innerHTML = `~ ${dec.toString()} USD`
@@ -76,7 +91,6 @@ function showBalances (gname, commodity) {
             b.blocktree.getPrice(commodity, 'GULD').then(pp => {
               setUSD(bal.Assets.__bal[commodity].value.mul(p.value).mul(pp.value))
             }).catch(e => {
-              console.error(e)
               setUSD (new b.Decimal(0))
             })
           }
@@ -84,4 +98,53 @@ function showBalances (gname, commodity) {
       }
     })
   }
+}
+
+function validateSender () {
+  senderDiv = senderDiv || document.getElementById('guld_transaction_sender')
+  var errmess = 'Unknown sender. '
+  return b.blocktree.isNameAvail(senderDiv.value).then(avail => {
+    if (avail !== false) {
+      setError(errmess)
+    } else {
+      unsetError(errmess)
+    }
+    return (avail === false)
+  }).catch(e => {
+    setError(errmess)
+    return false
+  })
+}
+
+function validateRecipient () {
+  recDiv = recDiv || document.getElementById('guld_transaction_recipient')
+  var errmess = 'Unknown recipient. '
+  return b.blocktree.isNameAvail(recDiv.value).then(avail => {
+    if (avail !== false) {
+      setError(errmes)
+    } else {
+      unsetError(errmess)
+    }
+    return (avail === false)
+  }).catch(e => {
+    setError(errmess)
+    return false
+  })
+}
+
+function validateSpendAmount () {
+  amtDiv = amtDiv || document.getElementById('guld_spend_amount')
+  amount = new b.Decimal(amtDiv.value)
+  var errmess = 'Invalid amount. '
+  if (amount.greaterThan(balance)) {
+    setError(errmess)
+    return false
+  } else {
+    unsetError(errmess)
+    return true
+  }
+}
+
+function detectCommodity () {
+  if (window.location.href.indexOf("/gg/") >= 0) commodity = 'GG'
 }

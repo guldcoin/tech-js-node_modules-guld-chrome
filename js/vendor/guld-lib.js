@@ -251,7 +251,12 @@ class Blocktree extends EventEmitter {
   }
 
   isNameAvail (gname) {
-    if (!this.initialized || !this.nameIsValid(gname)) {
+    try {
+      var valid = this.nameIsValid(gname)
+    } catch (e) {
+      return Promise.reject(e)
+    }
+    if (!this.initialized || !valid) {
       return Promise.resolve(false)
     } else {
       return this.listNames().then(namelist => {

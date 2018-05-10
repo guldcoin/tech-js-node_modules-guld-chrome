@@ -125,8 +125,8 @@ function setDisplay (t) {
 
 function loadGuldVals () {
   return b.getGuldID().then(data => {
-    if (b.guldname !== 'guld') document.getElementById('guldname').value = b.guldname
-    document.getElementById('fullname').value = b.fullname
+    if (b.guldname !== 'guld') document.getElementById('guldname-new').value = b.guldname
+    document.getElementById('fullname-new').value = b.fullname
     document.getElementById('guldmail').value = b.guldmail
     document.getElementById('guldfpr').value = b.guldfpr
     return data
@@ -197,7 +197,7 @@ function submitCreate (e) {
     checkGName().then(avail => {
       if (avail || expertMode) {
         b.guldname = guldnameDiv.value
-        b.fullname = document.getElementById('fullname').value
+        b.fullname = document.getElementById('fullname-new').value
         if (b.fullname.length === 0) b.fullname = b.guldname
         b.guldmail = document.getElementById('guldmail').value
         var options = {
@@ -283,7 +283,7 @@ function finishLocalSignup () {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  guldnameDiv = document.getElementById('guldname')
+  guldnameDiv = document.getElementById('guldname-new')
   guldmailDiv = document.getElementById('guldmail')
   errdiv = document.getElementById('err-div')
   guldnameDiv.addEventListener('focusout', checkGName)

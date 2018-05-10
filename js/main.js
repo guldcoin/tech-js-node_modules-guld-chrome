@@ -4,8 +4,7 @@
 
 function loadWallet () { // eslint-disable-line no-unused-vars
   setupPage()
-  var commodity = 'GULD'
-  if (window.location.href.indexOf("/gg/") >= 0) commodity = 'GG'
+  detectCommodity()
   showBalances(b.guldname, commodity)
 }
 
