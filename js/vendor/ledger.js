@@ -19,7 +19,7 @@ class Ledger { // eslint-disable-line no-unused-vars
 
   // `ledger balance` output format to allow parsing as a CSV string
   static formatBalance () {
-    return '%(quoted(display_total)),%(quoted(account)),%(quoted(partial_account)),%(depth)\n%/'
+    return '%(quoted(display_total)),%(quoted(account))\n%/'
   }
 
   static initialFormat () {
@@ -49,6 +49,7 @@ class Ledger { // eslint-disable-line no-unused-vars
   //   -900.00 CAD {USD1.1111111111} [13-Mar-19]
   static parseCommodity (data) {
     // Strip out unneeded details.
+    data = data.toString()
     data = data.replace(/{.*}/g, '')
     data = data.replace(/\[.*\]/g, '')
     data = data.trim()
@@ -92,7 +93,7 @@ class Ledger { // eslint-disable-line no-unused-vars
 
   // balance reports the current balance of all accounts.
   balance (options) {
-    var args = ['balance', '--format', Ledger.formatBalance()]
+    var args = ['balance', '--flat', '--format', Ledger.formatBalance()]
 
     options = options || {}
     if (options.collapse) {
@@ -113,23 +114,40 @@ class Ledger { // eslint-disable-line no-unused-vars
     }
     var p = this.withLedgerFile(this.cli).exec(args)
     var account = new Account(null)
+    var amtQueue = []
 
     return new Promise((resolve, reject) => {
       p.then(pro => {
-        return pro.split()
-          .compact()
-          .map(s => {
-            return Papa.parse(s, {escapeChar: '\\'}).data[0]
-          })
-          .toArray(parsed => {
-            parsed.forEach(line => {
-              if (line.length > 1) {
-                var bal = new Balance({})
-                bal = bal.add(Ledger.parseCommodity(line[0]))
-                account._add(bal, line[1].split(':'))
-              }
-            })
-            return resolve(account)
+        highland(pro)
+          .split()
+          .each(s => {
+            if (typeof s === 'string' && s.length > 0) {
+              if (!s.startsWith('"'))
+                s = `"${s}`
+              if (!s.endsWith('"'))
+                s = `${s}"`
+              var data = Papa.parse(s).data
+              data.forEach(line => {
+                if (line.length === 1)
+                  amtQueue.push(line)
+                if (line.length > 1) {
+                  var bal = new Balance({})
+                  bal = bal.add(Ledger.parseCommodity(line[0]))
+                  account._add(bal, line[1].split(':'))
+                  if (amtQueue.length > 0) {
+                    amtQueue.forEach(amt => {
+                      bal = new Balance({})
+                      bal = bal.add(Ledger.parseCommodity(amt))
+                      account._add(bal, line[1].split(':'))
+                    })
+                    amtQueue = []
+                  }
+                } else return highland.nil
+              })
+            } else {
+              resolve(account)
+              return highland.nil
+            }
           })
       })
     })
@@ -364,7 +382,7 @@ class Cli {
 
     return new Promise((resolve, reject) => {
       process.stdout.on('data', data => {
-        if (!highland.isNil(data)) resp.write(data)
+        if (highland.nil !== data) resp.write(data)
       })
       process.stdout.on('end', () => {
         resp.end()

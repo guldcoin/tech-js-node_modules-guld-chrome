@@ -179,7 +179,7 @@ function submitLogin (e) {
   } else {
     myKey.decrypt(passin.value).then(() => {
       window.location = `chrome-extension://${chrome.runtime.id}/main.html`
-    })
+    }).catch(setError)
   }
 }
 

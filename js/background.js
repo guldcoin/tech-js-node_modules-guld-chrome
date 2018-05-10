@@ -23,6 +23,7 @@ var guldmail = ''
 var guldfpr = ''
 var fullname = ''
 var keyring = new openpgp.Keyring()
+window.Ledger = Ledger
 
 // Load the filesystem and blocktree
 BrowserFS.configure(config, err => {

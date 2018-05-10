@@ -116,65 +116,65 @@ class Blocktree extends EventEmitter {
     this.initialized = false
   }
 
-  setLedger () {
+  setLedger (re) {
     var self = this
     var included = ''
-    function mapCommodities (c) {
-      if (c === 'prices') return Promise.resolve()
+
+    function includeFile (path) {
       return new Promise((resolve, reject) => {
-        self.fs.readdir(`/BLOCKTREE/${self.observer}/ledger/${c}`,
-          (err, users) => {
-            if (err) return reject(err)
-            users = users.filter(u => {
-              if (u.startsWith('.')) return false
-              else if (u.endsWith('.dat')) {
-                included = `${included}\ninclude /BLOCKTREE/${self.observer}/ledger/${c}/${u}`
-                return false
-              } else {
-                return true
-              }
-            })
-            var promises = users.map(u => {
-              return mapUsers(c, u)
-            })
-            Promise.all(promises).then(resolve).catch(reject)
-          })
-      })
-    }
-    function mapUsers (c, u) {
-      return new Promise((resolve, reject) => {
-        self.fs.readdir(`/BLOCKTREE/${self.observer}/ledger/${c}/${u}`,
-          (err, files) => {
-            if (err) return reject(err)
-            files.forEach(f => {
-              if (f.endsWith('.dat')) {
-                included = `${included}\ninclude /BLOCKTREE/${self.observer}/ledger/${c}/${u}/${f}`
-              }
-            })
-            resolve()
-          })
-      })
-    }
-    return new Promise((resolve, reject) => {
-      self.fs.readdir(`/BLOCKTREE/${self.observer}/ledger/prices/`,
-        (err, prices) => {
-          if (err) return reject(err)
-          prices.forEach(price => {
-            if (price.endsWith('.db')) {
-              included = `${included}\ninclude /BLOCKTREE/${self.observer}/ledger/prices/${price}`
+        self.fs.readFile(path, 'utf8', (err, data) => {
+          if (err) reject(err)
+          if (!re || re.test(data)) {
+            included = `${included}\n${data}\n`
+            if (data.indexOf('1,511,693') >= 0) {
+              console.log(data)
+              console.log(included)
             }
-          })
-          self.fs.readdir(`/BLOCKTREE/${self.observer}/ledger/`,
-            (err, commodities) => {
-              if (err) return reject(err)
-              var promises = commodities.map(mapCommodities)
-              Promise.all(promises).then(() => {
-                self._ledger = new Ledger({'file': '-', 'raw': included, 'binary': 'chrome'})
-                resolve()
-              }).catch(reject)
-            })
+            resolve()
+          } else resolve()
         })
-    })
+      })
+    }
+
+    function checkLine (path, l) {
+      var newpath = `${path}/${l}`
+      if (l.startsWith('.')) return Promise.resolve()
+      else if (l.endsWith('.dat') || l.endsWith('.db')) {
+        return includeFile(newpath)
+      } else {
+        return new Promise((resolve, reject) => {
+          self.fs.stat(newpath, (err, stats) => {
+            if (err) return resolve()
+            else if (stats.isDirectory()) {
+              includeRecursive(newpath).then(resolve).catch(reject)
+            } else resolve()
+          })
+        })
+      }
+    }
+
+    function includeRecursive (path) {
+      return new Promise((resolve, reject) => {
+        self.fs.readdir(path, (err, list) => {
+          if (err) return reject(err)
+          Promise.all(list.map(l => {
+            return checkLine(path, l)
+          })).then(resolve).catch(reject)
+        })
+      })    
+    }
+
+    return includeRecursive(`/BLOCKTREE/${self.observer}/ledger/`)
+      .then(() => {
+        var cfg = {'file': '-', 'raw': included}
+        if (re) {
+          cfg['query'] = re
+        } if (typeof chrome !== 'undefined') {
+          cfg['binary'] = 'chrome'
+        }
+        self._ledger = new Ledger(cfg)
+        return self._ledger
+      })
   }
 
   getLedger () {

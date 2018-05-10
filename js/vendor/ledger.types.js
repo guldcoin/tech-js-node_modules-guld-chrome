@@ -200,21 +200,17 @@ class Account {
 
   _add (bal, path) {
     var parent = this
-    var done = []
+    var current
+    var debug = false
+    if (path.indexOf('isysd') >= 0) debug = true
     while (path.length > 0) {
-      done.push(path.shift())
-      if (path.length > 0) {
-        if (!parent.hasOwnProperty(done[done.length - 1])) {
-          parent[done[done.length - 1]] = new Account()
-        }
+      current = path.shift()
+      if (parent.hasOwnProperty(current)) {
+        parent[current].__bal = parent[current]._bal().add(bal)
       } else {
-        if (parent.hasOwnProperty(done[done.length - 1])) {
-          parent[done[done.length - 1]].__bal = parent[done[done.length - 1]].__bal.add(bal)
-        } else {
-          parent[done[done.length - 1]] = new Account(bal)
-        }
+        parent[current] = new Account(bal)
       }
-      parent = parent[done[done.length - 1]]
+      parent = parent[current]
     }
   }
 
