@@ -1,10 +1,7 @@
 body {
-/*    width: 300px;*/
-/*    height: 500px;*/
-    background: #281954;
+    background: #000000;
     background-image: url("../images/background.png");
     background-size: cover;
-/*    overflow: hidden;*/
     color: #fff;
     margin: 0;
 }
@@ -29,17 +26,18 @@ h1 {
 }
 
 button, button:visited {
-    background: #e34822;
+    background: #a98d3a;
     padding: 0.5rem 1.2rem;
     border: 0;
     border-radius: 5rem;
     color: #fff;
     font-weight: 600;
     transition: all 0.5s;
+    cursor: pointer;
 }
 
 button:hover, button:active {
-    background: #f1866c;
+    background: #D0B460;
 }
 
 button.secondary, button.secondary:visited {
@@ -87,7 +85,7 @@ button.grouped {
     padding-bottom: 2rem;
 }
 
-input[type="text"] {
+input[type="text"], input[type="number"] {
     padding: 0.5rem;
     width: 11.9rem;
 }
@@ -117,67 +115,9 @@ select {
     display: block;
 }
 
-#logo_dash {
-    display: inline-block;
-    width: 6.6rem;
-}
-
-#balance {
-    display: inline-block;
-    float: right;
-}
-
-#balance span {
-    display: block;
-}
-
-#balance .balances {
-    width: 8rem;
-    display: inline-block;
-}
-
-#balance .assets {
-    width: 2rem;
-    display: inline-block;
-}
-
-#balance .balances .gg {
-    font-size: 1.2rem;
-}
-
-#balance .balances .usd {
-    font-size: 0.8rem;
-}
-
-#balance .assets .gg {
-    font-size: 1rem;
-}
-
-#balance .assets .usd {
-    font-size: 0.8rem;
-}
-
-#balance .usd {
-    color: #b5b5b5;
-}
-
-nav {
-    padding: 1rem 0.6rem;
-}
-
 #profile {
     background: #fff;
     padding: 2rem 0;
-}
-
-#name {
-    color: #727272;
-    font-size: 1.4rem;
-}
-
-#username {
-    color: #e34822;
-    font-size: 1.4rem;
 }
 
 .menu_btn {
@@ -253,3 +193,130 @@ nav {
     display: none;
 }
 
+#header-menu {
+    display: inline-block;
+    border-bottom: 2px solid #fff;
+    padding-bottom: 1rem;
+    margin-bottom: 5rem;
+}
+
+#header-menu a {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #fff;
+    width: 6rem;
+    padding: 1.6rem;
+    display: inline-block;
+}
+
+#header-menu a.active {
+    color: #D0B460;
+}
+
+#header-menu a:hover {
+    color: #D0B460;
+}
+
+#gg #header-menu a.active {
+    color: #FF5112;
+}
+
+#gg #header-menu a:hover {
+    color: #FF5112;
+}
+
+#currency_tab {
+    width: 5rem;
+    position: fixed;
+    top: 46%;
+    left: 4%;
+    text-align: center;
+}
+
+#currency_tab a {
+    display: block;
+    font-size: 1.4rem;
+    color: #fff;
+    text-decoration: none;
+    margin: 2rem 0;
+}
+
+#currency_tab.guld #guld_tab {
+    font-size: 2rem;
+    color: #D0B460;
+}
+
+#currency_tab.gg {
+    top: 42%;
+}
+
+#currency_tab.gg #gg_tab {
+    font-size: 2rem;
+    color: #D0B460;
+}
+
+#logo {
+    height: 7rem;
+    margin-top: 1rem;
+}
+
+#balance {
+    color: #D0B460;
+    font-size: 5rem;
+    font-weight: 100;
+    padding-bottom: 0;
+}
+
+#usd-balance {
+    color: #727272;
+    font-size: 2.4rem;
+}
+
+#name {
+    color: #727272;
+    font-size: 1.4rem;
+    margin-top: 4rem;
+    padding-bottom: 0;
+}
+
+#username {
+    color: #D0B460;
+    font-size: 1.4rem;
+}
+
+.col-form-label {
+    margin-bottom: 1rem;
+    display: block;
+    font-size: 1rem;
+    font-weight: 100;
+    color: #828282;
+}
+
+.modal-footer .btn {
+    margin-top: 1rem;
+}
+
+#gg {
+    background-image: url(../images/background_gg.png);
+    background-size: auto;
+}
+
+#gg #currency_tab.gg #gg_tab {
+    color: #FF5112;
+}
+
+#gg #balance {
+    color: #FF5112;    
+}
+
+#gg #username {
+    color: #FF5112;        
+}
+
+#gg button, #gg button:visited {
+    background: #e34822;
+}
+
+#gg button:hover, #gg button:active {
+    background: #f1866c;
+}
