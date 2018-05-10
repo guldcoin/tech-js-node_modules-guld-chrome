@@ -257,14 +257,14 @@ select {
     margin-left: 5rem;
 }
 
-#balance {
+#balance, #gg-balance, #guld-balance {
     color: #D0B460;
     font-size: 3.4rem;
     font-weight: 100;
     padding-bottom: 0;
 }
 
-#usd-value {
+#usd-value, #total-usd-value {
     color: #727272;
     font-size: 2.4rem;
 }

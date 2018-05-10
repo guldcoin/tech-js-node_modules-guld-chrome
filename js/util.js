@@ -62,12 +62,34 @@ function logout (e) { // eslint-disable-line no-unused-vars
   b.guldmail = ''
   b.guldfpr = ''
   b.fullname = ''
+  b.keyring = new b.openpgp.Keyring()
   window.location = `chrome-extension://${chrome.runtime.id}/options.html`
 }
 
-function showBalances (gname, commodity) {
+function getBalances (gname, commodity) {
   gname = gname || b.guldname
   commodity = commodity || 'GULD'
+  var blnc
+  var usdval
+  return b.getBalance(gname, true).then(bal => {
+    if (bal && bal.Assets && bal.Assets.__bal && bal.Assets.__bal[commodity]) {
+      blnc = bal.Assets.__bal[commodity].value
+      return b.blocktree.getPrice('GULD', '$').then(p => {
+        if (commodity === 'GULD')
+          return [blnc, bal.Assets.__bal.GULD.value.mul(p.value)]
+        else {
+          return b.blocktree.getPrice(commodity, 'GULD').then(pp => {
+            return [blnc, bal.Assets.__bal[commodity].value.mul(p.value).mul(pp.value)]
+          }).catch(e => {
+            return [blnc, new Decimal(0)]
+          })
+        }
+      })
+    }
+  })
+}
+
+function showBalances (gname, commodity) {
   var balDiv = document.getElementById('balance')
   var usdValDiv = document.getElementById('usd-value')
   var fullnameDiv = document.getElementById('fullname')
@@ -82,20 +104,9 @@ function showBalances (gname, commodity) {
     usdValDiv.innerHTML = `~ ${dec.toString()} USD`
   }
   if (balDiv && usdValDiv) {
-    b.getBalance(gname, true).then(bal => {
-      if (bal && bal.Assets && bal.Assets.__bal && bal.Assets.__bal[commodity]) {
-        balDiv.innerHTML = `${bal.Assets.__bal[commodity].value.toString()} ${commodity}`
-        b.blocktree.getPrice('GULD', '$').then(p => {
-          if (commodity === 'GULD') setUSD(bal.Assets.__bal.GULD.value.mul(p.value))
-          else {
-            b.blocktree.getPrice(commodity, 'GULD').then(pp => {
-              setUSD(bal.Assets.__bal[commodity].value.mul(p.value).mul(pp.value))
-            }).catch(e => {
-              setUSD (new b.Decimal(0))
-            })
-          }
-        })
-      }
+    getBalances(gname, commodity).then(bals => {
+      balDiv.innerHTML = `${bals[0].toString()} ${commodity}`
+      usdValDiv.innerHTML = `~ ${bals[1].toString()} USD`
     })
   }
 }
