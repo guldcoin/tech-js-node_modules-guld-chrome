@@ -9,93 +9,112 @@
   <script src="js/options.js" type="text/javascript"></script>
 </head>
 
-<body class="text-center">
+<body id="options" class="text-center">
   <div id="status"></div>
   <div id="wrapper">
 
     <div id="header-menu">
       <nav>
-        <a href="/main.html"><img id="logo_dash" src="images/logo2.svg"></a>
-        <span><a href="" id="logout">logout</a></span>
+        <a href="/main.html">
+          <img id="logo_options" src="images/logo.svg">
+        </a>
       </nav>
-    <div> <!--header-menu-->
+      <div>
+        <!--header-menu-->
 
-    <div id="content">
-      <div id="gh-options-div">
-        <div class="row">
-          <h3>Github Account</h3>
-          <div class="row" id="gh-login-div">
-            <span>Requesting access to github. Please create a new account if you are concerned about changing keys.</span>
+        <div id="content">
+          <div id="gh-options-div">
+            <div class="row">
+              <h3>Github Account</h3>
+              <div class="row" id="gh-login-div">
+                <span>Requesting access to github. Please create a new account if you are concerned about changing keys.</span>
+              </div>
+              <div class="row" id="ghavatar-div">
+                <img id="ghavatar" src="" alt="github avatar"></img>
+              </div>
+              <div>
+                <span>
+                  <a href="" id="logout">logout</a>
+                </span>
+              </div>
+            </div>
           </div>
-          <div class="row" id="ghavatar-div">
-            <img id="ghavatar" src="" alt="github avatar"></img>
-          </div>            
+
+          <div id="guld-id-div">
+            <h3>Guld Identity</h3>
+            <div class="row" id="key-create-radio-div">
+              <input type="radio" name="key-create-radio" id="key-create-radio-generate" value="generate" checked>generate</input>
+              <input type="radio" name="key-create-radio" id="key-create-radio-import" value="import">import</input>
+            </div>
+
+            <div id="key-import-div" class="row">
+              <textarea id="key-import" placeholder="ASCII Armored PGP Private Key" cols="40" rows="30"></textarea>
+              <br>
+            </div>
+
+            <div id="guldfpr-div" class="row">
+              <input type="text" id="guldfpr" placeholder="Guld Key Fingerprint" disabled value=""></input>
+              <br>
+            </div>
+
+            <div id="guldname-div" class="row">
+              <input type="text" id="guldname-new" placeholder="Username" autocomplete="username" value=""></input>
+              <br>
+            </div>
+
+            <div id="fullname-div" class="row">
+              <input type="text" id="fullname-new" placeholder="Full Name (optional)" autocomplete="fullname" value=""></input>
+              <br>
+            </div>
+
+            <div id="guldmail-div" class="row">
+              <input type="text" id="guldmail" placeholder="Email" autocomplete="email" value=""></input>
+              <br>
+            </div>
+
+            <div id="key-passphrase-div" class="row">
+              <input type="password" id="key-passphrase" placeholder="PGP Key Passphrase" value=""></input>
+              <br>
+            </div>
+
+            <div id="key-passphrase-repeat-div" class="row">
+              <input type="password" id="key-passphrase-repeat" placeholder="PGP Key Passphrase (repeat)" value=""></input>
+              <br>
+            </div>
+
+            <div id="expert-mode-div" class="row">
+              <input type="checkbox" id="expert-mode"></input>
+              <label for="expert-mode">Expert Mode (DANGER!)</label>
+              <br>
+            </div>
+
+            <div id="errors" class="row">
+              <span id="err-div" class="error"></span>
+              <br>
+              <span id="err-warn" class="warning"></span>
+            </div>
+
+            <div id="create-submit-div" class="row">
+              <button id="create-submit" type="submit" value="Create">Create</button>
+            </div>
+
+            <div id="import-submit-div" class="row">
+              <button id="import-submit" type="submit" value="Import">Import</button>
+            </div>
+
+            <div id="export-submit-div" class="row">
+              <button id="export-submit-private" type="submit" value="Export Private Key">Export Private Key</button>
+              <button id="export-submit-public" type="submit" value="Export Public Key">Export Public Key</button>
+            </div>
+
+            <div id="unlock-submit-div" class="row">
+              <button id="login-submit" type="submit" value="Login">Login</button>
+            </div>
+          </div>
+          <!--generate-key-->
         </div>
+        <!--content-->
       </div>
-
-      <div id="guld-id-div">
-        <h3>Guld Identity</h3>
-        <div class="row" id="key-create-radio-div">
-          <input type="radio" name="key-create-radio" id="key-create-radio-generate" value="generate" checked>generate</input>
-          <input type="radio" name="key-create-radio" id="key-create-radio-import" value="import">import</input>
-        </div>
-
-        <div id="key-import-div" class="row">
-          <textarea id="key-import" placeholder="ASCII Armored PGP Private Key" cols="40" rows="30"></textarea><br>
-        </div>
-
-        <div id="guldfpr-div" class="row">
-          <input type="text" id="guldfpr" placeholder="Guld Key Fingerprint" disabled value=""></input><br>
-        </div>
-
-        <div id="guldname-div" class="row">
-          <input type="text" id="guldname-new" placeholder="Username" autocomplete="username" value=""></input><br>
-        </div>
-
-        <div id="fullname-div" class="row">
-          <input type="text" id="fullname-new" placeholder="Full Name (optional)" autocomplete="fullname" value=""></input><br>
-        </div>
-
-        <div id="guldmail-div" class="row">
-          <input type="text" id="guldmail" placeholder="Email" autocomplete="email" value=""></input><br>
-        </div>
-
-        <div id="key-passphrase-div" class="row">
-          <input type="password" id="key-passphrase" placeholder="PGP Key Passphrase" value=""></input><br>
-        </div>
-
-        <div id="key-passphrase-repeat-div" class="row">
-          <input type="password" id="key-passphrase-repeat" placeholder="PGP Key Passphrase (repeat)" value=""></input><br>
-        </div>
-
-        <div id="expert-mode-div" class="row">
-          <input type="checkbox" id="expert-mode"></input><label for="expert-mode">Expert Mode (DANGER!)</label><br>
-        </div>
-
-        <div id="errors" class="row">
-          <span id="err-div" class="error"></span><br>
-          <span id="err-warn" class="warning"></span>
-        </div>
-
-        <div id="create-submit-div" class="row">
-          <button id="create-submit" type="submit" value="Create">Create</button>
-        </div>
-
-        <div id="import-submit-div" class="row">
-          <button id="import-submit" type="submit" value="Import">Import</button>
-        </div>
-
-        <div id="export-submit-div" class="row">
-          <button id="export-submit-private" type="submit" value="Export Private Key">Export Private Key</button>
-          <button id="export-submit-public" type="submit" value="Export Public Key">Export Public Key</button>
-        </div>
-
-        <div id="unlock-submit-div" class="row">
-            <button id="login-submit" type="submit" value="Login">Login</button>
-        </div>
-      </div> <!--generate-key-->
-    </div> <!--content-->
-  </div>
 </body>
 
 </html>

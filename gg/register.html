@@ -12,62 +12,70 @@
 <body id="gg" class="text-center">
   <div id="status"></div>
   <div id="wrapper">
-    <div id="logo-div" class="row">
-      <a href="#" id="register">
-        <img id="logo" src="../images/logo_gg.svg">
-      </a>
+    <div id="header-balance">
+      <div id="logo-div">
+        <a href="index.html">
+          <img id="logo" src="../images/logo_gg.svg">
+        </a>
+      </div>
+      <div id="balance-div">
+        <div id="top-balance" class="row">
+        </div>
+        <div id="top-usd-value" class="row">
+        </div>
+      </div>
     </div>
 
     <div id="header-menu">
       <nav>
-          <a href="register.html" id="register" class="active">Register</a>
-          <a href="send.html" id="send">Send</a>
-          <a href="grant.html" id="grant">Grant</a>
-          <!--
+        <a href="register.html" id="register" class="active">Register</a>
+        <a href="send.html" id="send">Send</a>
+        <a href="grant.html" id="grant">Grant</a>
+        <!--
           <a href="#" id="burn">Burn</a>
           <a href="#" id="history">History</a>
           -->
-          <a href="#" id="logout">Logout</a>
-        </nav>
+        <a href="#" id="logout">Logout</a>
+      </nav>
     </div>
     <!--header-menu-->
 
     <div id="content" class="text-center">
-        <form id="registration_form">
-          <div class="row">
-            <label for="receiver" class="col-sm-5 col-form-label">Registration Type</label>
-            <div class="col-sm-7">
-              <select id="guld_registration_type" class="form-control">
-                <option value="1" selected="">User</option>
-                <option value="2">Group</option>
-                <option value="3">Device</option>
-              </select>
-            </div>
+      <form id="registration_form">
+        <div class="row">
+          <label for="receiver" class="col-sm-5 col-form-label">Registration Type</label>
+          <div class="col-sm-7">
+            <select id="guld_registration_type" class="form-control">
+              <option value="1" selected="">User</option>
+              <option value="2">Group</option>
+              <option value="3">Device</option>
+            </select>
           </div>
-          <div class="form-group row">
-            <label for="sender" class="col-sm-5 col-form-label">Guld Username</label>
-            <div class="col-sm-7">
-              <input type="text" class="form-control" id="guld_registration_registrator" placeholder="Guld Username" required=""> </div>
+        </div>
+        <div class="form-group row">
+          <label for="sender" class="col-sm-5 col-form-label">Guld Username</label>
+          <div class="col-sm-7">
+            <input type="text" class="form-control" id="guld_registration_registrator" placeholder="Guld Username" required=""> </div>
+        </div>
+        <div id="guld_registration_name_group" class="form-group row" style="display:none">
+          <label for="sender" class="col-sm-5 col-form-label">Name</label>
+          <div class="col-sm-7">
+            <input type="text" class="form-control" id="guld_registration_name" placeholder="Name"> </div>
+        </div>
+        <div id="guld_registration_number_group" class="form-group row" style="display:none">
+          <label for="amount" class="col-sm-5 col-form-label">Amount</label>
+          <div class="col-sm-7">
+            <input type="number" step="1" class="form-control" id="guld_registration_number" placeholder="1"> </div>
+        </div>
+        <div class="modal-footer row">
+          <div class="col-sm-12">
+            <button class="btn btn-primary" type="submit">generate</button>
           </div>
-          <div id="guld_registration_name_group" class="form-group row" style="display:none">
-            <label for="sender" class="col-sm-5 col-form-label">Name</label>
-            <div class="col-sm-7">
-              <input type="text" class="form-control" id="guld_registration_name" placeholder="Name"> </div>
-          </div>
-          <div id="guld_registration_number_group" class="form-group row" style="display:none">
-            <label for="amount" class="col-sm-5 col-form-label">Amount</label>
-            <div class="col-sm-7">
-              <input type="number" step="1" class="form-control" id="guld_registration_number" placeholder="1"> </div>
-          </div>
-          <div class="modal-footer row">
-            <div class="col-sm-12">
-              <button class="btn btn-primary" type="submit">generate</button>
-            </div>
-          </div>
-        </form>
-      </div>
-      <!--content-->
-  
+        </div>
+      </form>
+    </div>
+    <!--content-->
+
     <div id="err-div" class="row"> </div>
 
     <div id="currency_tab" class="gg">

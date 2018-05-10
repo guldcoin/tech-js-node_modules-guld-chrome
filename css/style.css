@@ -79,12 +79,6 @@ button.grouped {
     margin: 0 auto;
 }
 
-#logo {
-    padding: 3rem;
-    width: 9rem;
-    padding-bottom: 2rem;
-}
-
 input[type="text"], input[type="number"] {
     padding: 0.5rem;
     width: 11.9rem;
@@ -256,13 +250,16 @@ select {
 }
 
 #logo {
-    height: 7rem;
-    margin-top: 1rem;
+    height: 6rem;
+    position: relative;
+    top: 2rem;
+    margin-bottom: 1rem;
+    margin-left: 5rem;
 }
 
 #balance {
     color: #D0B460;
-    font-size: 5rem;
+    font-size: 3.4rem;
     font-weight: 100;
     padding-bottom: 0;
 }
@@ -275,7 +272,7 @@ select {
 #fullname {
     color: #727272;
     font-size: 1.4rem;
-    margin-top: 4rem;
+    margin-top: 2rem;
     padding-bottom: 0;
 }
 
@@ -313,10 +310,51 @@ select {
     color: #FF5112;        
 }
 
+#gg #guldname {
+    color: #FF5112;
+}
+
 #gg button, #gg button:visited {
     background: #e34822;
 }
 
 #gg button:hover, #gg button:active {
     background: #f1866c;
+}
+
+#logo_options {
+    width: 3rem;
+    margin-top: 1rem;
+}
+
+#options #logout {
+    padding: 0;
+}
+
+#options #content {
+    width: 19rem;
+}
+
+#logo-div {
+    width: 49%;
+    display: inline-block;
+    text-align: left;
+}
+
+#balance-div {
+    width: 50%;
+    display: inline-block;
+    text-align: right;
+}
+
+#top-balance {
+    color: #D0B460;
+    font-size: 2.4rem;
+    font-weight: 100;
+    padding-bottom: 0;
+}
+
+#top-usd-value {
+    color: #727272;
+    font-size: 1.8rem;
 }
