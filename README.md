@@ -1,12 +1,14 @@
 # guld-chrome
 
-Chrome plugin for guld
+Chrome extension to support Guld applications
+
+This extension provides a wallet, ledger interaction, and PGP key management, so you can focus on your app's unique functionality.
 
 To make a browser-based app (in this case, a Chrome extension) work with [`ledger`](http://ledger-cli.org/), a fundamentally command-line oriented application, we've had to patch and/or fork a number of its dependencies. Here's an overview of what it takes to get this extension running.
 
 ## Ledger
 
-**Ledger 3.0** is expected to be installed on the host machine. Additionally, these libraries are needed:
+[**Ledger 3.0**](http://ledger-cli.org/) is expected to be installed on the host machine. Additionally, these libraries are needed:
 
 * [ledger-cli-browser](https://github.com/isysd/ledger-cli-browser), our rewrite of node-ledger
 * [ledger-types](https://github.com/isysd/ledger-types), our new safe math library for JS ledger
@@ -17,8 +19,6 @@ We are considering making a dedicated ledger extension to manage this connection
 ## PGP
 
 Only [openpgp.js](https://github.com/openpgpjs/openpgpjs) is required, and no forking is necessary.
-
-We are strongly considering making a standalone key-management extension forked out of the gg extension.
 
 ## git
 
