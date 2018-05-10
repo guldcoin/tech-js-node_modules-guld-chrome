@@ -9,11 +9,11 @@ function loadWallet () { // eslint-disable-line no-unused-vars
   var usdTotalValDiv = document.getElementById('total-usd-value')
   showBalances(b.guldname, 'GULD')
   getBalances(b.guldname, 'GULD').then(bals => {
-    document.getElementById('guld-balance').innerHTML = `${bals[0].toString()} ${commodity}`
+    document.getElementById('guld-balance').innerHTML = `${bals[0].toString()} GULD`
     usdVal = usdVal.plus(bals[1].toString())
     usdTotalValDiv.innerHTML = `~ ${usdVal.toString()} USD`
     getBalances(b.guldname, 'GG').then(bals => {
-      document.getElementById('gg-balance').innerHTML = `${bals[0].toString()} ${commodity}`
+      document.getElementById('gg-balance').innerHTML = `${bals[0].toString()} GG`
       usdVal = usdVal.plus(bals[1].toString())
       usdTotalValDiv.innerHTML = `~ ${usdVal.toString()} USD`
     })

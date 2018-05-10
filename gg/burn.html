@@ -5,6 +5,9 @@
   <!-- Style CSS -->
   <link href="../css/style.css" rel="stylesheet">
   <script src="../js/vendor/EventEmitter.js" type="text/javascript"></script>
+  <script src="../js/vendor/decimal.min.js" type="text/javascript"></script>
+  <script src="../js/vendor/ledger.types.js" type="text/javascript"></script>
+  <script src="../js/vendor/guld-lib.js" type="text/javascript"></script>
   <script src="../js/util.js" type="text/javascript"></script>
   <script src="../js/main.js" type="text/javascript"></script>
 </head>
@@ -19,23 +22,21 @@
         </a>
       </div>
       <div id="balance-div">
-        <div id="top-balance" class="row">
+        <div id="balance" class="row">
         </div>
-        <div id="top-usd-value" class="row">
+        <div id="usd-value" class="row">
         </div>
       </div>
     </div>
 
     <div id="header-menu">
       <nav>
-        <a href="register.html" id="register" class="active">Register</a>
         <a href="send.html" id="send">Send</a>
-        <a href="grant.html" id="grant">Grant</a>
+        <a href="burn.html" id="burn" class="active">Burn</a>
         <!--
-          <a href="#" id="burn">Burn</a>
-          <a href="#" id="history">History</a>
-          -->
-        <a href="#" id="logout">Logout</a>
+              <a href="#" id="burn">Burn</a>
+              <a href="#" id="history">History</a>
+              -->
       </nav>
     </div>
     <!--header-menu-->
@@ -83,6 +84,7 @@
       <a id="gg_tab" href="#">GG</a>
     </div>
   </div>
+  <a href="#" id="logout">Logout</a>
 </body>
 
 </html>

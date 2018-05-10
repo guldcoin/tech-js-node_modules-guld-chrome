@@ -220,28 +220,28 @@ select {
 }
 
 #currency_tab {
-    width: 5rem;
+    width: 100%;
     position: fixed;
-    top: 46%;
-    left: 4%;
+    bottom: 4%;
     text-align: center;
 }
 
 #currency_tab a {
-    display: block;
+    display: inline-block;
     font-size: 1.4rem;
     color: #fff;
     text-decoration: none;
-    margin: 2rem 0;
+    margin: 1rem;
 }
 
 #currency_tab.guld #guld_tab {
     font-size: 2rem;
     color: #D0B460;
+    padding-left: 4rem;
 }
 
 #currency_tab.gg {
-    top: 42%;
+    margin-left: -3.4rem;
 }
 
 #currency_tab.gg #gg_tab {
@@ -358,3 +358,13 @@ select {
     color: #727272;
     font-size: 1.8rem;
 }
+
+#logout {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    color: #9d9d9d;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
