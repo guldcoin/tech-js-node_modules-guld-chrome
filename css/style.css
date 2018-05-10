@@ -358,3 +358,12 @@ select {
     color: #727272;
     font-size: 1.8rem;
 }
+
+#logout {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    color: #9d9d9d;
+    text-decoration: none;
+    font-size: 1rem;
+}
