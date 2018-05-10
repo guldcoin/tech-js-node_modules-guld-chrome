@@ -26,17 +26,18 @@ h1 {
 }
 
 button, button:visited {
-    background: #e34822;
+    background: #a98d3a;
     padding: 0.5rem 1.2rem;
     border: 0;
     border-radius: 5rem;
     color: #fff;
     font-weight: 600;
     transition: all 0.5s;
+    cursor: pointer;
 }
 
 button:hover, button:active {
-    background: #f1866c;
+    background: #D0B460;
 }
 
 button.secondary, button.secondary:visited {
@@ -84,7 +85,7 @@ button.grouped {
     padding-bottom: 2rem;
 }
 
-input[type="text"] {
+input[type="text"], input[type="number"] {
     padding: 0.5rem;
     width: 11.9rem;
 }
@@ -112,15 +113,6 @@ select {
     color: #b173f0;
     margin-bottom: 0.2rem;
     display: block;
-}
-
-#logo_dash {
-    display: inline-block;
-    width: 6.6rem;
-}
-
-nav {
-    padding: 1rem 0.6rem;
 }
 
 #profile {
@@ -212,8 +204,25 @@ nav {
     text-decoration: none;
     font-size: 1rem;
     color: #fff;
-    width: 8rem;
+    width: 6rem;
+    padding: 1.6rem;
     display: inline-block;
+}
+
+#header-menu a.active {
+    color: #D0B460;
+}
+
+#header-menu a:hover {
+    color: #D0B460;
+}
+
+#gg #header-menu a.active {
+    color: #FF5112;
+}
+
+#gg #header-menu a:hover {
+    color: #FF5112;
 }
 
 #currency_tab {
@@ -275,6 +284,18 @@ nav {
     font-size: 1.4rem;
 }
 
+.col-form-label {
+    margin-bottom: 1rem;
+    display: block;
+    font-size: 1rem;
+    font-weight: 100;
+    color: #828282;
+}
+
+.modal-footer .btn {
+    margin-top: 1rem;
+}
+
 #gg {
     background-image: url(../images/background_gg.png);
     background-size: auto;
@@ -290,4 +311,12 @@ nav {
 
 #gg #username {
     color: #FF5112;        
+}
+
+#gg button, #gg button:visited {
+    background: #e34822;
+}
+
+#gg button:hover, #gg button:active {
+    background: #f1866c;
 }
