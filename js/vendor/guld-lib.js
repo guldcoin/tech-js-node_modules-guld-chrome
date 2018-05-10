@@ -126,10 +126,6 @@ class Blocktree extends EventEmitter {
           if (err) reject(err)
           if (!re || re.test(data)) {
             included = `${included}\n${data}\n`
-            if (data.indexOf('1,511,693') >= 0) {
-              console.log(data)
-              console.log(included)
-            }
             resolve()
           } else resolve()
         })

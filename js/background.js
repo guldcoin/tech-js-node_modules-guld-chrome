@@ -117,16 +117,17 @@ function initBlocktree () {
       }, () => {
         chrome.browserAction.disable()
         chrome.browserAction.setBadgeText({text: 'wait'})
-        chrome.browserAction.setTitle({title: 'Loading initial blocktree snapshot, this may take up to 10 minutes.'})
+        chrome.browserAction.setTitle({title: 'Loading initial blocktree snapshot, this may take up to half an hour.'})
         var start = Date.now()
         console.log(`starting blocktree init @ ${start}`) // eslint-disable-line no-console
         blocktree.initFS(guldname, 'guldcoin').then(cloneGG).then(() => {
-          console.log(`${(Date.now() - start) / 1000} seconds to init blocktree`) // eslint-disable-line no-console
-          chrome.browserAction.enable()
-          chrome.browserAction.setBadgeText({text: ''})
-          chrome.browserAction.setTitle({title: 'Guld wallet and key manager.'})
           // also cache ledger and balances
-          getLedger().then(getBalance())
+          getLedger().then(getBalance()).then(() => {
+            console.log(`${(Date.now() - start) / 1000} seconds to init blocktree and ledger`) // eslint-disable-line no-console
+            chrome.browserAction.enable()
+            chrome.browserAction.setBadgeText({text: ''})
+            chrome.browserAction.setTitle({title: 'Guld wallet and key manager.'})
+          })
         })
       })
     } else {
