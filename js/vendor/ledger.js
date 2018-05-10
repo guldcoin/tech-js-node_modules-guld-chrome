@@ -122,14 +122,11 @@ class Ledger { // eslint-disable-line no-unused-vars
           .split()
           .each(s => {
             if (typeof s === 'string' && s.length > 0) {
-              if (!s.startsWith('"'))
-                s = `"${s}`
-              if (!s.endsWith('"'))
-                s = `${s}"`
+              if (!s.startsWith('"')) { s = `"${s}` }
+              if (!s.endsWith('"')) { s = `${s}"` }
               var data = Papa.parse(s).data
               data.forEach(line => {
-                if (line.length === 1)
-                  amtQueue.push(line)
+                if (line.length === 1) { amtQueue.push(line) }
                 if (line.length > 1) {
                   var bal = new Balance({})
                   bal = bal.add(Ledger.parseCommodity(line[0]))

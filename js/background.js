@@ -125,6 +125,8 @@ function initBlocktree () {
           chrome.browserAction.enable()
           chrome.browserAction.setBadgeText({text: ''})
           chrome.browserAction.setTitle({title: 'Guld wallet and key manager.'})
+          // also cache ledger and balances
+          getLedger().then(getBalance())
         })
       })
     } else {
@@ -153,6 +155,129 @@ function renameBlocktree () { // eslint-disable-line no-unused-vars
       } else resolve()
     })
   })
+}
+
+function getThenSetLedger () {
+  return new Promise((resolve, reject) => {
+    blocktree.setLedger().then(() => {
+      chrome.storage.local.set({'journal': blocktree.getLedger().options.raw}, () => {
+        if (chrome.runtime.lastError) reject(chrome.runtime.lastError)
+        else resolve(blocktree.getLedger())
+      })
+    }).catch(reject)
+  })
+}
+
+function getLedger(useCache) {
+  if (typeof useCache === 'undefined') useCache = true
+
+  if (useCache) {
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.get(['journal'], j => {
+        if (j && j.journal) {
+          blocktree._ledger = new Ledger({'file': '-', 'raw': j.journal, 'binary': 'chrome'})
+          resolve(blocktree.getLedger())
+        } else {
+          getThenSetLedger().then(resolve).catch(reject)
+        } 
+      })
+    })
+  } else {
+    return getThenSetLedger()
+  }
+}
+
+function getThenSetBalances (gname) {
+  gname = gname || guldname
+
+  function saveBals (bals) {
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.set(bals, () => {
+        if (chrome.runtime.lastError) reject(chrome.runtime.lastError)
+        else resolve()
+      })    
+    })
+  }
+
+  return new Promise((resolve, reject) => {
+    getLedger().then(ledger => {
+      ledger.balance().then(bals => {
+        window.bals = bals
+        if (bals && bals['guld']) {
+          var dbBals = {}
+          Object.keys(bals).forEach(n => {
+            if (n.indexOf('_') === -1) {
+              dbBals[`bal_${n}`] = bals[n]
+            }
+          })
+          saveBals(dbBals).then(() => {
+            resolve(bals[gname])
+          }).catch(reject)
+        } else reject(new Error("Unable to get balances from ledger."))
+      }).catch(reject)
+    })
+  })
+}
+
+function reInitDecimal (dec) {
+  var val = new Decimal(0)
+	val.d = dec.d
+	val.e = dec.e
+	val.s = dec.s
+  return val
+}
+
+function reInitAmount (amt) {
+  if (amt instanceof Amount) return amt
+	else return new Amount(reInitDecimal(amt.value), amt.commodity)
+}
+
+function reInitBalance (bal) {
+  if (bal instanceof Balance) return bal
+	else {
+	  var balance = new Balance({})
+    Object.keys(bal).forEach(b => {
+      if (b.indexOf('_') === -1) {
+        balance = balance.add(reInitAmount(bal[b]))
+      }
+    })
+    return balance
+	}
+}
+
+function reInitAccount (acct) {
+  if (acct instanceof Account) return acct
+	else {
+	  var account = new Account(new Balance({}))
+	  Object.keys(acct).forEach(act => {
+	    if (act === '__bal') {
+        account.__bal = reInitBalance(acct[act])
+	    } else if (act.indexOf('_') === -1) {
+	      account[act] = reInitAccount(acct[act])
+	    }
+	  })
+	  return account
+	}
+}
+
+function getBalance(gname, useCache) {
+  gname = gname || guldname
+  if (typeof useCache === 'undefined') useCache = true
+  if (useCache) {
+    return new Promise((resolve, reject) => {
+      var cacheKey = `bal_${gname}`
+      chrome.storage.local.get([cacheKey], bal => {
+        if (bal && bal[cacheKey]) {
+          resolve(reInitAccount(bal[cacheKey]))
+        } else {
+          getThenSetBalances(gname).then(resolve).catch(reject)
+        } 
+      })
+    })
+
+  } else {
+    return getThenSetBalances(gname)
+  }
 }
 
 // Github helpers

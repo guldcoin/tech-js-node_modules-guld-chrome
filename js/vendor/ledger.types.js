@@ -206,7 +206,7 @@ class Account {
     while (path.length > 0) {
       current = path.shift()
       if (parent.hasOwnProperty(current)) {
-        parent[current].__bal = parent[current]._bal().add(bal)
+        parent[current].__bal = parent[current].__bal.add(bal)
       } else {
         parent[current] = new Account(bal)
       }
