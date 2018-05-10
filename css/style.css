@@ -267,19 +267,19 @@ select {
     padding-bottom: 0;
 }
 
-#usd-balance {
+#usd-value {
     color: #727272;
     font-size: 2.4rem;
 }
 
-#name {
+#fullname {
     color: #727272;
     font-size: 1.4rem;
     margin-top: 4rem;
     padding-bottom: 0;
 }
 
-#username {
+#guldname {
     color: #D0B460;
     font-size: 1.4rem;
 }

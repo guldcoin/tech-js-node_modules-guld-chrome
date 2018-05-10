@@ -60,6 +60,9 @@ function showBalances (gname, commodity) {
   commodity = commodity || 'GULD'
   var balDiv = document.getElementById('balance')
   var usdValDiv = document.getElementById('usd-value')
+  document.getElementById('fullname').innerHTML = b.fullname
+  document.getElementById('guldname').innerHTML = b.guldname
+
   function setUSD (dec) {
     usdValDiv.innerHTML = `~ ${dec.toString()} USD`
   }
