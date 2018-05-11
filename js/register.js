@@ -2,7 +2,7 @@
 
 /* global b:false loadBackground:false logout:false */
 
-function loadSend () { // eslint-disable-line no-unused-vars
+function loadRegister () { // eslint-disable-line no-unused-vars
   setupPage()
   senderDiv = document.getElementById('guld_transaction_sender')
   recDiv = document.getElementById('guld_transaction_recipient')
@@ -90,6 +90,3 @@ ${tx.raw}
   })
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  loadBackground().then(loadSend)
-})

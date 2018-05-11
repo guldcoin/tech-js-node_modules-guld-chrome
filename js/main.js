@@ -29,6 +29,12 @@ document.addEventListener('DOMContentLoaded', function () {
       case 'send':
         loadSend()
         break
+      case 'register':
+        loadRegister()
+        break
+      case 'grant':
+        loadGrant()
+        break
       case 'dash':
       default:
         loadWallet()

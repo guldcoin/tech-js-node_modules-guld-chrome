@@ -89,6 +89,3 @@ ${tx.raw}
   })
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  loadBackground().then(setupPage).then(loadSend)
-})

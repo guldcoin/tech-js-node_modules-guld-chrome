@@ -91,6 +91,3 @@ function loadGrant () { // eslint-disable-line no-unused-vars
 //  })
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  loadBackground().then(loadGrant)
-})
