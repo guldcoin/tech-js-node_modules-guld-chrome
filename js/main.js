@@ -30,6 +30,9 @@ document.addEventListener('DOMContentLoaded', function () {
       case 'grant':
         loadGrant()
         break
+      case 'receivebtc':
+        receiveBTC()
+        break
       case 'dash':
       default:
         loadWallet()

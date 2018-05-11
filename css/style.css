@@ -211,14 +211,6 @@ select {
     color: #D0B460;
 }
 
-#gg #header-menu a.active {
-    color: #FF5733;
-}
-
-#gg #header-menu a:hover {
-    color: #FF5733;
-}
-
 #currency-tab {
     width: 100%;
     position: fixed;
@@ -234,16 +226,22 @@ select {
     margin: 1rem;
 }
 
-#currency-tab.guld #guld-tab.active {
+#guld #currency-tab #guld-tab.active {
     font-size: 2rem;
     color: #D0B460;
+    margin-left: 10.4rem;
 }
 
 #gg-tab.active {
     font-size: 2rem;
-    color: #FF5733;
+    color: #D0B460;
 }
 
+#btc #currency-tab #btc-tab.active {
+    font-size: 2rem;
+    color: #D0B460;
+    margin-right: 10.8rem;
+}
 
 #currency-tab.gg {
     margin-left: -3.4rem;
@@ -298,35 +296,6 @@ select {
     margin-top: 1rem;
 }
 
-#gg {
-    background-image: url(../images/background_gg.png);
-    background-size: auto;
-}
-
-#gg #currency-tab.gg #gg-tab {
-    color: #FF5733;
-}
-
-#gg #balance {
-    color: #FF5733;    
-}
-
-#gg #username {
-    color: #FF5733;        
-}
-
-#gg #guldname {
-    color: #FF5733;
-}
-
-#gg button, #gg button:visited {
-    background: #e34822;
-}
-
-#gg button:hover, #gg button:active {
-    background: #f1866c;
-}
-
 #logo-options {
     width: 3rem;
     margin-top: 1rem;
@@ -373,3 +342,7 @@ select {
     font-size: 1rem;
 }
 
+#qrcode {
+    text-align: center;
+    display: inline-block;
+}
