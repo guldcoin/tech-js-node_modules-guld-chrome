@@ -3,7 +3,6 @@
 /* global b:false loadBackground:false logout:false */
 
 function loadSend () { // eslint-disable-line no-unused-vars
-  setupPage()
   senderDiv = document.getElementById('guld_transaction_sender')
   recDiv = document.getElementById('guld_transaction_recipient')
   amtDiv = document.getElementById('guld_spend_amount')
@@ -36,8 +35,8 @@ function loadSend () { // eslint-disable-line no-unused-vars
               b.fs.mkdir(repoDir, err => {
                 var repo = {
                   fs: b.fs,
-                  dir: repoDir,
-                  gitdir: `${repoDir}.git`
+                  dir: repoDir
+//                  gitdir: `${repoDir}.git`
                 }
                 b.fs.writeFile(`${repoDir}${time}.dat`, tx.raw, err => {
                   if (err) setError(err)
@@ -73,7 +72,7 @@ ${tx.raw}
                           else {
                             b.getBalance(b.guldname, false).then(bal => {
                               balance = bal
-                              window.location = `chrome-extension://${chrome.runtime.id}/main.html`
+                              window.location = `chrome-extension://${chrome.runtime.id}/html/main.html`
                             })
                           }
                         })
@@ -91,5 +90,5 @@ ${tx.raw}
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  loadBackground().then(loadSend)
+  loadBackground().then(setupPage).then(loadSend)
 })

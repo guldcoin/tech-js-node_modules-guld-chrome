@@ -68,6 +68,6 @@
       "js/background.js"
     ]
   },
-  "options_page": "options.html",
+  "options_page": "html/options.html",
   "manifest_version": 2
 }

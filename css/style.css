@@ -114,7 +114,7 @@ select {
     padding: 2rem 0;
 }
 
-.menu_btn {
+.menu-btn {
     width: 2rem;
     margin: 0.8rem 3.2rem;
     display: inline-block;
@@ -122,29 +122,29 @@ select {
     cursor: pointer;
 }
 
-.menu_btn img {
+.menu-btn img {
     width: 100%;
 }
 
-.menu_btn:hover {
+.menu-btn:hover {
     opacity: 0.8;
 }
 
-.menu_btn.active {
+.menu-btn.active {
     opacity: 0.8;
 }
 
-#footer_menu {
+#footer-menu {
     border-top: solid 1px #6742a4;
     margin-top: 1.4rem;
 }
 
-#footer_menu .name {
+#footer-menu .name {
     margin-top: 0.2rem;
     color: #fff;
 }
 
-.white_bg {
+.white-bg {
     background: #fff;
     position: absolute;
     top: 4.4rem;
@@ -154,7 +154,7 @@ select {
     background-image: url("../images/background_lottery.png");
 }
 
-.black_bg {
+.black-bg {
     background: #333;
     position: absolute;
     top: 4.4rem;
@@ -163,7 +163,7 @@ select {
     background-image: url("../images/background_lottery_black.png");
 }
 
-.black_bg h1 {
+.black-bg h1 {
     color: #d2d2d2;
 }
 
@@ -219,14 +219,14 @@ select {
     color: #FF5112;
 }
 
-#currency_tab {
+#currency-tab {
     width: 100%;
     position: fixed;
     bottom: 4%;
     text-align: center;
 }
 
-#currency_tab a {
+#currency-tab a {
     display: inline-block;
     font-size: 1.4rem;
     color: #fff;
@@ -234,17 +234,17 @@ select {
     margin: 1rem;
 }
 
-#currency_tab.guld #guld_tab {
+#currency-tab.guld #guld-tab {
     font-size: 2rem;
     color: #D0B460;
     padding-left: 4rem;
 }
 
-#currency_tab.gg {
+#currency-tab.gg {
     margin-left: -3.4rem;
 }
 
-#currency_tab.gg #gg_tab {
+#currency-tab.gg #gg-tab {
     font-size: 2rem;
     color: #D0B460;
 }
@@ -298,7 +298,7 @@ select {
     background-size: auto;
 }
 
-#gg #currency_tab.gg #gg_tab {
+#gg #currency-tab.gg #gg-tab {
     color: #FF5112;
 }
 
@@ -322,7 +322,7 @@ select {
     background: #f1866c;
 }
 
-#logo_options {
+#logo-options {
     width: 3rem;
     margin-top: 1rem;
 }

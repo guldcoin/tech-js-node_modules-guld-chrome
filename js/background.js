@@ -51,7 +51,7 @@ chrome.management.onUninstalled.addListener(strid => {
 // Open app in tab when user clicks on the icon
 chrome.browserAction.onClicked.addListener(function (tab) {
   chrome.tabs.create({
-    'url': chrome.extension.getURL('main.html')
+    'url': chrome.extension.getURL('html/main.html')
   }, function (tab) {})
 })
 

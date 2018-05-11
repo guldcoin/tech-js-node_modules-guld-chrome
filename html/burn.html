@@ -1,0 +1,34 @@
+<form id="registration_form">
+  <div class="row" style="display: none;">
+    <label for="receiver" class="col-sm-5 col-form-label">Registration Type</label>
+    <div class="col-sm-7">
+      <select id="guld_registration_type" class="form-control" disabled>
+        <option value="individual">Individual</option>
+        <option value="group" selected>Group</option>
+        <option value="device">Device</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="sender" class="col-sm-5 col-form-label">Name</label>
+    <div class="col-sm-7">
+      <input type="text" class="form-control" id="guld_transaction_sender" placeholder="Name to register" required=""> </div>
+  </div>
+  <div id="guld_registration_name_group" class="form-group row" style="display:none">
+    <label for="sender" class="col-sm-5 col-form-label">Name</label>
+    <div class="col-sm-7">
+      <input type="text" class="form-control" id="guld_registration_name" placeholder="Name"> </div>
+  </div>
+  <div id="guld_registration_number_group" class="form-group row">
+    <label for="amount" class="col-sm-5 col-form-label">Amount To Burn</label>
+    <div class="col-sm-7">
+      <input type="number" class="form-control" id="guld_spend_amount" min="0" step=".1" placeholder="1">
+    </div>
+  </div>
+  <div class="modal-footer row">
+    <div class="col-sm-12">
+      <button class="btn btn-primary" type="submit">burn</button>
+    </div>
+  </div>
+</form>
+

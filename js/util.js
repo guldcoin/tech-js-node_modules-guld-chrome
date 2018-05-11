@@ -5,6 +5,7 @@ var errdiv
 var commodity = 'GULD'
 var balance = new Decimal(0)
 var amount = new Decimal(0)
+var currentPage
 var senderDiv
 var recDiv
 var amtDiv
@@ -33,9 +34,15 @@ function loadBackground () { // eslint-disable-line no-unused-vars
 
 function setupPage () {
   if (!b.guldname || b.guldname === 'guld' || !b.ghoauth || b.ghoauth.length === 0) {
-    window.location = `chrome-extension://${chrome.runtime.id}/options.html`
+    window.location = `chrome-extension://${chrome.runtime.id}/html/options.html`
   }
   document.getElementById('logout').addEventListener('click', logout)
+  detectCommodity()
+  return loadHTML('currency-tab').then(() => {
+    var el = document.getElementById(`${commodity.toLowerCase()}-tab`)
+    if (el) el.setAttribute('class', 'active')
+    return loadHTML('header-wrapper').then(showPage).then(showBalances)
+  })
 }
 
 function setError (errmess) { // eslint-disable-line no-unused-vars
@@ -63,7 +70,7 @@ function logout (e) { // eslint-disable-line no-unused-vars
   b.guldfpr = ''
   b.fullname = ''
   b.keyring = new b.openpgp.Keyring()
-  window.location = `chrome-extension://${chrome.runtime.id}/options.html`
+  window.location = `chrome-extension://${chrome.runtime.id}/html/options.html`
 }
 
 function getBalances (gname, commodity) {
@@ -89,7 +96,9 @@ function getBalances (gname, commodity) {
   })
 }
 
-function showBalances (gname, commodity) {
+function showBalances (gname, comm) {
+  comm = comm || commodity
+  console.log(comm)
   var balDiv = document.getElementById('balance')
   var usdValDiv = document.getElementById('usd-value')
   var fullnameDiv = document.getElementById('fullname')
@@ -104,8 +113,8 @@ function showBalances (gname, commodity) {
     usdValDiv.innerHTML = `~ ${dec.toString()} USD`
   }
   if (balDiv && usdValDiv) {
-    getBalances(gname, commodity).then(bals => {
-      balDiv.innerHTML = `${bals[0].toString()} ${commodity}`
+    getBalances(gname, comm).then(bals => {
+      balDiv.innerHTML = `${bals[0].toString()} ${comm}`
       usdValDiv.innerHTML = `~ ${bals[1].toString()} USD`
     })
   }
@@ -156,6 +165,38 @@ function validateSpendAmount () {
   }
 }
 
-function detectCommodity () {
-  if (window.location.href.indexOf("/gg/") >= 0) commodity = 'GG'
+function parseQS () {
+  var args = {}
+  window.location.search.replace('?', '').split('&').forEach(v => {
+    var val = v.split('=')
+    args[val[0]] = val[1]
+  })
+  return args
+}
+
+function detectPage (qs) {
+  qs = qs || parseQS()
+  currentPage = qs.view || 'dash'
+  return currentPage
+}
+
+function detectCommodity (qs) {
+  qs = qs || parseQS()
+  commodity = qs.commodity || 'GULD'
+  return commodity
+}
+
+function showPage (page) {
+  page = page || detectPage()
+  return loadHTML(page, 'content').then(() => {
+    var el = document.getElementById(page)
+    if (el) el.setAttribute('class', 'active')
+  })
+}
+
+function loadHTML (component, eid) {
+  eid = eid || component
+  return b.curl(`/html/${component}.html`).then(content => {
+    document.getElementById(eid).innerHTML = content
+  })
 }

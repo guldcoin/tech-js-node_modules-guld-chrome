@@ -8,7 +8,7 @@ var passin
 var passrin
 var expertMode = false
 var emodel
-var mainurl = `chrome-extension://${chrome.runtime.id}/main.html`
+var mainurl = `chrome-extension://${chrome.runtime.id}/html/main.html`
 var tab = 'login'
 
 const DIVS = {
@@ -175,10 +175,10 @@ function submitLogin (e) {
   e.preventDefault()
   var myKey = b.keyring.privateKeys.getForId(b.guldfpr)
   if (myKey.primaryKey.isDecrypted) {
-    window.location = `chrome-extension://${chrome.runtime.id}/main.html`
+    window.location = mainurl
   } else {
     myKey.decrypt(passin.value).then(() => {
-      window.location = `chrome-extension://${chrome.runtime.id}/main.html`
+      window.location = mainurl
     }).catch(setError)
   }
 }
@@ -278,7 +278,7 @@ function finishLocalSignup () {
     .then(b.setGH)
     .then(b.setGuldID)
     .then(() => {
-      window.location = `chrome-extension://${chrome.runtime.id}/main.html`
+      window.location = mainurl
     })
 }
 
