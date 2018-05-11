@@ -60,13 +60,67 @@ chrome.runtime.onConnectExternal.addListener(function (port) {
   function extMessageHandler (msg) {
     switch (msg.cmd) {
       case 'getuser':
+        var unlocked = false
+        if (keyring.privateKeys.getForId(guldfpr) &&
+          keyring.privateKeys.getForId(guldfpr).primaryKey &&
+          keyring.privateKeys.getForId(guldfpr).primaryKey.isDecrypted)
+          unlocked = true
         port.postMessage({
           'cmd': 'gotuser',
           'data': {
             'name': guldname,
             'email': guldmail,
             'fpr': guldfpr,
-            'ghavatar': ghavatar
+            'ghavatar': ghavatar,
+            'unlocked': unlocked
+          }
+        })
+        break
+      case 'balance':
+        getBalance(guldname, true).then(bal => {
+          port.postMessage({
+            'cmd': 'balance',
+            'data': {
+              'name': guldname,
+              'balance': bal
+            }
+          })
+        })
+        break
+      case 'price':
+        var comm = 'GULD'
+        if (msg.hasOwnProperty('commodity')) comm = msg.commodity
+        var quote = '$'
+        if (msg.hasOwnProperty('quote')) quote = msg.quote
+        blocktree.getPrice(comm, quote).then(price => {
+          port.postMessage({
+            'cmd': 'price',
+            'data': {
+              'commodity': comm,
+              'quote': quote,
+              'price': price
+            }
+          })
+        })
+        break
+      case 'readdir':
+        var path = `/BLOCKTREE/${guldname}/`
+        if (msg.hasOwnProperty('path')) {
+          path = `/BLOCKTREE/${guldname}/${msg.path}`.replace(`/BLOCKTREE/${guldname}/BLOCKTREE/${guldname}`, `/BLOCKTREE/${guldname}`)
+        }
+        fs.readdir(path, (err, contents) => {
+          if (err) {
+            port.postMessage({
+              'error': err
+            })
+          } else {
+            port.postMessage({
+              'cmd': 'readdir',
+              'data': {
+                'path': path,
+                'contents': contents
+              }
+            })
           }
         })
         break

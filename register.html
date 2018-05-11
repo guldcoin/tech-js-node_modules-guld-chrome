@@ -17,7 +17,7 @@
   <div id="wrapper">
     <div id="header-balance">
       <div id="logo-div">
-        <a href="main.html">
+        <a href="/main.html">
           <img id="logo" src="images/logo.svg">
         </a>
       </div>
@@ -32,7 +32,7 @@
     <div id="header-menu">
       <nav>
           <a href="/send.html" id="send">Send</a>
-          <a href="/register.html" id="register">Register</a>
+          <a href="/register.html" id="register"  class="active">Register</a>
           <a href="/grant.html" id="grant">Grant</a>
         <!--
           <a href="#" id="burn">Burn</a>
@@ -48,16 +48,16 @@
           <label for="receiver" class="col-sm-5 col-form-label">Registration Type</label>
           <div class="col-sm-7">
             <select id="guld_registration_type" class="form-control">
-              <option value="1" selected="">User</option>
-              <option value="2">Group</option>
-              <option value="3">Device</option>
+              <option value="individual" selected>Individual</option>
+              <option value="group">Group</option>
+              <option value="device">Device</option>
             </select>
           </div>
         </div>
         <div class="form-group row">
-          <label for="sender" class="col-sm-5 col-form-label">Guld Username</label>
+          <label for="sender" class="col-sm-5 col-form-label">Name</label>
           <div class="col-sm-7">
-            <input type="text" class="form-control" id="guld_registration_registrator" placeholder="Guld Username" required=""> </div>
+            <input type="text" class="form-control" id="guld_registration_registrator" placeholder="name to register" required=""> </div>
         </div>
         <div id="guld_registration_name_group" class="form-group row" style="display:none">
           <label for="sender" class="col-sm-5 col-form-label">Name</label>
@@ -71,7 +71,7 @@
         </div>
         <div class="modal-footer row">
           <div class="col-sm-12">
-            <button class="btn btn-primary" type="submit">generate</button>
+            <button class="btn btn-primary" type="submit">register</button>
           </div>
         </div>
       </form>
