@@ -126,10 +126,8 @@ function showTransactionTypes (page, comm) {
     'GULD': ['send', 'register', 'grant'],
     'GG': ['send']
   }
-  console.log(ttypes[page])
   if (ttypes[comm]) {
     ttypes[comm].forEach(ttype => {
-      console.log(ttype)
       document.getElementById(ttype).style.display = 'inline-block'
     })
   }
