@@ -212,11 +212,11 @@ select {
 }
 
 #gg #header-menu a.active {
-    color: #FF5112;
+    color: #FF5733;
 }
 
 #gg #header-menu a:hover {
-    color: #FF5112;
+    color: #FF5733;
 }
 
 #currency-tab {
@@ -299,19 +299,19 @@ select {
 }
 
 #gg #currency-tab.gg #gg-tab {
-    color: #FF5112;
+    color: #FF5733;
 }
 
 #gg #balance {
-    color: #FF5112;    
+    color: #FF5733;    
 }
 
 #gg #username {
-    color: #FF5112;        
+    color: #FF5733;        
 }
 
 #gg #guldname {
-    color: #FF5112;
+    color: #FF5733;
 }
 
 #gg button, #gg button:visited {
