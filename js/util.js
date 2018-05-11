@@ -124,7 +124,8 @@ function showTransactionTypes (page, comm) {
   comm = comm || detectCommodity()
   ttypes = {
     'GULD': ['send', 'register', 'grant'],
-    'GG': ['send']
+    'GG': ['send', 'burn'],
+    'BTC': ['deposit', 'convert']
   }
   if (ttypes[comm]) {
     ttypes[comm].forEach(ttype => {

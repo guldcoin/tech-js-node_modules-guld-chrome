@@ -234,16 +234,20 @@ select {
     margin: 1rem;
 }
 
-#currency-tab.guld #guld-tab.active {
+#currency-tab .active {
     font-size: 2rem;
     color: #D0B460;
 }
 
-#gg-tab.active {
-    font-size: 2rem;
-    color: #FF5733;
-}
+/*#gg-tab.active {*/
+/*    font-size: 2rem;*/
+/*    color: #D0B460;*/
+/*}*/
 
+/*#btc-tab.active {*/
+/*    font-size: 2rem;*/
+/*    color: #D0B460;*/
+/*}*/
 
 #currency-tab.gg {
     margin-left: -3.4rem;

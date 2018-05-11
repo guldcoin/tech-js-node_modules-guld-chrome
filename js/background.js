@@ -65,15 +65,18 @@ chrome.runtime.onConnectExternal.addListener(function (port) {
           keyring.privateKeys.getForId(guldfpr).primaryKey &&
           keyring.privateKeys.getForId(guldfpr).primaryKey.isDecrypted)
           unlocked = true
-        port.postMessage({
-          'cmd': 'gotuser',
-          'data': {
-            'name': guldname,
-            'email': guldmail,
-            'fpr': guldfpr,
-            'ghavatar': ghavatar,
-            'unlocked': unlocked
-          }
+        isRegistered(guldname).then(registered => {
+          port.postMessage({
+            'cmd': 'gotuser',
+            'data': {
+              'name': guldname,
+              'email': guldmail,
+              'fpr': guldfpr,
+              'ghavatar': ghavatar,
+              'unlocked': unlocked,
+              'registered': registered
+            }
+          })
         })
         break
       case 'balance':
@@ -333,6 +336,23 @@ function getBalance(gname, useCache) {
   } else {
     return getThenSetBalances(gname)
   }
+}
+
+function isRegistered(gname) {
+  gname = gname || guldname
+  return getBalance('guld').then(bal => {
+    return (
+      bal &&
+      bal.Income &&
+      bal.Income.register &&
+      bal.Income.register.individual &&
+      bal.Income.register.individual[gname] &&
+      bal.Income.register.individual[gname].__bal &&
+      bal.Income.register.individual[gname].__bal.GULD &&
+      bal.Income.register.individual[gname].__bal.GULD.value &&
+      bal.Income.register.individual[gname].__bal.GULD.value.equals(new Decimal(-0.1))
+    )
+  })
 }
 
 function updateLedger (tx) {

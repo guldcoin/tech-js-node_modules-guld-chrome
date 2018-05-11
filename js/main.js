@@ -30,6 +30,15 @@ document.addEventListener('DOMContentLoaded', function () {
       case 'grant':
         loadGrant()
         break
+      case 'burn':
+        loadBurn()
+        break
+      case 'convert':
+        loadConvert()
+        break
+      case 'deposit':
+        loadDeposit()
+        break
       case 'dash':
       default:
         loadWallet()
