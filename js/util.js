@@ -41,7 +41,7 @@ function setupPage () {
   return loadHTML('currency-tab').then(() => {
     var el = document.getElementById(`${commodity.toLowerCase()}-tab`)
     if (el) el.setAttribute('class', 'active')
-    return loadHTML('header-wrapper').then(showPage).then(showBalances)
+    return loadHTML('header-wrapper').then(showPage).then(showBalances).then(showTransactionTypes)
   })
 }
 
@@ -115,6 +115,22 @@ function showBalances (gname, comm) {
     getBalances(gname, comm).then(bals => {
       balDiv.innerHTML = `${bals[0].toString()} ${comm}`
       usdValDiv.innerHTML = `~ ${bals[1].toDecimalPlaces(2).toString()} USD`
+    })
+  }
+}
+
+function showTransactionTypes (page, comm) {
+  page = page || detectPage()
+  comm = comm || detectCommodity()
+  ttypes = {
+    'GULD': ['send', 'register', 'grant'],
+    'GG': ['send']
+  }
+  console.log(ttypes[page])
+  if (ttypes[comm]) {
+    ttypes[comm].forEach(ttype => {
+      console.log(ttype)
+      document.getElementById(ttype).style.display = 'inline-block'
     })
   }
 }
