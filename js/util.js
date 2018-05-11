@@ -98,7 +98,6 @@ function getBalances (gname, commodity) {
 
 function showBalances (gname, comm) {
   comm = comm || commodity
-  console.log(comm)
   var balDiv = document.getElementById('balance')
   var usdValDiv = document.getElementById('usd-value')
   var fullnameDiv = document.getElementById('fullname')
@@ -115,13 +114,13 @@ function showBalances (gname, comm) {
   if (balDiv && usdValDiv) {
     getBalances(gname, comm).then(bals => {
       balDiv.innerHTML = `${bals[0].toString()} ${comm}`
-      usdValDiv.innerHTML = `~ ${bals[1].toString()} USD`
+      usdValDiv.innerHTML = `~ ${bals[1].toDecimalPlaces(2).toString()} USD`
     })
   }
 }
 
 function validateSender () {
-  senderDiv = senderDiv || document.getElementById('guld_transaction_sender')
+  senderDiv = senderDiv || document.getElementById('guld-transaction-sender')
   var errmess = 'Unknown sender. '
   return b.blocktree.isNameAvail(senderDiv.value).then(avail => {
     if (avail !== false) {
@@ -137,7 +136,7 @@ function validateSender () {
 }
 
 function validateRecipient () {
-  recDiv = recDiv || document.getElementById('guld_transaction_recipient')
+  recDiv = recDiv || document.getElementById('guld-transaction-recipient')
   var errmess = 'Unknown recipient. '
   return b.blocktree.isNameAvail(recDiv.value).then(avail => {
     if (avail !== false) {
@@ -153,7 +152,7 @@ function validateRecipient () {
 }
 
 function validateSpendAmount () {
-  amtDiv = amtDiv || document.getElementById('guld_spend_amount')
+  amtDiv = amtDiv || document.getElementById('guld-spend-amount')
   amount = new b.Decimal(amtDiv.value)
   var errmess = 'Invalid amount. '
   if (amount.greaterThan(balance)) {

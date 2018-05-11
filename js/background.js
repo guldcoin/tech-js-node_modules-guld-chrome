@@ -335,6 +335,75 @@ function getBalance(gname, useCache) {
   }
 }
 
+function updateLedger (tx) {
+  console.log(tx)
+  return new Promise((resolve, reject) => {
+    getLedger().then(ledger => {
+      console.log(ledger)
+      var newJournal = `${ledger.options.raw}
+${tx}
+`
+      chrome.storage.local.set({'journal': newJournal}, () => {
+        if (chrome.runtime.lastError) reject(chrome.runtime.lastError)
+        else {
+          getBalance(guldname, false).then(bal => {
+            balance = bal
+            resolve()
+          }).catch(reject)
+        }
+      })
+    })
+  })
+}
+
+function writeTx (tx, gname, comm, sender, time) {
+  gname = gname || guldname
+  comm = comm || commodity
+  sender = sender || gname
+  time = time || Transaction.getTimestamp(tx)
+  var repoDir = `/BLOCKTREE/${gname}/ledger/${comm}/${sender}/`
+  console.log(repoDir)
+  console.log(time)
+  console.log(tx)
+  return new Promise((resolve, reject) => {
+    fs.mkdir(repoDir, err => {
+      var repo = {
+        fs: fs,
+        dir: repoDir
+      }
+      console.log(`${repoDir}${time}.dat`)
+      fs.writeFile(`${repoDir}${time}.dat`, tx.raw, err => {
+        if (err) reject(err)
+        else {
+          var addRepo = Object.assign({filepath: `${time}.dat`}, repo)
+          git.add(addRepo).then(() => {
+            // TODO commit and sign
+            /*
+            var commitRepo = Object.assign( 
+              {
+                message: `transfer`,
+                author: {
+                  name: fullname,
+                  email: guldmail,
+                  date: new Date(time * 1000),
+                  timestamp: time
+                }
+              },
+              repo
+            )
+            console.log(commitRepo)
+            git.commit(commitRepo).then(hash => {
+              console.log(`created commit ${hash}`)
+            }).catch(console.error)
+            */
+            updateLedger(tx.raw).then(resolve).catch(reject)
+          })
+        }
+      })
+    })
+  })
+}
+
 // Github helpers
 
 function initGitHub () { // eslint-disable-line no-unused-vars
