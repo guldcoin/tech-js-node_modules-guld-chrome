@@ -302,14 +302,19 @@ select {
     width: 19rem;
 }
 
+#content {
+    max-height: 21rem;
+    overflow-y: auto;
+}
+
 #logo-div {
-    width: 49%;
+    width: 29%;
     display: inline-block;
     text-align: left;
 }
 
 #balance-div {
-    width: 50%;
+    width: 70%;
     display: inline-block;
     text-align: right;
 }
@@ -351,4 +356,47 @@ select {
 #qrcode {
     text-align: center;
     display: inline-block;
+}
+
+@media only screen and (max-width: 600px) {
+    #balance, #gg-balance, #guld-balance {
+        font-size: 2rem;
+    }
+
+    #usd-value, #total-usd-value {
+        font-size: 1.6rem;
+    }
+
+    #currency-tab {
+        bottom: 6%;
+    }
+
+    #header-balance {
+        height: 7rem;
+        top: -1rem;
+        position: relative;
+    }
+
+    #header-menu a {
+        padding: 0.6rem;
+        margin-top: 1rem;
+    }
+
+    #header-menu {
+        margin-bottom: 2rem;
+    }
+
+    #logo {
+        margin-left: 3rem;
+    }
+
+    #settings {
+        bottom: 0.4rem;
+        left: 0.4rem;
+    }
+
+    #logout {
+        bottom: 0.8rem;
+        right: 0.8rem;
+    }
 }
