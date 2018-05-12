@@ -302,11 +302,6 @@ select {
     width: 19rem;
 }
 
-#content {
-    max-height: 21rem;
-    overflow-y: auto;
-}
-
 #logo-div {
     width: 29%;
     display: inline-block;
