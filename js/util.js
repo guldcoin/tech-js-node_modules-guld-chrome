@@ -39,6 +39,7 @@ function setupPage () {
   document.getElementById('logout').addEventListener('click', logout)
   detectCommodity()
   return loadHTML('currency-tab').then(() => {
+    document.body.id = commodity.toLowerCase();
     var el = document.getElementById(`${commodity.toLowerCase()}-tab`)
     if (el) el.setAttribute('class', 'active')
     return loadHTML('header-wrapper').then(showPage).then(showBalances).then(showTransactionTypes)
