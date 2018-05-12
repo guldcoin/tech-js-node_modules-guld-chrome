@@ -277,6 +277,7 @@ function finishLocalSignup () {
     .then(b.bootstrapBlocktree)
     .then(b.setGH)
     .then(b.setGuldID)
+    .then(b.redirectAllRemotes)
     .then(() => {
       window.location = mainurl
     })

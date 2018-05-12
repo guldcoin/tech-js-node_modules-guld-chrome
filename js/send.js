@@ -21,6 +21,7 @@ function loadSend () { // eslint-disable-line no-unused-vars
   amtDiv.addEventListener('change', validateSpendAmount)
   formEl.addEventListener('submit', e => {
     e.preventDefault()
+    document.body.className = document.body.className + ' loading'
     if (validateSpendAmount()) {
       validateSender().then(valid => {
         if (valid) {
@@ -30,7 +31,10 @@ function loadSend () { // eslint-disable-line no-unused-vars
               var tx = Transfer.create(senderDiv.value, recDiv.value, amtDiv.value, commodity, time)
               b.writeTx(tx, b.guldname, commodity, senderDiv.value, time).then(() => {
                 window.location = `chrome-extension://${chrome.runtime.id}/html/main.html`
-              }).catch(setError)
+              }).catch(err => {
+                document.body.className = document.body.className.replace(' loading', '')
+                setError(err)
+              })
             }
           })
         }

@@ -269,7 +269,6 @@ class Blocktree extends EventEmitter {
     var self = this
     seed = seed || 'guld'
     ghseed = ghseed || 'guldcoin'
-
     function clonep (p, rname) {
       function pull() {
         return git.pull({
@@ -282,6 +281,7 @@ class Blocktree extends EventEmitter {
       }
       return new Promise((resolve, reject) => {
         var ghurl = `https://github.com/${ghseed}/${rname}.git`
+        console.log(ghurl)
         self.fs.stat(p, (err, stats) => {
           if (err || !(stats.isDirectory())) {
             git.clone({

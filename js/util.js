@@ -114,8 +114,10 @@ function showBalances (gname, comm) {
   }
   if (balDiv && usdValDiv) {
     getBalances(gname, comm).then(bals => {
-      balDiv.innerHTML = `${bals[0].toString()} ${comm}`
-      usdValDiv.innerHTML = `~ ${bals[1].toDecimalPlaces(2).toString()} USD`
+      if (bals) {
+        balDiv.innerHTML = `${bals[0].toString()} ${comm}`
+        usdValDiv.innerHTML = `~ ${bals[1].toDecimalPlaces(2).toString()} USD`
+      }
     })
   }
 }
