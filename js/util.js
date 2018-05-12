@@ -206,6 +206,10 @@ function showPage (page) {
   return loadHTML(page, 'content').then(() => {
     var el = document.getElementById(page)
     if (el) el.setAttribute('class', 'active')
+    var hnav = document.getElementById('header-nav')
+    for (var i = 0; i < hnav.children.length; i++) {
+      hnav.children[i].href = hnav.children[i].href.replace(/(GULD|BTC|GG)/, commodity)
+    }
   })
 }
 
