@@ -56,7 +56,8 @@
     "scripts": [
       "js/vendor/EventEmitter.js",
       "js/vendor/GitHub.bundle.js",
-      "js/vendor/browserfs.min.js",
+      "js/vendor/buffer.js",
+      "js/vendor/chrome-storage-fs.js",
       "js/vendor/isomorphic-git.min.js",
       "js/vendor/openpgp.min.js",
       "js/vendor/isomorphic-git.openpgp.js",

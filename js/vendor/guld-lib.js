@@ -7,12 +7,11 @@
 /* global Amount:false git:false Ledger:false */
 
 function mkdirps (p, tfs) {
-  try {
-    tfs.mkdirSync(p)
-    return
-  } catch (e) {
-    return e
-  }
+  return new Promise((resolve, reject) => {
+    tfs.mkdir(p, err => {
+      resolve()
+    })  
+  })
 }
 
 class Transaction {
@@ -301,9 +300,9 @@ class Blocktree extends EventEmitter {
             }).then(commit => {
               git.getRemoteInfo({'url': ghurl}).then(info => {
                 if (commit[0].oid != info.refs.heads.master) {
-                  pull()
+                  pull().then(resolve).catch(reject)
                 } else resolve()
-              })            
+              }).catch(reject)
             }).catch(err => {
               pull().then(resolve).catch(reject)
             })
@@ -313,19 +312,23 @@ class Blocktree extends EventEmitter {
     }
 
     return new Promise((resolve, reject) => {
-      mkdirps('/BLOCKTREE', self.fs)
-      mkdirps(`/BLOCKTREE/${seed}`, self.fs)
-      mkdirps(`/BLOCKTREE/${seed}/ledger`, self.fs)
-      mkdirps(`/BLOCKTREE/${seed}/keys`, self.fs)
-      clonep(`/BLOCKTREE/${seed}/ledger/GULD`, 'ledger-guld').then(() => {
-        clonep(`/BLOCKTREE/${seed}/ledger/prices`, 'token-prices').then(() => {
-          clonep(`/BLOCKTREE/${seed}/keys/pgp`, 'keys-pgp').then(() => {
-            self.emit('initialized')
-            self.initialized = true
-            resolve()
+      mkdirps('/BLOCKTREE', self.fs).then(() => {
+        mkdirps(`/BLOCKTREE/${seed}`, self.fs)
+      }).then(() => {
+        mkdirps(`/BLOCKTREE/${seed}/ledger`, self.fs)
+      }).then(() => {
+        mkdirps(`/BLOCKTREE/${seed}/keys`, self.fs)
+      }).then(() => {
+        clonep(`/BLOCKTREE/${seed}/ledger/GULD`, 'ledger-guld').then(() => {
+          clonep(`/BLOCKTREE/${seed}/ledger/prices`, 'token-prices').then(() => {
+            clonep(`/BLOCKTREE/${seed}/keys/pgp`, 'keys-pgp').then(() => {
+              self.emit('initialized')
+              self.initialized = true
+              resolve()
+            }).catch(reject)
           }).catch(reject)
         }).catch(reject)
-      }).catch(reject)
+      })
     })
   }
 

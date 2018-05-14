@@ -9793,6 +9793,167 @@ return /******/ (function(modules) { // webpackBootstrap
 	LocalStorageFileSystem.Options = {};
 	
 	/**
+	 * Get the indexedDB constructor for the current browser.
+	 * @hidden
+	 */
+	var chrome = global$1.chrome;
+	/**
+	 * Converts a chrome runtime error into a
+	 * standardized BrowserFS API error.
+	 * @hidden
+	 */
+	function convertError$3(e) {
+	    switch (e.message) {
+	        // case "NotFoundError":
+	        //   return new ApiError(ErrorCode.ENOENT, message);
+	        // case "QuotaExceededError":
+	        //   return new ApiError(ErrorCode.ENOSPC, message);
+	        default:
+	            // The rest do not seem to map cleanly to standard error codes.
+	            return new ApiError(ErrorCode.EIO, e.message);
+	    }
+	}
+	/**
+	 * @hidden
+	 */
+	var ChromeStorageROTransaction = function ChromeStorageROTransaction(store) {
+	    this.store = store;
+	    this.store = store;
+	};
+	ChromeStorageROTransaction.prototype.get = function get (key, cb) {
+	    chrome.storage[this.store.storeType].get([key], function (result) {
+	        if (result && result[key]) {
+	            cb(null, Buffer.from(result[key], 'base64'));
+	        }
+	        else if (chrome.runtime.lastError) {
+	            cb(convertError$3(chrome.runtime.lastError));
+	        }
+	        else {
+	            cb(null, undefined);
+	        }
+	    });
+	};
+	/**
+	 * @hidden
+	 */
+	var ChromeStorageRWTransaction = (function (ChromeStorageROTransaction) {
+	    function ChromeStorageRWTransaction(store) {
+	        ChromeStorageROTransaction.call(this, store);
+	    }
+	
+	    if ( ChromeStorageROTransaction ) ChromeStorageRWTransaction.__proto__ = ChromeStorageROTransaction;
+	    ChromeStorageRWTransaction.prototype = Object.create( ChromeStorageROTransaction && ChromeStorageROTransaction.prototype );
+	    ChromeStorageRWTransaction.prototype.constructor = ChromeStorageRWTransaction;
+	    ChromeStorageRWTransaction.prototype.put = function put (key, data, overwrite, cb) {
+	        chrome.storage[this.store.storeType].set({ key: data.toString('base64') }, function () {
+	            if (chrome.runtime.lastError) {
+	                cb(convertError$3(chrome.runtime.lastError));
+	            }
+	            else {
+	                cb(null, true);
+	            }
+	        });
+	    };
+	    ChromeStorageRWTransaction.prototype.del = function del (key, cb) {
+	        chrome.storage[this.store.storeType].remove(key, function () {
+	            if (chrome.runtime.lastError) {
+	                cb(convertError$3(chrome.runtime.lastError));
+	            }
+	            else {
+	                cb();
+	            }
+	        });
+	    };
+	    ChromeStorageRWTransaction.prototype.commit = function commit (cb) {
+	        // Return to the event loop to commit the transaction.
+	        setTimeout(cb, 0);
+	    };
+	    ChromeStorageRWTransaction.prototype.abort = function abort (cb) {
+	        setTimeout(cb, 0);
+	    };
+	
+	    return ChromeStorageRWTransaction;
+	}(ChromeStorageROTransaction));
+	var ChromeStore = function ChromeStore(cb, storeType) {
+	    var this$1 = this;
+	    if ( storeType === void 0 ) storeType = 'local';
+	
+	    this.storeType = storeType;
+	    setTimeout(function () {
+	        cb(null, this$1);
+	    }, 0);
+	};
+	ChromeStore.prototype.name = function name () {
+	    return ChromeStorageFileSystem.Name + " - " + this.storeType;
+	};
+	ChromeStore.prototype.clear = function clear (cb) {
+	    try {
+	        chrome.storage[this.storeType].clear();
+	    }
+	    catch (e) {
+	        cb(convertError$3(e));
+	    }
+	};
+	ChromeStore.prototype.beginTransaction = function beginTransaction (type) {
+	        if ( type === void 0 ) type = 'readonly';
+	
+	    if (type === 'readwrite') {
+	        return new ChromeStorageRWTransaction(this);
+	    }
+	    else if (type === 'readonly') {
+	        return new ChromeStorageROTransaction(this);
+	    }
+	    else {
+	        throw new ApiError(ErrorCode.EINVAL, 'Invalid transaction type.');
+	    }
+	};
+	/**
+	 * A file system that uses the chrome.storage key value file system.
+	 */
+	var ChromeStorageFileSystem = (function (AsyncKeyValueFileSystem$$1) {
+	    function ChromeStorageFileSystem(cb, storeType, deprecateMsg) {
+	        var this$1 = this;
+	        if ( deprecateMsg === void 0 ) deprecateMsg = true;
+	
+	        AsyncKeyValueFileSystem$$1.call(this);
+	        this.store = new ChromeStore(function (e) {
+	            if (e) {
+	                cb(e);
+	            }
+	            else {
+	                this$1.init(this$1.store, function (e) {
+	                    cb(e, this$1);
+	                });
+	            }
+	        }, storeType);
+	        deprecationMessage(deprecateMsg, ChromeStorageFileSystem.Name, { storeType: storeType });
+	    }
+	
+	    if ( AsyncKeyValueFileSystem$$1 ) ChromeStorageFileSystem.__proto__ = AsyncKeyValueFileSystem$$1;
+	    ChromeStorageFileSystem.prototype = Object.create( AsyncKeyValueFileSystem$$1 && AsyncKeyValueFileSystem$$1.prototype );
+	    ChromeStorageFileSystem.prototype.constructor = ChromeStorageFileSystem;
+	    /**
+	     * Constructs a ChromeStorage file system with the given options.
+	     */
+	    ChromeStorageFileSystem.Create = function Create (opts, cb) {
+	        // tslint:disable-next-line:no-unused-new
+	        new ChromeStorageFileSystem(cb, opts.storeType, false);
+	        // tslint:enable-next-line:no-unused-new
+	    };
+	
+	    return ChromeStorageFileSystem;
+	}(AsyncKeyValueFileSystem));
+	
+	ChromeStorageFileSystem.Name = "ChromeStorage";
+	ChromeStorageFileSystem.Options = {
+	    storeType: {
+	        type: "string",
+	        optional: true,
+	        description: "The storage type, options are 'local' or 'sync'."
+	    }
+	};
+	
+	/**
 	 * The MountableFileSystem allows you to mount multiple backend types or
 	 * multiple instantiations of the same backend into a single file system tree.
 	 * The file systems do not need to know about each other; all interactions are
@@ -12032,7 +12193,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                for (i = 0; i < fixedArgs.length; i++) {
 	                    fixedArgs[i] = this$1._argRemote2Local(args[i]);
 	                }
-	                this$1._callbackConverter.toLocalArg(resp.cbId).apply(null, fixedArgs);
+	                var larg = this$1._callbackConverter.toLocalArg(resp.cbId);
+	                if (larg) {
+	                    larg.apply(null, fixedArgs);
+	                }
 	            }
 	        });
 	    }
@@ -15574,7 +15738,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	// Monkey-patch `Create` functions to check options before file system initialization.
-	[AsyncMirror, DropboxFileSystem, EmscriptenFileSystem, FolderAdapter, HTML5FS, InMemoryFileSystem, IndexedDBFileSystem, IsoFS, LocalStorageFileSystem, MountableFileSystem, OverlayFS, WorkerFS, XmlHttpRequest, ZipFS].forEach(function (fsType) {
+	[AsyncMirror, DropboxFileSystem, EmscriptenFileSystem, FolderAdapter, HTML5FS, InMemoryFileSystem, IndexedDBFileSystem, IsoFS, LocalStorageFileSystem, ChromeStorageFileSystem, MountableFileSystem, OverlayFS, WorkerFS, XmlHttpRequest, ZipFS].forEach(function (fsType) {
 	    var create = fsType.Create;
 	    fsType.Create = function (opts, cb) {
 	        var oneArg = typeof (opts) === "function";
@@ -15594,7 +15758,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @hidden
 	 */
-	var Backends = { AsyncMirror: AsyncMirror, Dropbox: DropboxFileSystem, Emscripten: EmscriptenFileSystem, FolderAdapter: FolderAdapter, HTML5FS: HTML5FS, InMemory: InMemoryFileSystem, IndexedDB: IndexedDBFileSystem, IsoFS: IsoFS, LocalStorage: LocalStorageFileSystem, MountableFileSystem: MountableFileSystem, OverlayFS: OverlayFS, WorkerFS: WorkerFS, XmlHttpRequest: XmlHttpRequest, ZipFS: ZipFS };
+	var Backends = { AsyncMirror: AsyncMirror, Dropbox: DropboxFileSystem, Emscripten: EmscriptenFileSystem, FolderAdapter: FolderAdapter, HTML5FS: HTML5FS, InMemory: InMemoryFileSystem, IndexedDB: IndexedDBFileSystem, IsoFS: IsoFS, LocalStorage: LocalStorageFileSystem, ChromeStorage: ChromeStorageFileSystem, MountableFileSystem: MountableFileSystem, OverlayFS: OverlayFS, WorkerFS: WorkerFS, XmlHttpRequest: XmlHttpRequest, ZipFS: ZipFS };
 	
 	/**
 	 * BrowserFS's main module. This is exposed in the browser via the BrowserFS global.

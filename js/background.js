@@ -18,54 +18,12 @@ var fullname = ''
 var keyring = new openpgp.Keyring()
 window.Ledger = Ledger
 
-//var worker = new Worker('js/fs.js')
-//function tryToGetFS () {
-//  return Promise.race([
-//    new Promise((resolve, reject) => {
-//      BrowserFS.configure({
-//        fs: 'WorkerFS',
-//        options: {
-//          worker: worker
-//        }
-//      }, err => {
-//        if (err) {
-//          return tryToGetFS().then(resolve).catch(reject)
-//        } else {
-//          fs = BrowserFS.BFSRequire('fs')
-//          return resolve(fs)
-//        }
-//      })
-//    }),
-//    new Promise(resolve => {
-//      setTimeout(resolve, 1000)
-//    })
-//  ]).then(() => {
-//    if (!fs) return tryToGetFS()
-//    else {
-//      return fs
-//      BrowserFS.FileSystem.WorkerFS.attachRemoteListener(worker)
-//    }
-//  })
-//}
-
-//tryToGetFS().then(getGuldID).then(bootstrapBlocktree).catch(bootstrapBlocktree)
-
 // load the isomorphic-git openpgp plugin
 //git.use(GitOpenPGP)
 
 // Load the filesystem and blocktree
-BrowserFS.configure({
-  fs: 'LocalStorage',
-  options: {
-    '/tmp': {
-      fs: 'InMemory'
-    }
-  }
-}, err => {
-  if (err) throw err
-  fs = BrowserFS.BFSRequire('fs')
-  getGuldID().then(bootstrapBlocktree).catch(bootstrapBlocktree)
-})
+fs = new ChromeStorageFS()
+fs.initialize().then(getGuldID).then(bootstrapBlocktree).catch(bootstrapBlocktree)
 
 // initialize the blocktree on first install
 chrome.runtime.onInstalled.addListener(e => {
@@ -75,11 +33,7 @@ chrome.runtime.onInstalled.addListener(e => {
 // set uninitialized on uninstall, and clear localstorage... redundant?
 chrome.management.onUninstalled.addListener(strid => {
   if (strid === chrome.runtime.id) {
-    chrome.storage.local.set({
-      'guld-initialized': false
-    }, () => {
-      localStorage.clear()
-    })
+    chrome.storage.local.clear()
   }
 })
 
@@ -222,8 +176,8 @@ function initBlocktree () {
             chrome.browserAction.enable()
             chrome.browserAction.setBadgeText({text: ''})
             chrome.browserAction.setTitle({title: 'Guld wallet and key manager.'})
-          })
-        })
+          }).catch(console.error)
+        }).catch(console.error)
       })
     } else {
       if (chrome.runtime.lastError) console.warn(chrome.runtime.lastError) // eslint-disable-line no-console
