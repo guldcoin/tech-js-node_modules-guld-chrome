@@ -59,3 +59,4 @@ typings/
 
 #js/vendor/*.js
 gg-chrome.zip
+package-lock.json
