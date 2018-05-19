@@ -1,25 +1,25 @@
 {
   "name": "guld-chrome",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Chrome extension for guld",
   "repository": "https://github.com/guldcoin/guld-chrome",
   "author": "zimmi",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint --env browser *.js* js/*.js*",
-    "fix": "eslint --fix *.js* js/*.js*",
-    "build-deps": "cd ../BrowserFS && git pull && npm run build && cd ../isomorphic-git && git pull && npm run build && cd ../decimal.js && git pull && cd ../openpgp && git pull && cd ../ledger-types && git pull && cd ../github-api && git pull && npm run build && cd ../EventEmitter && git pull ",
-    "dist": "mkdir -p js/vendor && cp ../BrowserFS/dist/browserfs.js js/vendor/ && cp ../chrome-storage-fs/chrome-storage-fs.js js/vendor/ && cp ../isomorphic-git/dist/bundle.umd.min.js js/vendor/isomorphic-git.min.js && cp ../decimal.js/decimal.min.js js/vendor/ && cp ../ledger-types/types.js js/vendor/ledger.types.js && cp ../ledger-cli/ledger.js js/vendor/ledger.js && cp ../github-api/dist/GitHub.bundle.js js/vendor/ && cp ../openpgp/dist/openpgp.min.js js/vendor/ && cp ../js-guld-lib/guld-lib.js js/vendor/ && cp ../EventEmitter/EventEmitter.js js/vendor/",
-    "bdist": "npm run build-deps && npm run dist"
+    "lint": "eslint --env browser *.js* js/*.js* test/*.js*",
+    "fix": "eslint --fix *.js* js/*.js test/*.js*",
+    "dist": "./node_modules/.bin/webpack-cli",
+    "test": "./node_modules/.bin/mocha"
   },
   "dependencies": {
-    "decimal.js": "^10.0.0",
-    "isomorphic-git": "^0.11.2",
-    "ledger-types": "^1.2.0",
     "browserfs": "^2.0.0",
-    "github-api": "^3.1.0"
+    "decimal.js": "^10.0.0",
+    "github-api": "^3.1.0",
+    "isomorphic-git": "^0.11.3",
+    "ledger-types": "^1.2.0"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-es5": "^1.3.1",
@@ -28,7 +28,11 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.1.0",
-    "pre-commit": "^1.2.2"
+    "mocha": "^5.1.1",
+    "pre-commit": "^1.2.2",
+    "puppeteer": "^1.4.0",
+    "webpack": "^4.8.3",
+    "webpack-cli": "^2.1.3"
   },
   "pre-commit": [
     "lint"

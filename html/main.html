@@ -1,43 +1,65 @@
 <!DOCTYPE html>
 <html>
+<!--
+  Add overall description of what this file is for, and how it works with the
+  extension.
 
+  For a description of the overall operation of the extension, refer to 
+  README.md.
+-->
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Style CSS -->
   <link href="/css/style.css" rel="stylesheet">
-  <script src="/js/vendor/EventEmitter.js" type="text/javascript"></script>
-  <script src="/js/vendor/decimal.min.js" type="text/javascript"></script>
-  <script src="/js/vendor/ledger.types.js" type="text/javascript"></script>
-  <script src="/js/vendor/guld-lib.js" type="text/javascript"></script>
-  <script src="/js/vendor/qrcode.min.js" type="text/javascript"></script>
-  <script src="/js/util.js" type="text/javascript"></script>
-  <script src="/js/main.js" type="text/javascript"></script>
-  <script src="/js/send.js" type="text/javascript"></script>
-  <script src="/js/register.js" type="text/javascript"></script>
-  <script src="/js/grant.js" type="text/javascript"></script>
-  <script src="/js/deposit.js" type="text/javascript"></script>
-  <script src="/js/burn.js" type="text/javascript"></script>
-  <script src="/js/convert.js" type="text/javascript"></script>
+  <!-- 
+    Scripts in /dist/vendor/
+      qrcode - 
+      openpgp - 
+
+    Scripts in /dist/
+      front - 
+  -->
+  <script src="/dist/vendor/qrcode.min.js" type="text/javascript"></script>
+  <script src="/dist/vendor/openpgp.min.js" type="text/javascript"></script>
+  <script src="/dist/front.js" type="text/javascript"></script>
 </head>
 
 <body id="guld" class="text-center">
+  <!-- 
+    The status div is used for ...
+  -->
   <div id="status"></div>
+  <!-- 
+    The wrapper div is used for ...
+  -->
   <div id="wrapper">
+    <!--
+      The header wrapper is ...
+    -->
     <div id="header-wrapper"></div>
-    <!--header-wrapper-->
+    <!--
+      The content division is ...
+    -->
     <div id="content" class="text-center"></div>
-    <!--content-->
+    <!--
+      The err-div division is ...
+    -->
     <div id="err-div" class="row"></div>
     <!--err-div-->
-    <div id="currency-tab" class="guld"></div>
+    <!--
+      The currency-tab division is ...
+    -->
+    <div id="currency-tab" class="guld" style="display: none;"></div>
     <!--currency-tab-->
   </div>
-  <a href="#" id="logout">Logout</a>
-  <a href="options.html" id="settings">
+  <a href="#" id="logout" style="display: none;">Logout</a>
+  <a href="main.html?view=options" id="settings" style="display: none;">
     <img src="/images/settings.svg">
   </a>
-  <!--content-->
+  <!--
+    The loading-div gets replaced when ...
+  -->
   <div id="loading-div">
     <div id="loading-message-div">
       <h1>Processing</h1>

@@ -1,3 +1,9 @@
+<!--
+  Populates the header in the UI. Values in balance-div are populated by the
+  loadWallet() function defined in js/main.js.
+
+  This list's styling is controlled by the #currency-tab entries in style.css.
+-->
 <div id="header-balance">
   <div id="logo-div">
     <a href="/html/main.html?view=dash">
@@ -12,7 +18,7 @@
   </div>
 </div><!--header-balance-->
 
-<div id="header-menu">
+<div id="header-menu" style="display: none;">
   <nav id="header-nav">
       <a href="/html/main.html?view=send&commodity=GULD" id="send" style="display: none;">Send</a>
       <a href="/html/main.html?view=register&commodity=GULD" id="register" style="display: none;">Register</a>

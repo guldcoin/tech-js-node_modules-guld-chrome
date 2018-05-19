@@ -364,7 +364,7 @@ select {
     bottom: 0;
     text-align: center;
     padding-top: 32%;
-    display: none;
+    display: block;
 }
 
 .loading #loading-div {
