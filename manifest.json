@@ -1,7 +1,7 @@
 {
   "name": "guld",
   "short_name": "guld",
-  "version": "0.4.0",
+  "version": "0.4.9",
   "description": "guld browser extension",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsmjbIs865n8tHXDuCQ+fdbY6vXJKG5A0uYUF5MMxMQD8FXLiVEY3+t4OP3edSWQvXP4dvn9hf1h1udJMqpEJFHCNeh57M79za27cXl0cgR8zNNlC7CrvsAxoUISFrpvTagBOv7kWxjNmoPecVKCqLC1S3h97utknJ8uUxZe5xU2y5H6+hmG2qTIPSRrWhIqxDGKjnXIaSmfYFjsuz4Yvyd2OvUfEF8TjEtDjJDmA+L66sT9gvbCDDr/2XSTluTJ47/T5X4ohgU0Ad15C6nqNKXcJa7mw63lAIW2lvmszMXlbzxqnwtHjRYlrlF7PoBW1ZJunT3UB3PUFhvhCFYJZ5QIDAQAB",
   "permissions": [
@@ -55,9 +55,9 @@
   "background": {
     "scripts": [
       "dist/vendor/openpgp.min.js",
-      "dist/back.js"
+      "dist/background.js"
     ]
   },
-  "options_page": "html/main.html?view=options",
+  "options_page": "src/index.html?view=options",
   "manifest_version": 2
 }

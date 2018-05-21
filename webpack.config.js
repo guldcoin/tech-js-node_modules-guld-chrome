@@ -4,8 +4,8 @@ module.exports = [
   {
     target: 'web',
     entry: {
-      back: './js/background.js',
-      front: './js/main.js'
+      background: './src/background.js',
+      index: './src/index.js'
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -15,7 +15,7 @@ module.exports = [
     },
     mode: 'development',
     devtool: 'source-map',
-    watch: true,
+    watch: false,
     watchOptions: {
       aggregateTimeout: 1000,
       poll: 1000

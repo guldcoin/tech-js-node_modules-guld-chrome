@@ -57,6 +57,7 @@ typings/
 # dotenv environment variables file
 .env
 
-#js/vendor/*.js
 gg-chrome.zip
 package-lock.json
+test-config.js
+**/test-config.js
