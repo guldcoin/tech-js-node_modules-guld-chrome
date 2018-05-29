@@ -1,10 +1,6 @@
-'use strict'
-
-/* global b:false logout:false */
-//const { logout, setError, unsetError, loadBackground, getBackground, detectPage, setupPage, getBalances, showBalances, validateSender, validateRecipient, validateSpendAmount } = require('./util.js')
-const { Decimal } = require('decimal.js')
-const {Blocktree, Transaction, Transfer, Grant, Register} = require('../../js-guld-lib/guld-lib.js')
-const { Amount, Balance, Account } = require('../../ledger-types/types.js')
+const AppObserver = require('./observer.js')
+const views = require('./views.js')
+const balances = require('./components/balances.js')
 
 const NAMEWARN = 'Guld name is not available or valid, choose another.'
 var guldnameDiv
@@ -14,39 +10,44 @@ var passin
 var passrin
 var expertMode = false
 var emodel
-var mainurl = `chrome-extension://${chrome.runtime.id}/html/main.html`
+var mainurl = `chrome-extension://${chrome.runtime.id}/src/index.html`
 var tab = 'login'
-var b
-document.addEventListener('DOMContentLoaded', function () {
-  loadBackground().then(getBackground).then(bkg => {
-    b = bkg
-  }).then(setupPage).then(() => {
-    switch (detectPage()) {
-      case 'dash':
-        loadWallet()
-        break
-      case 'send':
-        loadSend()
-        break
-      case 'register':
-        loadRegister()
-        break
-      case 'grant':
-        loadGrant()
-        break
-      case 'burn':
-        loadBurn()
-        break
-      case 'convert':
-        loadConvert()
-        break
-      case 'deposit':
-        loadDeposit()
-        break
-      case 'options':
-      default:
-        loadOptions()
-        break
-    }
-  })
+var global
+
+document.addEventListener('DOMContentLoaded', async function () {
+  var global = await AppObserver.getGlobal()
+  for (var v in views) {
+    global.observer[v] = views[v]
+  }
+  for (var v in balances) {
+    global.observer[v] = balances[v]
+  }
+  await global.observer.setupPage()
+  switch (global.observer.detectPage()) {
+    case 'dash':
+      loadWallet()
+      break
+    case 'send':
+      loadSend()
+      break
+    case 'register':
+      loadRegister()
+      break
+    case 'grant':
+      loadGrant()
+      break
+    case 'burn':
+      loadBurn()
+      break
+    case 'convert':
+      loadConvert()
+      break
+    case 'deposit':
+      loadDeposit()
+      break
+    case 'options':
+    default:
+      loadOptions()
+      break
+  }
 })

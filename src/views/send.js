@@ -27,7 +27,7 @@ module.exports.load = () => {
               var time = Math.trunc(Date.now() / 1000)
               var tx = Transfer.create(window.senderDiv.value, window.recDiv.value, window.amtDiv.value, commodity, time)
               b.writeTx(tx, b.guldname, commodity, window.senderDiv.value, time).then(() => {
-                window.location = `chrome-extension://${chrome.runtime.id}/html/main.html`
+                window.location = `chrome-extension://${chrome.runtime.id}/src/index.html`
               }).catch(err => {
                 document.body.className = document.body.className.replace(' loading', '')
                 setError(err)

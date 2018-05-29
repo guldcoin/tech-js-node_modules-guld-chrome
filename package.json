@@ -14,16 +14,19 @@
     "test": "./node_modules/.bin/mocha"
   },
   "dependencies": {
-    "browserfs": "^2.0.0",
+    "browserfs": "https://github.com/isysd/BrowserFS.git#cache",
     "decimal.js": "^10.0.0",
+    "flexfs": "https://github.com/isysd/flexfs.git",
     "github-api": "^3.0.0",
-    "guld-lib": "^0.1.0",
-    "isomorphic-git": "^0.11.3",
-    "ledger-cli-browser": "^0.3.2",
-    "ledger-types": "^1.2.0",
-    "mkdirp": "^0.5.1",
-    "pify": "^3.0.0",
+    "guld-lib": "git+https://github.com/guldcoin/js-guld-lib.git",
+    "isomorphic-git": "git+https://github.com/isysd/isomorphic-git.git",
+    "keyring-pgp": "git+https://github.com/isysd/keyring-pgp.git",
+    "keyvaluedb": "git+https://github.com/isysd/keyvaluedb.git",
+    "ledger-cli-browser": "git+https://github.com/isysd/ledger-cli-browser.git",
+    "ledger-types": "git+https://github.com/isysd/ledger-types.git",
+    "pify": "git+https://github.com/isysd/pify.git",
     "qrcode": "^1.2.0",
+    "read-or-fetch": "git+https://github.com/isysd/read-or-fetch.git",
     "window-or-global": "^1.0.1"
   },
   "devDependencies": {
