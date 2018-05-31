@@ -16,7 +16,7 @@
   "dependencies": {
     "browserfs": "https://github.com/isysd/BrowserFS.git#cache",
     "decimal.js": "^10.0.0",
-    "flexfs": "https://github.com/isysd/flexfs.git",
+    "flexfs": "git+https://github.com/isysd/flexfs.git",
     "github-api": "^3.0.0",
     "guld-lib": "git+https://github.com/guldcoin/js-guld-lib.git",
     "isomorphic-git": "git+https://github.com/isysd/isomorphic-git.git",

@@ -1,5 +1,5 @@
 
-module.exports.loadRegister = () => {
+async function loadRegister () {
   var regTypeDiv = document.getElementById('guld-registration-type')
   var nameDiv = document.getElementById('guld-registration-name')
   amtDiv = document.getElementById('guld-spend-amount')
@@ -42,3 +42,5 @@ module.exports.loadRegister = () => {
     }
   })
 }
+
+module.exorts = loadRegister

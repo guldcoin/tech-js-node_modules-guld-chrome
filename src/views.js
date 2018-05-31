@@ -1,23 +1,104 @@
 const curl = require('./curl.js')
-const {showBalances} = require('./components/balances.js')
+const loadOptions = require('./views/options.js')
+const loadRegister = require('./views/register.js')
+const deposit = require('./views/deposit.js')
+const dash = require('./views/dash.js')
+const send = require('./views/send.js')
+const grant = require('./views/grant.js')
+const burn = require('./views/burn.js')
+const convert = require('./views/convert.js')
+const register = require('./views/register.js')
+const cache = {}
+
+const DIVS = {
+  'login': {
+    'key-create-radio-div': false,
+    'guldfpr-div': true,
+    'key-import-div': false,
+    'guldname-div': true,
+    'fullname-div': false,
+    'guldmail-div': false,
+    'key-passphrase-div': true,
+    'key-passphrase-repeat-div': false,
+    'expert-mode-div': false,
+    'unlock-submit-div': true,
+    'import-submit-div': false,
+    'export-submit-div': false,
+    'create-submit-div': false,
+    'err-warn': 'Please unlock your key.'
+  },
+  'import': {
+    'key-create-radio-div': true,
+    'guldfpr-div': false,
+    'key-import-div': true,
+    'guldname-div': true,
+    'fullname-div': false,
+    'guldmail-div': false,
+    'key-passphrase-div': true,
+    'key-passphrase-repeat-div': false,
+    'expert-mode-div': true,
+    'unlock-submit-div': false,
+    'import-submit-div': true,
+    'export-submit-div': false,
+    'create-submit-div': false,
+    'err-warn': ''
+  },
+  'loggedin': {
+    'key-create-radio-div': false,
+    'guldfpr-div': true,
+    'key-import-div': false,
+    'guldname-div': true,
+    'fullname-div': false,
+    'guldmail-div': false,
+    'key-passphrase-div': false,
+    'key-passphrase-repeat-div': false,
+    'expert-mode-div': true,
+    'unlock-submit-div': false,
+    'import-submit-div': false,
+    'export-submit-div': true,
+    'create-submit-div': false,
+    'err-warn': ''
+  },
+  'generate': {
+    'key-create-radio-div': true,
+    'guldfpr-div': false,
+    'key-import-div': false,
+    'guldname-div': true,
+    'fullname-div': true,
+    'guldmail-div': true,
+    'key-passphrase-div': true,
+    'key-passphrase-repeat-div': true,
+    'expert-mode-div': true,
+    'unlock-submit-div': false,
+    'import-submit-div': false,
+    'export-submit-div': false,
+    'create-submit-div': true,
+    'err-warn': 'WARNING: Everything except your passphrase is public!'
+  }
+}
 
 async function setupPage () {
   var page = detectPage()
-  if (page !== 'options' && (!this.observer.name || this.observer.name === 'guld' || this.hosts.length === 0 || !this.hosts[0].name)) {
+  console.log(page)
+  if (page !== 'options' && (!this.observer.name || this.observer.name === 'guld' || this.hosts.github === undefined || !this.hosts.github.name)) {
+    console.log('new locale')
     window.location = `chrome-extension://${chrome.runtime.id}/src/index.html?view=options`
   }
   detectCommodity()
-  return loadHTML('currency-tab').then(() => {
-    document.body.id = self.commodity.toLowerCase()
-    var el = document.getElementById(`${self.commodity.toLowerCase()}-tab`)
-    if (el) el.setAttribute('class', 'active')
-    return loadHTML('header-wrapper').then(showPage).then(showBalances).then(showTransactionTypes)
-  })
+  await loadHTML('currency-tab')
+  document.body.id = self.commodity.toLowerCase()
+  var el = document.getElementById(`${self.commodity.toLowerCase()}-tab`)
+  if (el) el.setAttribute('class', 'active')
+  await this.observer.loadHTML('header-wrapper')
+  await this.observer.showPage(page)
+  if (this.observer.initialized) await this.observer.showBalances()
+  else this.observer.on('initialized', this.observer.showBalances)
+  await this.observer.showTransactionTypes()
 }
 
-function getCachedDiv (cache, div) {
-  if (typeof cache === 'undefined') cache = document.getElementById(div)
-  return cache
+function getCachedDiv (div) {
+  if (!cache.hasOwnProperty(div)) cache[div] = document.getElementById(div)
+  return cache[div]
 }
 
 function showTransactionTypes (page, comm) {
@@ -107,5 +188,6 @@ module.exports = {
   showTransactionTypes: showTransactionTypes,
   parseQS: parseQS,
   detectPage: detectPage,
-  detectCommodity: detectCommodity
+  detectCommodity: detectCommodity,
+  loadOptions: loadOptions
 }

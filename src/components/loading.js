@@ -1,24 +1,15 @@
-const {getCachedDiv} = require('../util.js')
-let loadingDiv
-let loadingMessage
+const {getCachedDiv} = require('../views.js')
 
-function loadAllDivs () {
-  getCachedDiv(loadingDiv, 'loading-div')
-  getCachedDiv(loadingMessage, 'loader-wait-msg')
-}
-
-module.exports.setLoading = (mess) => {
-  loadAllDivs()
-  loadingDiv.style.display = 'block'
+module.exports.setLoading = function (mess) {
+  getCachedDiv('loading-div').style.display = 'block'
   if (mess) {
-    loadingMessage.innerHTML = mess
+    getCachedDiv('loader-wait-msg').innerHTML = mess
   } else {
-    loadingMessage.innerHTML = 'Please wait.'
+    getCachedDiv('loader-wait-msg').innerHTML = 'Please wait.'
   }
 }
 
-module.exports.setNotLoading = () => {
-  loadAllDivs()
-  loadingMessage.innerHTML = 'Please wait.'
-  loadingDiv.style.display = 'none'
+module.exports.setNotLoading = function () {
+  getCachedDiv('loader-wait-msg').innerHTML = 'Please wait.'
+  getCachedDiv('loading-div').style.display = 'none'
 }

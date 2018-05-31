@@ -1,86 +1,18 @@
-
-const DIVS = {
-  'login': {
-    'key-create-radio-div': false,
-    'guldfpr-div': true,
-    'key-import-div': false,
-    'guldname-div': true,
-    'fullname-div': false,
-    'guldmail-div': false,
-    'key-passphrase-div': true,
-    'key-passphrase-repeat-div': false,
-    'expert-mode-div': false,
-    'unlock-submit-div': true,
-    'import-submit-div': false,
-    'export-submit-div': false,
-    'create-submit-div': false,
-    'err-warn': 'Please unlock your key.'
-  },
-  'import': {
-    'key-create-radio-div': true,
-    'guldfpr-div': false,
-    'key-import-div': true,
-    'guldname-div': true,
-    'fullname-div': false,
-    'guldmail-div': false,
-    'key-passphrase-div': true,
-    'key-passphrase-repeat-div': false,
-    'expert-mode-div': true,
-    'unlock-submit-div': false,
-    'import-submit-div': true,
-    'export-submit-div': false,
-    'create-submit-div': false,
-    'err-warn': ''
-  },
-  'loggedin': {
-    'key-create-radio-div': false,
-    'guldfpr-div': true,
-    'key-import-div': false,
-    'guldname-div': true,
-    'fullname-div': false,
-    'guldmail-div': false,
-    'key-passphrase-div': false,
-    'key-passphrase-repeat-div': false,
-    'expert-mode-div': true,
-    'unlock-submit-div': false,
-    'import-submit-div': false,
-    'export-submit-div': true,
-    'create-submit-div': false,
-    'err-warn': ''
-  },
-  'generate': {
-    'key-create-radio-div': true,
-    'guldfpr-div': false,
-    'key-import-div': false,
-    'guldname-div': true,
-    'fullname-div': true,
-    'guldmail-div': true,
-    'key-passphrase-div': true,
-    'key-passphrase-repeat-div': true,
-    'expert-mode-div': true,
-    'unlock-submit-div': false,
-    'import-submit-div': false,
-    'export-submit-div': false,
-    'create-submit-div': true,
-    'err-warn': 'WARNING: Everything except your passphrase is public!'
-  }
-}
-
-module.exports.loadOptions = () => {
-  setDisplay('login')
+async function loadOptions () {
+  this.observer.setDisplay('login')
   document.getElementById('loading-div').style.display = 'none'
   guldnameDiv = document.getElementById('guldname-new')
   guldmailDiv = document.getElementById('guldmail')
   errdiv = document.getElementById('err-div')
-  if (guldnameDiv) { guldnameDiv.addEventListener('focusout', checkGName) }
+  if (guldnameDiv) { guldnameDiv.addEventListener('focusout', this.observer.checkGName) }
   passin = document.getElementById('key-passphrase')
   passrin = document.getElementById('key-passphrase-repeat')
   emodel = document.getElementById('expert-mode')
-  document.getElementById('logout').addEventListener('click', logout)
+  document.getElementById('logout').addEventListener('click', this.observer.logout)
   var ghavatarDiv = document.getElementById('ghavatar')
   if (ghavatarDiv) {
     ghavatarDiv.addEventListener('click', e => {
-      b.ghoauth = ''
+      this.observer.hosts.github.auth = {}
       loadGithub()
     })
   }
@@ -94,118 +26,89 @@ module.exports.loadOptions = () => {
   document.getElementById('login-submit').addEventListener('click', submitLogin)
   document.getElementById('create-submit').addEventListener('click', submitCreate)
   document.getElementById('import-submit').addEventListener('click', submitImport)
-
-  loadGuldVals().then(loadGithub).then(() => {
-    if (b.keyring.privateKeys.keys.length > 0) {
-      if (b.guldfpr && b.guldfpr.length > 0) {
-        var myKey = b.keyring.privateKeys.getForId(b.guldfpr)
-        if (myKey && myKey.primaryKey.isDecrypted === false) {
-          document.getElementById('err-warn').innerHTML = 'Please unlock your key.'
-          setDisplay('login')
-        } else {
-          setDisplay('loggedin')
-        }
-      }
-    } else setDisplay('generate')
-  }).catch(setError)
+  console.log('loading option details')
+  await this.observer.loadGuldVals()
+  await this.observer.hosts.github.loadGithub()
+  if (this.observer.keyring.listKeys().length === 0) this.observer.setDisplay('generate')
+  else if (this.observer.keyring.isUnlocked(this.observer.fpr) === false) {
+    document.getElementById('err-warn').innerHTML = 'Please unlock your key.'
+    this.observer.setDisplay('login')    
+  } else {
+    this.observer.setDisplay('loggedin')
+  }
 }
 
-module.exports.submitLogin = (e) => {
+async function submitLogin (e) {
   e.preventDefault()
-  var myKey = b.keyring.privateKeys.getForId(b.guldfpr)
-  if (myKey.primaryKey.isDecrypted) {
+  if (this.observer.keyring.isUnlocked(this.observer.fpr)) {
     window.location = mainurl
   } else {
-    myKey.decrypt(passin.value).then(() => {
-      window.location = mainurl
-    }).catch(setError)
+    await this.observer.keyring.unlock(this.observer.fpr, passin.value)
+    window.location = mainurl
   }
 }
 
-module.exports.submitCreate = (e) => {
+async function submitCreate (e) {
   e.preventDefault()
   if (validatePass()) {
-    checkGName().then(avail => {
-      if (avail || expertMode) {
-        b.guldname = guldnameDiv.value
-        b.fullname = document.getElementById('fullname-new').value
-        if (b.fullname.length === 0) b.fullname = b.guldname
-        b.guldmail = document.getElementById('guldmail').value
-        var options = {
-          numBits: 4096,
-          userIds: [{
-            name: b.fullname,
-            email: b.guldmail
-          }],
-          passphrase: passin.value
-        }
-        var errmess = 'Generating keys, please wait. '
-        setError(errmess)
-        b.openpgp.generateKey(options).then(function (key) {
-          b.keyring.publicKeys.importKey(key.publicKeyArmored)
-          b.keyring.privateKeys.importKey(key.privateKeyArmored)
-          b.guldfpr = key.key.primaryKey.fingerprint
-          b.keyring.store()
-          key.key.decrypt(passin.value).then(() => {
-            unsetError(errmess)
-            b.setGuldID()
-              .then(b.setupGHKey)
-              .then(finishLocalSignup)
-              .then(() => {
-                finishLocalSignup()
-                window.location = mainurl
-              })
-          })
-        })
+    var avail = await checkGName()
+    if (avail || expertMode) {
+      this.observer.name = guldnameDiv.value
+      this.observer.fullname = document.getElementById('fullname-new').value
+      if (this.observer.fullname.length === 0) this.observer.fullname = this.observer.name
+      this.observer.mail = document.getElementById('guldmail').value
+      var options = {
+        numBits: 4096,
+        userIds: [{
+          name: this.observer.fullname,
+          email: this.observer.mail
+        }],
+        passphrase: passin.value
       }
-    })
+      var errmess = 'Generating keys, please wait. '
+      setError(errmess)
+      this.observer.fpr = await this.keyring.generate(options)
+      this.keyring.unlock(this.observer.fpr, passin.value)
+      unsetError(errmess)
+      await b.setGuldID()
+      await b.setupGHKey()
+      await finishLocalSignup()
+      window.location = mainurl
+    }
   }
 }
 
-module.exports.submitImport = (e) => {
+async function submitImport (e) {
   e.preventDefault()
   document.getElementById('loading-div').style.display = 'block'
-  b.keyring.privateKeys.importKey(document.getElementById('key-import').value).then(err => {
-    if (err) setErrorNotLoading(err)
-    else {
-      b.keyring.store()
-      b.keyring.privateKeys.keys[0].decrypt(passin.value).then(() => {
-        b.keyring.publicKeys.importKey(b.keyring.privateKeys.keys[0].toPublic().armor()).then(() => {
-          b.guldname = guldnameDiv.value
-          b.guldfpr = b.keyring.privateKeys.keys[0].primaryKey.fingerprint
-          if (b.keyring.privateKeys.keys[0].users.length > 0) {
-            var userid = b.keyring.privateKeys.keys[0].users[0].userId.userid
-            var uida = userid.replace('>', '').split('<')
-            b.fullname = uida[0].trim()
-            b.guldmail = uida[1].trim()
-          }
-          b.blocktree.mapNamesToFPR([b.guldfpr]).then(names => {
-            if (names.length === 1) b.guldname = names[0]
-            finishLocalSignup()
-          }).catch(e => {
-            finishLocalSignup()
-          })
-        }).catch(setErrorNotLoading)
-      }).catch(setErrorNotLoading)
-    }
-  })
+  this.observer.fpr = await this.observer.keyring.importPrivateKey(document.getElementById('key-import').value).catch(setErrorNotLoading)
+  await this.observer.keyring.unlock(passin.value)
+//  await this.observer.keyring.importPublicKey(b.keyring.privateKeys.keys[0].toPublic().armor())
+  this.observer.name = guldnameDiv.value
+  if (b.keyring.privateKeys.keys[0].users.length > 0) {
+    var userid = b.keyring.privateKeys.keys[0].users[0].userId.userid
+    var uida = userid.replace('>', '').split('<')
+    this.observer.fullname = uida[0].trim()
+    this.observer.mail = uida[1].trim()
+  }
+  var names = await this.observer.keyring.mapNamesToFPR([this.observer.fpr])
+  if (names.length === 1) this.observer.name = names[0]
+  return finishLocalSignup()
 }
 
-module.exports.finishLocalSignup = () => {
-  return b.setupGHKey()
-    .then(b.renameBlocktree)
-    .then(b.forkGuld)
-    .then(b.bootstrapBlocktree)
-    .then(b.setGH)
-    .then(b.setGuldID)
-    .then(b.redirectAllRemotes)
-    .then(() => {
-      document.getElementById('loading-div').style.display = 'none'
-      window.location = mainurl
-    }).catch(setErrorNotLoading)
+async function finishLocalSignup () {
+  await this.observer.hosts.github.setupGHKey()
+  await this.observer.fs.renameBlocktree('guld', this.observer.name)
+  await this.observer.hosts.github.forkGuld()
+  await b.bootstrapBlocktree()
+  await this.observer.hosts.github.setGH()
+  await this.observer.db.setMany(this.observer)
+  await this.observer.git.redirectAllRemotes()
+  document.getElementById('loading-div').style.display = 'none'
+  window.location = mainurl
 }
 
-module.exports.toggleExpertMode = () => {
+async function toggleExpertMode () {
   if (emodel && emodel.checked) {
     expertMode = true
     document.getElementById('export-submit-private').style.display = 'block'
@@ -214,3 +117,4 @@ module.exports.toggleExpertMode = () => {
     expertMode = false
   }
 }
+module.exports = loadOptions

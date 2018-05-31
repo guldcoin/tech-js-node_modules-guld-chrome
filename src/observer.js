@@ -18,12 +18,15 @@ class AppObserver extends Observer {
   }
 
   async loadGuldVals () {
-    var data = await b.getGuldID()
-    if (b.guldname !== 'guld') document.getElementById('guldname-new').value = b.guldname
-    document.getElementById('fullname-new').value = b.fullname
-    document.getElementById('guldmail').value = b.guldmail
-    document.getElementById('guldfpr').value = b.guldfpr
-    return data
+    var gnameDiv = document.getElementById('guldname-new')
+    if (this.observer.name !== 'guld' && gnameDiv) gnameDiv.value = this.observer.name
+    var fullnameDiv = document.getElementById('fullname-new')
+    if (fullnameDiv) fullnameDiv.value = this.observer.fullname
+    var gmailDiv = document.getElementById('guldmail')
+    if (gmailDiv) gmailDiv.value = this.observer.mail
+    var gfprDiv = document.getElementById('guldfpr')
+    if (gfprDiv) gmailDiv.value = this.observer.fpr
+    return this.observer
   }
 }
 

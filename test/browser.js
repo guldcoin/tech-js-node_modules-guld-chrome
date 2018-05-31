@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer')
-const chai = require('chai')
+const {assert, should} = require('chai')
 const {extraFS} = require('flexfs')
 const pify = require('pify')
 const fs = pify(require('fs'))
@@ -97,14 +97,14 @@ async function isLoading () {
 
 async function assertLoading () {
   var isloading = await isLoading()
-  chai.should(isloading).exist
+  should(isloading).exist
   isloading.should.equal(true)
   return isloading
 }
 
 async function assertNotLoading () {
   var isloading = await isLoading()
-  chai.assert.isTrue(isloading === false)
+  assert.isTrue(isloading === false)
   return isloading
 }
 
@@ -182,8 +182,8 @@ describe('Setup', () => {
         })
       }
       var src = (await safeEval('#ghavatar', getsrc)).toString()
-      chai.assert.isTrue(src.startsWith('http'))
-      chai.assert.equal((await safeEval('#ghavatar', (el) => getComputedStyle(el).getPropertyValue('display'))), 'inline')
+      assert.isTrue(src.startsWith('http'))
+      assert.equal((await safeEval('#ghavatar', (el) => getComputedStyle(el).getPropertyValue('display'))), 'inline')
     }).timeout(90000)
     it('shows generate by default', async () => {
       while (!(await safeEval('#key-create-radio-generate', ischecked))) {
@@ -191,7 +191,7 @@ describe('Setup', () => {
           setTimeout(resolve, 500)
         })
       }
-      chai.assert.isTrue(await safeEval('#key-create-radio-generate', ischecked))
+      assert.isTrue(await safeEval('#key-create-radio-generate', ischecked))
     })
     it('shows import form when selected', async () => {
       await (await page.$('#key-create-radio-import')).click()
@@ -200,7 +200,7 @@ describe('Setup', () => {
           setTimeout(resolve, 500)
         })
       }
-      chai.assert.isTrue(await safeEval('#key-create-radio-import', ischecked))
+      assert.isTrue(await safeEval('#key-create-radio-import', ischecked))
     })
     it('imports key in < 4 mins', async () => {
       await page.evaluate((a, b) => {
@@ -242,13 +242,13 @@ describe('Setup', () => {
       (await safeGetProperty('#fullname', 'innerHTML')).should.equal(config.username)
     })
     it('shows guld balance', async () => {
-      chai.assert.isTrue((await safeGetProperty('#guld-balance', 'innerHTML')) !== '')
+      assert.isTrue((await safeGetProperty('#guld-balance', 'innerHTML')) !== '')
     })
     it('shows gg balance', async () => {
-      chai.assert.isTrue((await safeGetProperty('#gg-balance', 'innerHTML')) !== '')
+      assert.isTrue((await safeGetProperty('#gg-balance', 'innerHTML')) !== '')
     })
     it('shows total USD balance', async () => {
-      chai.assert.isTrue((await safeGetProperty('#total-usd-value', 'innerHTML')) !== '')
+      assert.isTrue((await safeGetProperty('#total-usd-value', 'innerHTML')) !== '')
     })
   })
   describe('Send', () => {

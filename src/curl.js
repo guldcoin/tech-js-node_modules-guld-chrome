@@ -1,9 +1,15 @@
 // Semi-smart curl for simple fetching
 module.exports = async function (uri, settings) {
   settings = settings || {}
-  if (uri.indexOf('github.com') >= 0 && self.hosts[0].auth.username && !settings.hasOwnProperty('headers')) {
+  if (uri.indexOf('github.com') >= 0 && 
+    this.observer.hosts && 
+    this.observer.hosts.github &&
+    this.observer.hosts.github.auth &&
+    this.observer.hosts.github.auth.password &&
+    this.observer.hosts.github.auth.password && !settings.hasOwnProperty('headers')
+  ) {
     var heads = {
-      'authorization': `token ${self.hosts[0].auth.username}`,
+      'authorization': `token ${this.observer.hosts.github.auth.password}`,
       'accept': 'application/json',
       'User-Agent': 'guld app'
     }

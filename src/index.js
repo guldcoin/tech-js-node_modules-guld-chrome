@@ -1,8 +1,11 @@
 const AppObserver = require('./observer.js')
 const views = require('./views.js')
+const {github} = require('./hosts/hosts.js')
 const balances = require('./components/balances.js')
+const validate = require('./validate.js')
+const error = require('./components/error.js')
+const loading = require('./components/loading.js')
 
-const NAMEWARN = 'Guld name is not available or valid, choose another.'
 var guldnameDiv
 var guldmailDiv
 var errdiv
@@ -15,39 +18,55 @@ var tab = 'login'
 var global
 
 document.addEventListener('DOMContentLoaded', async function () {
-  var global = await AppObserver.getGlobal()
+  global = await AppObserver.getGlobal()
+  global.observer.curl = require('./curl.js').bind(global.observer)
   for (var v in views) {
-    global.observer[v] = views[v]
+    global.observer[v] = views[v].bind(global.observer)
+  }
+  for (var v in validate) {
+    global.observer[v] = validate[v].bind(global.observer)
   }
   for (var v in balances) {
-    global.observer[v] = balances[v]
+    global.observer[v] = balances[v].bind(global.observer)
+  }
+  for (var v in error) {
+    global.observer[v] = error[v].bind(global.observer)
+  }
+  for (var v in loading) {
+    global.observer[v] = loading[v].bind(global.observer)
+  }
+  global.observer.hosts = global.observer.hosts || {}
+  global.observer.hosts.github = global.observer.hosts.github || {}
+  global.observer.hosts.github.auth = global.observer.hosts.github.auth || {}
+  for (var v in github) {
+    global.observer.hosts.github[v] = github[v].bind(global.observer)
   }
   await global.observer.setupPage()
   switch (global.observer.detectPage()) {
     case 'dash':
-      loadWallet()
+      global.observer.loadWallet()
       break
     case 'send':
-      loadSend()
+      global.observer.loadSend()
       break
     case 'register':
-      loadRegister()
+      global.observer.loadRegister()
       break
     case 'grant':
-      loadGrant()
+      global.observer.loadGrant()
       break
     case 'burn':
-      loadBurn()
+      global.observer.loadBurn()
       break
     case 'convert':
-      loadConvert()
+      global.observer.loadConvert()
       break
     case 'deposit':
-      loadDeposit()
+      global.observer.loadDeposit()
       break
     case 'options':
     default:
-      loadOptions()
+      global.observer.loadOptions()
       break
   }
 })

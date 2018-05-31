@@ -1,4 +1,4 @@
-module.exports.load = () => {
+async function load () {
   document.getElementById('loading-div').style.display = 'none'
   window.senderDiv = document.getElementById('guld-transaction-sender')
   window.recDiv = document.getElementById('guld-transaction-recipient')

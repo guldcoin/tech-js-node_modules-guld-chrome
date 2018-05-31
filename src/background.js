@@ -12,7 +12,6 @@ async function init() {
   var start = now.getTime()
   observer.log(`starting blocktree init @ ${now.toLocaleString()}`)
   await observer.init()
-  //    console.log(`${(Date.now() - start) / 60000} minutes to init fs and clone gg`)
   observer.log(`${(Date.now() - start) / 60000} minutes to init blocktree and ledger`)
   chrome.browserAction.enable()
   chrome.browserAction.setBadgeText({text: ''})

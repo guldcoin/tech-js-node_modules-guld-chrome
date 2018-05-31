@@ -1,33 +1,36 @@
 const GitHub = require('github-api')
 
-module.exports.loadGithubVals = async () => {
-  await b.initGitHub()
+async function loadGithubVals () {
+  await this.observer.hosts.github.initGitHub()
   document.getElementById('gh-login-div').style.display = 'none'
   document.getElementById('ghavatar-div').style.display = 'block'
-  document.getElementById('ghavatar').src = b.ghavatar
-  if (b.ghmail && b.ghmail.length > 0 &&
+  document.getElementById('ghavatar').src = this.observer.hosts.github.avatar
+  if (this.observer.hosts.github.mail && this.observer.hosts.github.mail.length > 0 &&
       (!guldmailDiv.value ||
        guldmailDiv.value.length === 0)) {
-    guldmailDiv.value = b.ghmail
+    guldmailDiv.value = this.observer.hosts.github.mail
   }
-  if (b.ghname && b.ghname.length > 0 && (!guldnameDiv.value || guldnameDiv.value.length === 0)) {
-    guldnameDiv.value = b.ghname
-    return checkGName()
+  if (this.observer.hosts.github.name && this.observer.hosts.github.name.length > 0 && (!guldnameDiv.value || guldnameDiv.value.length === 0)) {
+    guldnameDiv.value = this.observer.hosts.github.name
+    return this.observer.checkGName()
   } else return true
 }
 
-module.exports.loadGithub = async () => {
-  if (b.ghoauth.length === 0) {
+async function loadGithub () {
+  if (!(this.observer.hosts.github.auth) ||
+    !(this.observer.hosts.github.auth.password) ||
+    this.observer.hosts.github.auth.password.length === 0
+  ) {
     var errmess = 'Git host authentication is required. '
-    setError(errmess)
-    var token = await b.ghOAUTH()
-    unsetError(errmess)
-    return loadGithubVals()
-  } else return loadGithubVals()
+    this.observer.setError(errmess)
+    var token = await this.observer.hosts.github.ghOAUTH()
+    this.observer.unsetError(errmess)
+    return this.observer.hosts.github.loadGithubVals()
+  } else return this.observer.hosts.github.loadGithubVals()
 }
 
-module.exports.get = () => { // eslint-disable-line no-unused-vars
-  return getLocal(['ghname', 'ghmail', 'ghkeyid', 'ghavatar', 'ghoauth']).then(vals => {
+async function get () { // eslint-disable-line no-unused-vars
+  return this.observer.db.getMany(['ghname', 'ghmail', 'ghkeyid', 'ghavatar', 'ghoauth']).then(vals => {
     self.ghname = vals.ghname
     self.ghmail = vals.ghmail
     self.ghkeyid = vals.ghkeyid
@@ -55,10 +58,10 @@ module.exports.get = () => { // eslint-disable-line no-unused-vars
   })
 }
 
-module.exports.set = () => { // eslint-disable-line no-unused-vars
+async function set () { // eslint-disable-line no-unused-vars
   if (ghoauth.length > 0) {
     return simpleEncrypt(self.ghoauth).then(enc => {
-      return setLocal({
+      return this.observer.db.setMany({
         ghname: self.ghname,
         ghmail: self.ghmail,
         ghkeyid: self.ghkeyid,
@@ -67,7 +70,7 @@ module.exports.set = () => { // eslint-disable-line no-unused-vars
       })
     })
   } else {
-    return setLocal({
+    return this.observer.db.setMany({
       ghname: self.ghname,
       ghmail: self.ghmail,
       ghkeyid: self.ghkeyid,
@@ -79,34 +82,31 @@ module.exports.set = () => { // eslint-disable-line no-unused-vars
 
 // Github helpers
 
-window.initGitHub = () => { // eslint-disable-line no-unused-vars
-  self.gh = new GitHub({token: ghoauth})
+async function initGitHub () { // eslint-disable-line no-unused-vars
+  self.gh = new GitHub({token: this.observer.hosts.github.auth.password})
   if (self.ghname && self.ghname.length > 0) return Promise.resolve()
   var guser = gh.getUser()
   return guser.getProfile().then(profile => {
-    self.ghname = profile.data.login
-    self.ghavatar = profile.data.avatar_url
-    self.ghmail = profile.data.email
-    return getGHKeys()
+    this.observer.hosts.github.name = profile.data.login
+    this.observer.hosts.github.avatar = profile.data.avatar_url
+    this.observer.hosts.github.mail = profile.data.email
+    return this.observer.hosts.github.getGHKeys()
   })
 }
 
-function getGHKeys () {
-  return self.curl(`https://api.github.com/users/${self.ghname}/gpg_keys`)
-    .then(keys => {
-      keys = JSON.parse(keys)
-      if (keys.length !== 0) {
-        self.ghkeyid = keys[0].key_id
-        if (keys[0].emails.length !== 0) {
-          self.ghmail = keys[0].emails[0].email
-        }
-      }
-    })
+async function getGHKeys () {
+  var keys = JSON.parse(await this.observer.curl(`https://api.github.com/users/${this.observer.hosts.github.name}/gpg_keys`))
+  if (keys.length !== 0) {
+    this.observer.hosts.github.keyid = keys[0].key_id
+    if (keys[0].emails.length !== 0) {
+      this.observer.hosts.github.mail = keys[0].emails[0].email
+    }
+  }
 }
 
-window.setupGHKey = () => { // eslint-disable-line no-unused-vars
+async function setupGHKey () { // eslint-disable-line no-unused-vars
   if (!self.ghkeyid || self.ghkeyid.length === 0) {
-    return self.curl(`https://api.github.com/user/gpg_keys`,
+    return self.observer.curl(`https://api.github.com/user/gpg_keys`,
       {
         'method': 'POST',
         'body': JSON.stringify({'armored_public_key': self.keyring.publicKeys.getForId(self.guldfpr).armor()})
@@ -115,29 +115,26 @@ window.setupGHKey = () => { // eslint-disable-line no-unused-vars
   } else return getGHKeys()
 }
 
-function getTokenForCode (code) {
-  return self.curl(`https://guld.gg/api/OAUTH_TOKEN?code=${code}`,
-    {}).then(token => {
-    self.ghoauth = token
-    self.ghcreds = git.utils.oauth2('github', token)
-    // TODO move at least this event to new emitter
-    blocktree.emit('oauth-ready')
-    return token
-  })
+async function getTokenForCode (code) {
+  this.observer.hosts.github.auth.password = await this.observer.curl(`https://guld.gg/api/OAUTH_TOKEN?code=${code}`)
+  // XXX move this event to new emitter?
+  this.observer.emit('oauth-ready')
+  return this.observer.hosts.github.auth.password
 }
 
-window.ghOAUTH = () => { // eslint-disable-line no-unused-vars
+async function ghOAUTH () { // eslint-disable-line no-unused-vars
   var reulr = chrome.identity.getRedirectURL('provider_cb')
-  var scope = encodeURIComponent(manifest.oauth2.scopes.join(' '))
+  var scope = encodeURIComponent(this.observer.manifest.oauth2.scopes.join(' '))
   var options = {
     'interactive': true,
-    'url': `https://github.com/login/oauth/authorize?client_id=${manifest.oauth2.client_id}&redirect_uri=${encodeURIComponent(reulr)}&scope=${scope}`
+    'url': `https://github.com/login/oauth/authorize?client_id=${this.observer.manifest.oauth2.client_id}&redirect_uri=${encodeURIComponent(reulr)}&scope=${scope}`
   }
+  var self = this
   return new Promise((resolve, reject) => {
     function handler (rurl) {
       if (rurl) {
         var code = rurl.split('=')[1]
-        getTokenForCode(code).then(resolve)
+        self.observer.hosts.github.getTokenForCode(code).then(resolve)
       } else {
         reject(chrome.runtime.lastError)
       }
@@ -150,20 +147,34 @@ window.ghOAUTH = () => { // eslint-disable-line no-unused-vars
   })
 }
 
-function createPR (org, repo) {
-  return self.gh.getRepo(org, repo).createPullRequest({
+async function createPR (org, repo) {
+  return this.observer.hosts.github.client.getRepo(org, repo).createPullRequest({
     title: 'guld app created tx PR',
     head: `${self.guldname}:master`,
     base: 'master'
   })
 }
 
-window.forkGuld = () => { // eslint-disable-line no-unused-vars
+async function forkGuld () { // eslint-disable-line no-unused-vars
   return Promise.all([
-    self.gh.getRepo('guldcoin', 'ledger-guld').fork().catch(e => {}),
-    self.gh.getRepo('guldcoin', 'keys-pgp').fork().catch(e => {}),
-    self.gh.getRepo('tigoctm', 'token-prices').fork().catch(e => {}),
-    self.gh.getRepo('guld-games', 'ledger-gg').fork().catch(e => {})
+    this.observer.hosts.github.client.getRepo('guldcoin', 'ledger-guld').fork().catch(e => {}),
+    this.observer.hosts.github.client.getRepo('guldcoin', 'keys-pgp').fork().catch(e => {}),
+    this.observer.hosts.github.client.getRepo('tigoctm', 'token-prices').fork().catch(e => {}),
+    this.observer.hosts.github.client.getRepo('guld-games', 'ledger-gg').fork().catch(e => {})
   ])
+}
+
+module.exports = {
+  loadGithubVals: loadGithubVals,
+  loadGithub: loadGithub,
+  initGitHub: initGitHub,
+  getGHKeys: getGHKeys,
+  setupGHKey: setupGHKey,
+  getTokenForCode: getTokenForCode,
+  createPR: createPR,
+  forkGuld: forkGuld,
+  ghOAUTH: ghOAUTH,
+  get: get,
+  set: set
 }
 

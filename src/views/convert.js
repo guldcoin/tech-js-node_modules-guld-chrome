@@ -1,2 +1,1 @@
-module.exports.load = () => {
-}
+module.exports.load = async function load () {}
