@@ -16,7 +16,7 @@ async function showBalances (gname, comm) {
     usdValDiv.innerHTML = `~ ${dec.toString()} USD`
   }
   if (balDiv && usdValDiv) {
-    this.observer.getBalances(gname, comm).then(bals => {
+    this.observer.ledger.getAccount(gname, comm).then(bals => {
       if (bals) {
         balDiv.innerHTML = `${bals[0].toString()} ${comm}`
         usdValDiv.innerHTML = `~ ${bals[1].toDecimalPlaces(2).toString()} USD`
@@ -31,7 +31,7 @@ async function getBalances (gname, commodity) {
   var blnc
   var usdval
   if (this.observer.ledger) {
-    var bal = await this.observer.ledger.getBalance(gname, true)
+    var bal = await this.observer.ledger.getAccount(gname, true)
     if (bal && bal.Assets && bal.Assets.__bal && bal.Assets.__bal[commodity]) {
       blnc = bal.Assets.__bal[commodity].value
       var p = await this.observer.ledger.getPrice('GULD', '$')

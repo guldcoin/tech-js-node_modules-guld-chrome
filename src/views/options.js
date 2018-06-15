@@ -30,7 +30,7 @@ async function loadOptions () {
   await this.observer.loadGuldVals()
   await this.observer.hosts.github.loadGithub()
   if (this.observer.keyring.listKeys().length === 0) this.observer.setDisplay('generate')
-  else if (this.observer.keyring.isUnlocked(this.observer.fpr) === false) {
+  else if (this.observer.keyring.isLocked(this.observer.fpr) !== false) {
     document.getElementById('err-warn').innerHTML = 'Please unlock your key.'
     this.observer.setDisplay('login')    
   } else {
@@ -40,7 +40,7 @@ async function loadOptions () {
 
 async function submitLogin (e) {
   e.preventDefault()
-  if (this.observer.keyring.isUnlocked(this.observer.fpr)) {
+  if (!this.observer.keyring.isLocked(this.observer.fpr)) {
     window.location = mainurl
   } else {
     await this.observer.keyring.unlock(this.observer.fpr, passin.value)
